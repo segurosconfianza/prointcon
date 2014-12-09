@@ -31,12 +31,11 @@
     <servlet-name>confianza</servlet-name>
     <url-pattern>/confianza/*</url-pattern>
   </servlet-mapping>
-  <session-config>  
-	<!-- Default to 5 minute session timeouts -->  
-	<session-timeout>15</session-timeout>  
-  </session-config> 
+  <session-config>
+    <session-timeout>15</session-timeout>
+  </session-config>
   <error-page>
-       <error-code>404</error-code>
-       <location>/WEB-INF/error/error404.html</location>
-  </error-page>  
+    <error-code>404</error-code>
+    <location>/WEB-INF/error/error404.html</location>
+  </error-page>
 </web-app>
