@@ -10,6 +10,7 @@ package com.confianza.webapp.service.framework.frmparametro;
   */                          
 
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,26 +38,47 @@ public class FrmParametroServiceImpl implements FrmParametroService{
 	}
 	
 	@Override
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__READ"})
 	public FrmParametro list(Long id){
 		return frmParametroRepository.list(id);
 	}
 	
 	@Override
-	public List<FrmParametro> listAll(){
-		return frmParametroRepository.listAll();
+	public List<FrmParametro> listParamsCosu(Long id){
+	
+		return frmParametroRepository.listParamsCosu(id);
 	}	
 	
 	@Override
-	public FrmParametro update(Long id){
-		return frmParametroRepository.update(id);
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__READ"})
+	public List<FrmParametro> listAll(int pageSize, int page){
+	
+		int limit=pageSize*page;
+		int init=limit-pageSize;
+		
+		return frmParametroRepository.listAll(init, limit);
+	}	
+	
+	@Override
+	public int getCount(){
+				
+		return frmParametroRepository.getCount();
 	}
 	
 	@Override
-	public void delete(Long id){
-		frmParametroRepository.delete(id);
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__UPDATE"})
+	public FrmParametro update(FrmParametro frmparametro){
+		return frmParametroRepository.update(frmparametro);
 	}
 	
 	@Override
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__DELETE"})
+	public void delete(FrmParametro frmparametro){
+		frmParametroRepository.delete(frmparametro);
+	}
+	
+	@Override
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__CREATE"})
 	public FrmParametro insert(FrmParametro frmparametro){
 		return frmParametroRepository.insert(frmparametro);
 	}

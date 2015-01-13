@@ -28,7 +28,6 @@ import com.confianza.webapp.repository.framework.frmmenu.FrmMenu;
 import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
 
 @Controller
-@EnableWebMvc
 @RequestMapping("/FrmMenu")
 public class CFrmMenu {
 

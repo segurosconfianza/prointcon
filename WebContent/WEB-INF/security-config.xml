@@ -1,15 +1,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:security="http://www.springframework.org/schema/security"
-	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:ldap="http://www.springframework.org/schema/ldap"
-	xsi:schemaLocation="http://www.springframework.org/schema/ldap http://www.springframework.org/schema/ldap/spring-ldap-2.0.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
-		http://www.springframework.org/schema/ldap http://www.springframework.org/schema/ldap/spring-ldap.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/ldap http://www.springframework.org/schema/ldap/spring-ldap.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<security:global-method-security jsr250-annotations="enabled"/>
 
@@ -19,9 +14,11 @@
 		<security:intercept-url pattern="/menu.jsp"  access="isAuthenticated()"/>
 		<security:intercept-url pattern="/confianza/**" access="isAuthenticated()"/>
 		<security:logout invalidate-session="true" logout-url="/logout"/>
-	</security:http>
+	</security:http>		
 	
-	<bean id="myAuthenticationSuccessHandler" class="com.confianza.webapp.service.security.MySimpleUrlAuthenticationSuccessHandler" />
+	<security:authentication-manager>
+		<security:authentication-provider ref="authenticate" />								  
+	</security:authentication-manager>
 	
 	<ldap:context-source
           url="ldap://192.168.100.2:389"
@@ -31,18 +28,10 @@
           
     <ldap:ldap-template id="ldapTemplate" ignore-partial-result="true" search-scope="SUBTREE" />
     
-    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder"/>
-    <!-- For hashing and salting user passwords -->
- 	
-	<security:authentication-manager>
-		<security:authentication-provider ref="authenticate">	
-			<!--  <security:password-encoder hash="md5"/> -->		
-		</security:authentication-provider>	   
-	</security:authentication-manager>	
-
-	<bean id="authenticate" class="com.confianza.webapp.service.security.AutenticateImpl"/>
-	
-	<bean id="reCaptcha" class="net.tanesha.recaptcha.ReCaptchaImpl">
-        <property name="privateKey" value="6Ld7av4SAAAAAPqyLaN63Q2qNBZVu1-ESWUvUjLq"/>
-    </bean>
+    <bean id="authenticate" class="com.confianza.webapp.service.security.AutenticateImpl"/>
+    
+    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder"/>    
+    
+    <bean id="myAuthenticationSuccessHandler" class="com.confianza.webapp.service.security.MySimpleUrlAuthenticationSuccessHandler" />
+		
 </beans>

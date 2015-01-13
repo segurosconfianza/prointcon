@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.confianza.co</groupId>
-	<artifactId>webconfianza</artifactId>
+	<artifactId>Confianza</artifactId>
 	<packaging>war</packaging>
 
 	<dependencies>
@@ -168,9 +168,21 @@
 			<version>3.1.0</version>
 		</dependency>
 		<dependency>
-			<groupId>net.tanesha.recaptcha4j</groupId>
+		    <groupId>com.oracle</groupId>
+		    <artifactId>ojdbc6</artifactId>
+		    <version>11.2.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>
+				com.google.code.maven-play-plugin.net.tanesha.recaptcha4j
+			</groupId>
 			<artifactId>recaptcha4j</artifactId>
-			<version>0.0.7</version>
+			<version>0.0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>javainetlocator</groupId>
+			<artifactId>inetaddresslocator</artifactId>
+			<version>2.18</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -206,5 +218,6 @@
 			</plugin>
 		</plugins>
 	</build>
-	<version>${aplicacion.version}</version>
+	<name>Confianza</name>
+	<version>1.0</version>
 </project>

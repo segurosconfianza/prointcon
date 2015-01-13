@@ -15,11 +15,15 @@ public interface FrmParametroRepository {
 	
 	public FrmParametro list(Long id);
 	
-	public List<FrmParametro> listAll();	
+	public List<FrmParametro> listAll(int init, int limit);	
 	
-	public FrmParametro update(Long id);
+	public FrmParametro update(FrmParametro frmparametro);
 	
-	public void delete(Long id);
+	public void delete(FrmParametro frmparametro);
 	
 	public FrmParametro insert(FrmParametro frmparametro);
+	
+	public int getCount();
+
+	public List<FrmParametro> listParamsCosu(Long id);
 }

@@ -26,7 +26,6 @@ import com.confianza.webapp.repository.framework.frmi18n.FrmI18n;
 import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
 
 @Controller
-@EnableWebMvc
 @RequestMapping("/FrmI18n")
 public class CFrmI18n {
 

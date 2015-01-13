@@ -141,6 +141,10 @@ public class FrmConsulta {
 		return new String[]{ "CONSCONS", "CONSMODU", "CONSNOMB", "CONSDESC", "CONSCACO", "CONSTIPO", "CONSLSQL", "CONSCOLU", "CONSTICO" };
 	}		
 	
+	static public String getColumnNames(){
+		return " CONSCONS, CONSMODU, CONSNOMB, CONSDESC, CONSCACO, CONSTIPO, CONSLSQL, CONSCOLU, CONSTICO ";
+	}
+	
 	public String toString(){
 		return " CONSCONS: "+ this.conscons 
 			+" CONSMODU: "+ this.consmodu 

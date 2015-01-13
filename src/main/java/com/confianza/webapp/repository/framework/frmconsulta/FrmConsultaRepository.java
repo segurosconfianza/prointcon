@@ -10,16 +10,25 @@ package com.confianza.webapp.repository.framework.frmconsulta;
   */                          
 
 import java.util.List;
+import java.util.Map;
 
 public interface FrmConsultaRepository {
 	
 	public FrmConsulta list(Long id);
 	
-	public List<FrmConsulta> listAll();	
+	public List<FrmConsulta> listAll(int init, int limit);	
 	
-	public FrmConsulta update(Long id);
+	public FrmConsulta update(FrmConsulta frmconsulta);
 	
-	public void delete(Long id);
+	public void delete(FrmConsulta frmconsulta);
 	
 	public FrmConsulta insert(FrmConsulta frmconsulta);
+	
+	public int getCount();
+
+	public FrmConsulta listName(String id);
+
+	public List<Object[]> loadData(FrmConsulta frmConsulta,	Map<String, Object> parameters);
+
+	public List<Object[]> loadDataOsiris(FrmConsulta frmConsulta, Map<String, Object> parameters);
 }

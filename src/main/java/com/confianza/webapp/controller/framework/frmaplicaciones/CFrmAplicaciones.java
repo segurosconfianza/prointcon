@@ -19,7 +19,6 @@ import com.confianza.webapp.service.framework.frmaplicaciones.FrmAplicacionesSer
 import com.confianza.webapp.repository.framework.frmaplicaciones.FrmAplicaciones;
 
 @Controller
-@EnableWebMvc
 @RequestMapping("/FrmAplicaciones")
 public class CFrmAplicaciones {
 

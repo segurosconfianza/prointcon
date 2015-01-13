@@ -26,7 +26,6 @@ import com.confianza.webapp.service.framework.frmperfil.FrmPerfilService;
 import com.confianza.webapp.repository.framework.frmperfil.FrmPerfil;
 
 @Controller
-@EnableWebMvc
 @RequestMapping("/FrmPerfil")
 public class CFrmPerfil {
 
