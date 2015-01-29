@@ -19,11 +19,11 @@ import com.confianza.webapp.repository.framework.frmmodurope.FrmModurope;
 @RequestMapping("/FrmModurope")
 public class CFrmModurope {
 
+	@Autowired
 	private FrmModuropeService frmModuropeService;
 	
-	@Autowired
-	public CFrmModurope(FrmModuropeService frmmoduropeService) {
-		this.frmModuropeService = frmmoduropeService;
+	public CFrmModurope(){
+		super();
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

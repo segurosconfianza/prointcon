@@ -32,6 +32,7 @@ import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
 @RequestMapping("/FrmParametro")
 public class CFrmParametro {
 
+	@Autowired
 	private FrmParametroService frmParametroService;
 	
 	@Autowired
@@ -41,11 +42,6 @@ public class CFrmParametro {
 		super();
 	}
 	
-	@Autowired
-	public CFrmParametro(FrmParametroService frmparametroService) {
-		this.frmParametroService = frmparametroService;
-	}
-		
 	@RequestMapping("/")
 	public String index() {
 		return "framework/frmparametro/FrmParametro";

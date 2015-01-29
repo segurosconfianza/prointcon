@@ -19,11 +19,11 @@ import com.confianza.webapp.repository.framework.frmroleperm.FrmRoleperm;
 @RequestMapping("/FrmRoleperm")
 public class CFrmRoleperm {
 
+	@Autowired
 	private FrmRolepermService frmRolepermService;
 	
-	@Autowired
-	public CFrmRoleperm(FrmRolepermService frmrolepermService) {
-		this.frmRolepermService = frmrolepermService;
+	public CFrmRoleperm(){
+		super();
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

@@ -29,14 +29,14 @@ import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
 @RequestMapping("/FrmI18n")
 public class CFrmI18n {
 
+	@Autowired
 	private FrmI18nService frmI18nService;
 	
 	@Autowired
 	Gson gson;
 	
-	@Autowired
-	public CFrmI18n(FrmI18nService frmi18nService) {
-		this.frmI18nService = frmi18nService;
+	public CFrmI18n(){
+		super();
 	}
 	
 	@RequestMapping("/")

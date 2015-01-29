@@ -24,11 +24,11 @@ import com.confianza.webapp.repository.framework.frmtransaccion.FrmTransaccion;
 @RequestMapping("/FrmLog")
 public class CFrmLog {
 
+	@Autowired
 	private FrmLogService frmLogService;
 	
-	@Autowired
-	public CFrmLog(FrmLogService frmlogService) {
-		this.frmLogService = frmlogService;
+	public CFrmLog(){
+		super();
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

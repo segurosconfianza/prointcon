@@ -29,16 +29,9 @@ import com.confianza.webapp.repository.framework.frmperfil.FrmPerfil;
 @RequestMapping("/FrmPerfil")
 public class CFrmPerfil {
 
+	@Autowired
 	private FrmPerfilService frmPerfilService;		
-	
-	@Autowired
-	Gson gson;
-	
-	@Autowired
-	public CFrmPerfil(FrmPerfilService frmperfilService) {
-		this.frmPerfilService = frmperfilService;
-	}		
-	
+		
 	public CFrmPerfil() {
 		super();
 	}
@@ -52,28 +45,15 @@ public class CFrmPerfil {
 	@ResponseBody
 	public String list(@PathVariable("peficons") Long peficons) throws Exception{
 		
-		return gson.toJson(this.frmPerfilService.list(peficons));
+		return this.frmPerfilService.list(peficons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"}, method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page) throws Exception{
 		
-		try{
-			List<FrmPerfil> listAll=this.frmPerfilService.listAll(pageSize, page);
+		return this.frmPerfilService.listAll(pageSize, page);
 			
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("data", listAll);
-			result.put("count", this.frmPerfilService.getCount());
-			
-			return gson.toJson(result);
-		}catch(AccessDeniedException e){
-			
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("tituloError", "Acceso denegado");
-			result.put("error", "No posee los permisos para esta accion");
-			return gson.toJson(result);
-		}
 	}
 	
 	@RequestMapping(value = "/deleteR", method = RequestMethod.POST, produces={"application/json"})
@@ -83,16 +63,9 @@ public class CFrmPerfil {
 	
 		/*HttpSession session = request.getSession();
 		FrmSesion frmSesion = (FrmSesion) session.getAttribute("frmSesion");*/
-		try{
-			frmperfil.setPefiesta("B");
-			
-			return gson.toJson(this.frmPerfilService.update(frmperfil));
-		}catch(AccessDeniedException e){
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("tituloError", "Acceso denegado");
-			result.put("error", "No posee los permisos para esta accion");
-			return gson.toJson(result);
-		}
+		frmperfil.setPefiesta("B");
+		
+		return this.frmPerfilService.update(frmperfil);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -100,17 +73,10 @@ public class CFrmPerfil {
 	@ResponseBody	
 	public String insert(@RequestBody FrmPerfil frmperfil, HttpServletRequest request) throws Exception{
 			
-		try{
-			frmperfil.setPefiesta("A");
-			frmperfil.setPefifecr(new Date());
-				
-			return gson.toJson(this.frmPerfilService.insert(frmperfil));
-		}catch(AccessDeniedException e){
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("tituloError", "Acceso denegado");
-			result.put("error", "No posee los permisos para esta accion");
-			return gson.toJson(result);
-		}
+		frmperfil.setPefiesta("A");
+		frmperfil.setPefifecr(new Date());
+			
+		return this.frmPerfilService.insert(frmperfil);
 	}
 		
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -118,14 +84,7 @@ public class CFrmPerfil {
 	@ResponseBody
 	public String update(@RequestBody FrmPerfil frmperfil, HttpServletRequest request) throws Exception{
 		
-		try{
-			return gson.toJson(this.frmPerfilService.update(frmperfil));
-		}catch(AccessDeniedException e){
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("tituloError", "Acceso denegado");
-			result.put("error", "No posee los permisos para esta accion");
-			return gson.toJson(result);
-		}
+		return this.frmPerfilService.update(frmperfil);
 	}
 		
 }

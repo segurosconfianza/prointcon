@@ -13,12 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.confianza.webapp.repository.framework.security.Person;
 import com.confianza.webapp.repository.framework.security.PersonAttributesMapperImpl;
-import com.confianza.webapp.service.framework.frmsesion.FrmSesionService;
 
 public class AutenticateImpl implements AuthenticationProvider {
 
@@ -37,7 +34,7 @@ public class AutenticateImpl implements AuthenticationProvider {
 		boolean authenticated = this.authenticate(username, password);
 		
 		List<GrantedAuthority> autorities = new ArrayList<GrantedAuthority>();
-			
+		
 		if(authenticated)
 		{
 			List<Person> lista = null;
@@ -46,6 +43,7 @@ public class AutenticateImpl implements AuthenticationProvider {
 	        		 new PersonAttributesMapperImpl());
 			
 			Person persona=lista.get(0);
+			
 			List<Object[]> roles=rolService.loadRoles(persona.getGroups());
 			if(roles!=null)
 				for(Object[] obj:roles)

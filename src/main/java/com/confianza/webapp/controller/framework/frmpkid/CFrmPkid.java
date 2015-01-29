@@ -19,11 +19,11 @@ import com.confianza.webapp.repository.framework.frmpkid.FrmPkid;
 @RequestMapping("/FrmPkid")
 public class CFrmPkid {
 
+	@Autowired
 	private FrmPkidService frmPkidService;
 	
-	@Autowired
-	public CFrmPkid(FrmPkidService frmpkidService) {
-		this.frmPkidService = frmpkidService;
+	public CFrmPkid(){
+		super();
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

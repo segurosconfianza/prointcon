@@ -19,11 +19,11 @@ import com.confianza.webapp.repository.framework.frmestaproc.FrmEstaproc;
 @RequestMapping("/FrmEstaproc")
 public class CFrmEstaproc {
 
+	@Autowired
 	private FrmEstaprocService frmEstaprocService;
 	
-	@Autowired
-	public CFrmEstaproc(FrmEstaprocService frmestaprocService) {
-		this.frmEstaprocService = frmestaprocService;
+	public CFrmEstaproc(){
+		super();
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

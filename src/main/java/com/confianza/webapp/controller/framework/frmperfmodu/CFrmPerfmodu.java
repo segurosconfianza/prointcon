@@ -26,15 +26,11 @@ import com.google.gson.Gson;
 @RequestMapping("/FrmPerfmodu")
 public class CFrmPerfmodu {
 
+	@Autowired
 	private FrmPerfmoduService frmPerfmoduService;
 	
 	@Autowired
 	Gson gson;
-	
-	@Autowired
-	public CFrmPerfmodu(FrmPerfmoduService frmperfmoduService) {
-		this.frmPerfmoduService = frmperfmoduService;
-	}
 	
 	public CFrmPerfmodu() {
 		super();

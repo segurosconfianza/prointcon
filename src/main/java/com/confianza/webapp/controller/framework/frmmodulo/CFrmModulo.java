@@ -19,11 +19,11 @@ import com.confianza.webapp.repository.framework.frmmodulo.FrmModulo;
 @RequestMapping("/FrmModulo")
 public class CFrmModulo {
 
+	@Autowired
 	private FrmModuloService frmmoduloService;
 	
-	@Autowired
-	public CFrmModulo(FrmModuloService frmmoduloService) {
-		this.frmmoduloService = frmmoduloService;
+	public CFrmModulo(){
+		super();
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

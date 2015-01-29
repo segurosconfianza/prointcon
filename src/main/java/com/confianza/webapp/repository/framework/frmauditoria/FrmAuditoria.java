@@ -43,7 +43,7 @@ public class FrmAuditoria {
 	protected String auditabl; 
 	 
 	@Column(name = "AUDICOPK")
-	protected Long audicopk; 
+	protected String audicopk; 
 	 
 	@Column(name = "AUDICAMP")
 	protected String audicamp; 
@@ -82,11 +82,11 @@ public class FrmAuditoria {
 		this.auditabl = auditabl;
 	}
 
-	public Long getAudicopk(){
+	public String getAudicopk(){
 		return audicopk;
 	}
 	
-	public void setAudicopk(Long audicopk){
+	public void setAudicopk(String audicopk){
 		this.audicopk = audicopk;
 	}
 

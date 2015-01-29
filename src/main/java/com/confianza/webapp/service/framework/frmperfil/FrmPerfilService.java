@@ -15,15 +15,15 @@ import com.confianza.webapp.repository.framework.frmperfil.FrmPerfil;
 
 public interface FrmPerfilService{
 	
-	public FrmPerfil list(Long id) throws Exception;	
+	public String list(Long id) throws Exception;	
 
-	public FrmPerfil insert(FrmPerfil frmperfil) throws Exception;
+	public String insert(FrmPerfil frmperfil) throws Exception;
 
-	public List<FrmPerfil> listAll(int pageSize, int page) throws Exception;
+	public String listAll(int pageSize, int page) throws Exception;
 
 	public int getCount() throws Exception;
 
-	public FrmPerfil update(FrmPerfil frmperfil) throws Exception;
+	public String update(FrmPerfil frmperfil) throws Exception;
 
 	public void delete(FrmPerfil frmperfil) throws Exception;
 	

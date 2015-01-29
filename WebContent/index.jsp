@@ -1,6 +1,6 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<html lang="es" ng-app=FrmMainApp> 
+<html lang="es" xmlns:ng="http://angularjs.org" id="ng-app" ng-app=FrmMainApp> 
 	<head>		
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Seguros Confianza</title>			
@@ -10,18 +10,19 @@
 	    %>	    
 	    <script >var WEB_SERVER='<%out.print(WEB_SERVER);%>';</script>
 	    
-		<script src="lib/Angular/1.3.2/angular.js"></script>
-	    <script src="lib/Angular/1.3.2/angular.min.js"></script>
-	    <script src="lib/Angular/1.3.2/angular-route.js"></script>
-	    <script src="lib/Angular/1.3.2/angular-ui-tree.js"></script>
-	    <script src="lib/bootstrap/Angular/ui-bootstrap-tpls-0.11.2.min.js"></script>    	    	          
+		<script  src="lib/Angular/1.3.2/angular.js"></script>
+	    <script  src="lib/Angular/1.3.2/angular.min.js"></script>
+	    <script  src="lib/Angular/1.3.2/angular-route.js"></script>
+	    <script  src="lib/Angular/1.3.2/angular-ui-tree.js"></script>
+	    <script  src="lib/Angular/1.3.2/i18n/angular-locale_es-co.js"></script>
+	    <script  src="lib/bootstrap/Angular/ui-bootstrap-tpls-0.11.2.min.js"></script>    	    	          
 	    	    
     	<!--ng grid...-->
-	    <script src="lib/Angular/angular-ui-ng-grid/3.0/jquery.min.js"></script>
-    	<script src="lib/Angular/angular-ui-ng-grid/3.0/ng-grid.debug.js" type="text/javascript" ></script>
+	    <script  src="lib/Angular/angular-ui-ng-grid/3.0/jquery.min.js"></script>
+    	<script  src="lib/Angular/angular-ui-ng-grid/3.0/ng-grid.debug.js"></script>
     	
-    	<script src="lib/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    	<script src="lib/bootstrap/3.1.1/js/bootstrap.js"></script>
+    	<script  src="lib/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    	<script  src="lib/bootstrap/3.1.1/js/bootstrap.js"></script>
     	
 	    <!--inclusion de estilos ...-->
 	    <link  href="lib/CSS/Base.css" rel="stylesheet">
@@ -31,14 +32,27 @@
 		<link href="lib/Angular/angular-ui-ng-grid/3.0/ng-grid.css" rel="stylesheet" type="text/css" />
 		
 		<!--inclusion de app, servicios, controles ...-->		
-	    <script src="WebResources/framework/frmmenu/FrmMenuApp.js"></script>
-	    <script src="WebResources/framework/frmmenu/FrmMenuService.js"></script>
-	    <script src="WebResources/framework/frmmenu/FrmMenuController.js"></script>
+	    <script  src="WebResources/framework/frmmenu/FrmMenuApp.js"></script>
+	    <script  src="WebResources/framework/frmmenu/FrmMenuService.js"></script>
+	    <script  src="WebResources/framework/frmmenu/FrmMenuController.js"></script>
 	        					
-		<script src="WebResources/framework/frmperfil/FrmPerfilApp.js"></script>
-	    <script src="WebResources/framework/frmperfil/FrmPerfilService.js"></script>
-	    <script src="WebResources/framework/frmperfil/FrmPerfilController.js"></script>
-	    <script src="WebResources/framework/frmperfil/FrmPerfmoduController.js"></script>
+		<script  src="WebResources/framework/frmperfil/FrmPerfilApp.js"></script>
+	    <script  src="WebResources/framework/frmperfil/FrmPerfilService.js"></script>
+	    <script  src="WebResources/framework/frmperfil/FrmPerfilController.js"></script>
+	    <script  src="WebResources/framework/frmperfil/FrmPerfmoduController.js"></script>
+	    
+	    <script  src="WebResources/soporte/soporte/SoporteApp.js"></script>
+	    <script  src="WebResources/soporte/soporte/SoporteService.js"></script>
+	    <script  src="WebResources/soporte/soporte/SoporteController.js"></script>
+		
+		
+		<script type="text/javascript" Language="JavaScript">
+			document.createElement('ng-view');
+		
+		    $(document).ready(function() {
+		        angular.bootstrap(document);
+		    });
+		</script>
 			        					
 	</head>		      
 	

@@ -11,6 +11,7 @@ package com.confianza.webapp.service.framework.frmmenu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,9 +21,14 @@ import org.springframework.stereotype.Service;
 
 import com.confianza.webapp.repository.framework.frmmenu.FrmMenu;
 import com.confianza.webapp.repository.framework.frmmenu.FrmMenuRepository;
+import com.confianza.webapp.utils.JSONUtil;
+import com.google.gson.Gson;
 
 @Service
 public class FrmMenuServiceImpl implements FrmMenuService{
+	
+	@Autowired
+	Gson gson;
 	
 	@Autowired
 	private FrmMenuRepository frmMenuRepository;
@@ -42,13 +48,37 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 	}
 	
 	@Override
-	public FrmMenu list(Long id){
-		return frmMenuRepository.list(id);
+	public String list(Long id){
+		return gson.toJson(frmMenuRepository.list(id));
 	}
 	
 	@Override
-	public List<FrmMenu> listAll(){		
-		return frmMenuRepository.listAll();
+	public String listAll(){		
+		//cargo los menus padres
+		List<Object[]> menu=this.loadMenu(null);		
+		List<Map<String, Object>> menuAll;
+		
+		if(menu!=null){
+			
+			//cast de los menu a ser mapeados por cada campo
+			menuAll = JSONUtil.toNameList(new String[]{"menucons", "menuicon", "menutitu", "modudurl", "menuhijo"},menu
+			);
+			
+			//por cada menu se recorre para asignarle sus hijos
+			for(Map<String, Object> map:menuAll){
+				List<Map<String, Object>> menuhijos=loadChildren(Long.parseLong(map.get("menucons").toString()));
+				map.put("menuhijo", menuhijos);
+			}
+		}
+		else{
+			Object obj[]={0,"","No tiene permisos",null,null};
+			menu=new ArrayList<Object[]>();
+			menu.add(obj);
+			//cast de los menu a ser mapeados por cada campo
+			menuAll = JSONUtil.toNameList(new String[]{"menucons", "menuicon", "menutitu", "modudurl", "menuhijo"},menu
+			);
+		}
+		return gson.toJson(menuAll);
 	}	
 	
 	@Override
@@ -62,33 +92,27 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 	}
 	
 	@Override
-	public FrmMenu insert(FrmMenu frmmenu){
-		return frmMenuRepository.insert(frmmenu);
+	public String insert(FrmMenu frmmenu){
+		return gson.toJson(frmMenuRepository.insert(frmmenu));
 	}
 	
 	@Override
 	public List<Object[]> loadMenu(Long id) {
 
 		List<String> roles = getRoles();
+				
 		if(roles.size()>0)
 			return frmMenuRepository.loadMenu(roles, id);
 		else
 			return null;
 	}
-	
-	@Override
-	public FrmMenu loadMenuf() {
-
-		FrmMenu FrmMenu=new FrmMenu();
-		return FrmMenu;
-	}
-	
+		
 	private List<String> getRoles() {
 		
 		List<String> roles = new ArrayList<String>();
 		List<GrantedAuthority> autorities = new ArrayList<GrantedAuthority>();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if(auth!=null) {
+		if(auth!=null) {			 
 			autorities=(List<GrantedAuthority>) auth.getAuthorities();
 			for(GrantedAuthority obj:autorities){
 				String[] auxRol= obj.toString().split("_");
@@ -104,5 +128,23 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 	    }
 		
 		return roles;
+	}
+	
+	private List<Map<String, Object>> loadChildren(Long id) {
+		//cargo los hijos del papa
+		List<Object[]> menu=this.loadMenu(id);
+		
+		//cast de los hijos a ser mapeados por cada campo
+		List<Map<String, Object>> menuAll = JSONUtil.toNameList(
+				new String[]{"menucons", "menuicon", "menutitu", "modudurl", "menuhijo"},menu
+		);
+		
+		//por cada menu se recorre para asignarle sus hijos		
+		for(Map<String, Object> map:menuAll){
+			List<Map<String, Object>> menuhijos=loadChildren(Long.parseLong(map.get("menucons").toString()));
+			map.put("menuhijo", menuhijos);
+		}
+		
+		return menuAll;
 	}
 }

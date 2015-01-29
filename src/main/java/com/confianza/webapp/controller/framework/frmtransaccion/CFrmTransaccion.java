@@ -27,11 +27,11 @@ import com.confianza.webapp.repository.framework.frmtransaccion.FrmTransaccion;
 @RequestMapping("/FrmTransaccion")
 public class CFrmTransaccion {
 
+	@Autowired
 	private FrmTransaccionService frmTransaccionService;
 	
-	@Autowired
-	public CFrmTransaccion(FrmTransaccionService frmtransaccionService) {
-		this.frmTransaccionService = frmtransaccionService;
+	public CFrmTransaccion(){
+		super();
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

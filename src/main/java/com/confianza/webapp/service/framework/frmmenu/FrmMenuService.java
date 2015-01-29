@@ -15,17 +15,15 @@ import com.confianza.webapp.repository.framework.frmmenu.FrmMenu;
 
 public interface FrmMenuService{
 	
-	public FrmMenu list(Long id);
+	public String list(Long id);
 	
-	public List<FrmMenu> listAll();	
+	public String listAll();	
 	
 	public FrmMenu update(Long id);
 	
 	public void delete(Long id);
 	
-	public FrmMenu insert(FrmMenu frmmenu);
-
-	public FrmMenu loadMenuf();
+	public String insert(FrmMenu frmmenu);
 
 	public List<Object[]> loadMenu(Long id);
 	

@@ -11,10 +11,6 @@ package com.confianza.webapp.service.framework.frmlogext;
 
 import java.util.List;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-
-import com.confianza.webapp.repository.framework.frmconsulta.FrmConsulta;
 import com.confianza.webapp.repository.framework.frmlogext.FrmLogext;
 
 public interface FrmLogextService{
@@ -31,7 +27,4 @@ public interface FrmLogextService{
 	
 	public int getCount();
 
-	void insert(HttpServletRequest servletRequest, FrmConsulta frmConsulta,	String data) throws Throwable;
-
-	
 }

@@ -19,13 +19,13 @@ import com.confianza.webapp.repository.framework.frmauditoria.FrmAuditoria;
 @RequestMapping("/FrmAuditoria")
 public class CFrmAuditoria {
 
+	@Autowired
 	private FrmAuditoriaService frmAuditoriaService;
 	
-	@Autowired
-	public CFrmAuditoria(FrmAuditoriaService frmauditoriaService) {
-		this.frmAuditoriaService = frmauditoriaService;
+	public CFrmAuditoria(){
+		super();
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public FrmAuditoria list(Long id){

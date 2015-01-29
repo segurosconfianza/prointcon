@@ -22,14 +22,14 @@ import com.confianza.webapp.repository.framework.frmaplicaciones.FrmAplicaciones
 @RequestMapping("/FrmAplicaciones")
 public class CFrmAplicaciones {
 
+	@Autowired
 	private FrmAplicacionesService frmaplicacionesService;
 	
 	@Autowired
 	Gson gson;
 	
-	@Autowired
-	public CFrmAplicaciones(FrmAplicacionesService frmaplicacionesService) {
-		this.frmaplicacionesService = frmaplicacionesService;
+	public CFrmAplicaciones(){
+		super();
 	}
 	
 	@RequestMapping(value = "/{aplicons}.json", method = RequestMethod.GET, produces={"application/json"})
@@ -50,6 +50,7 @@ public class CFrmAplicaciones {
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public FrmAplicaciones update(@PathVariable("aplicons") Long aplicons){
+		
 		return this.frmaplicacionesService.update(aplicons);
 	}
 	
@@ -57,6 +58,7 @@ public class CFrmAplicaciones {
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public void delete(@PathVariable("aplicons") Long aplicons){
+		
 		this.frmaplicacionesService.delete(aplicons);
 	}
 	
@@ -64,6 +66,7 @@ public class CFrmAplicaciones {
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FrmAplicaciones frmaplicaciones){
+		
 		return gson.toJson(this.frmaplicacionesService.insert(frmaplicaciones));
 	}
 }

@@ -9,7 +9,9 @@ package com.confianza.webapp.service.framework.frmperfil;
   * @app		framework  
   */                          
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -18,9 +20,13 @@ import org.springframework.stereotype.Service;
 
 import com.confianza.webapp.repository.framework.frmperfil.FrmPerfil;
 import com.confianza.webapp.repository.framework.frmperfil.FrmPerfilRepository;
+import com.google.gson.Gson;
 
 @Service
 public class FrmPerfilServiceImpl implements FrmPerfilService{
+	
+	@Autowired
+	Gson gson;
 	
 	@Autowired
 	private FrmPerfilRepository frmPerfilRepository;
@@ -41,18 +47,24 @@ public class FrmPerfilServiceImpl implements FrmPerfilService{
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PERFIL_ALL", "FRM_PERFIL_READ"})
-	public FrmPerfil list(Long id) throws Exception{
-		return frmPerfilRepository.list(id);
+	public String list(Long id) throws Exception{
+		return gson.toJson(frmPerfilRepository.list(id));
 	}
 		
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PERFIL_ALL", "FRM_PERFIL_READ"})
-	public List<FrmPerfil> listAll(int pageSize, int page) throws Exception{
+	public String listAll(int pageSize, int page) throws Exception{
 		
 		int limit=pageSize*page;
 		int init=limit-pageSize;
 		
-		return frmPerfilRepository.listAll(init, limit);
+		List<FrmPerfil> listAll=this.frmPerfilRepository.listAll(pageSize, page);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", listAll);
+		result.put("count", this.getCount());
+		
+		return gson.toJson(result);
 	}
 	
 	@Override
@@ -63,8 +75,8 @@ public class FrmPerfilServiceImpl implements FrmPerfilService{
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PERFIL_ALL", "FRM_PERFIL_UPDATE"})
-	public FrmPerfil update(FrmPerfil frmPerfil) throws Exception{
-		return frmPerfilRepository.update(frmPerfil);
+	public String update(FrmPerfil frmPerfil) throws Exception{
+		return gson.toJson(frmPerfilRepository.update(frmPerfil));
 	}
 	
 	@Override
@@ -75,8 +87,8 @@ public class FrmPerfilServiceImpl implements FrmPerfilService{
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PERFIL_ALL", "FRM_PERFIL_CREATE"})
-	public FrmPerfil insert(FrmPerfil frmperfil) throws Exception{
-		return frmPerfilRepository.insert(frmperfil);
+	public String insert(FrmPerfil frmperfil) throws Exception{
+		return gson.toJson(frmPerfilRepository.insert(frmperfil));
 	}
 	
 }

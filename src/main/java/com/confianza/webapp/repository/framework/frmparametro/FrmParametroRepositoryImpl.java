@@ -73,7 +73,7 @@ public class FrmParametroRepositoryImpl implements FrmParametroRepository{
 		try{
 			String sql = "select "+FrmParametro.getColumnNames()
 					   + "from Frm_Parametro "
-					   + "where paracosu = :id ";
+					   + "where paracosu = :id order by paracons";
 						
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(FrmParametro.class)					

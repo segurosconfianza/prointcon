@@ -19,13 +19,13 @@ import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
 @RequestMapping("/FrmSesion")
 public class CFrmSesion {
 
+	@Autowired
 	private FrmSesionService frmSesionService;
 	
-	@Autowired
-	public CFrmSesion(FrmSesionService frmsesionService) {
-		this.frmSesionService = frmsesionService;
+	public CFrmSesion(){
+		super();
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public FrmSesion list(Long id){

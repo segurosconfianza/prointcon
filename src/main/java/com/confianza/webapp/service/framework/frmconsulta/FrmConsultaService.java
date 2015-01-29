@@ -13,16 +13,17 @@ import java.util.List;
 import java.util.Map;
 
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsulta;
+import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
 
 public interface FrmConsultaService{
 	
-	public FrmConsulta list(Long id);
+	public String list(Long id);
 	
-	public List<FrmConsulta> listAll(int pageSize, int page);	
+	public String listAll(int pageSize, int page);	
 	
-	public FrmConsulta insert(FrmConsulta frmconsulta);
+	public String insert(FrmConsulta frmconsulta);
 	
-	public FrmConsulta update(FrmConsulta frmconsulta);
+	public String update(FrmConsulta frmconsulta);
 	
 	public void delete(FrmConsulta frmconsulta);	
 	
@@ -31,5 +32,17 @@ public interface FrmConsultaService{
 	public FrmConsulta listName(String conscons);
 
 	public List<Object[]> loadData(FrmConsulta frmConsulta, Map<String, Object> parameters);
+
+	public FrmConsulta listProcedureChild(String id);
+
+	public Map<String, Object> loadProcedure(FrmConsulta frmConsulta,	List<FrmParametro> parametros, Map<String, Object> parameters, Map<String, Object> parametersData);
+
+	public String loadRecord(String conscons, String params);
+
+	public String updateRecord(String conscons, String params, String paramsData);
+
+	public String listCombo(String conscons);
+
+	public String listComboDynamic(String conscons);
 	
 }

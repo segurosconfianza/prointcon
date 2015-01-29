@@ -9,8 +9,12 @@ package com.confianza.webapp.repository.framework.frmconsulta;
   * @app		framework  
   */                          
 
+import java.sql.CallableStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+
+import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
 
 public interface FrmConsultaRepository {
 	
@@ -31,4 +35,17 @@ public interface FrmConsultaRepository {
 	public List<Object[]> loadData(FrmConsulta frmConsulta,	Map<String, Object> parameters);
 
 	public List<Object[]> loadDataOsiris(FrmConsulta frmConsulta, Map<String, Object> parameters);
+
+	public FrmConsulta listProcedureChild(String id);
+
+	public Map<String, Object> loadProcedure(FrmConsulta frmConsulta, List<FrmParametro> parametros, Map<String, Object> parameters, Map<String, Object> parametersData);
+
+	public Map<String, Object> loadProcedureOsiris(FrmConsulta frmConsulta, List<FrmParametro> parametros, Map<String, Object> parameters, Map<String, Object> parametersData);
+
+	public Map<String, Object> getParametersOutput(List<FrmParametro> fp, CallableStatement cst) throws SQLException;
+
+	public CallableStatement putParameterOutput(List<FrmParametro> fp, CallableStatement cst) throws SQLException;
+
+	public CallableStatement putParametersInput(Map<String, Object> p, List<FrmParametro> fp, CallableStatement cst, String tipo) throws SQLException;
+	
 }

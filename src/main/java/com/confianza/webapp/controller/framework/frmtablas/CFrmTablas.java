@@ -19,11 +19,11 @@ import com.confianza.webapp.repository.framework.frmtablas.FrmTablas;
 @RequestMapping("/FrmTablas")
 public class CFrmTablas {
 
+	@Autowired
 	private FrmTablasService frmTablasService;
 	
-	@Autowired
-	public CFrmTablas(FrmTablasService frmtablasService) {
-		this.frmTablasService = frmtablasService;
+	public CFrmTablas(){
+		super();
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

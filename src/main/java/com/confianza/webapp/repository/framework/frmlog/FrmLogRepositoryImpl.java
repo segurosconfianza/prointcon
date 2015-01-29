@@ -123,7 +123,7 @@ public class FrmLogRepositoryImpl implements FrmLogRepository{
 	@Override
 	@Transactional
 	public FrmLog insert(FrmLog frmlog){
-		//getSession().insert(frmlog);
+		getSession().save(frmlog);
 		return frmlog;
 	}
 }

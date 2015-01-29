@@ -31,6 +31,7 @@ import com.confianza.webapp.repository.framework.frmlogext.FrmLogext;
 @RequestMapping("/FrmLogext")
 public class CFrmLogext {
 
+	@Autowired
 	private FrmLogextService frmlogextService;
 	
 	@Autowired
@@ -40,11 +41,6 @@ public class CFrmLogext {
 		super();
 	}
 	
-	@Autowired
-	public CFrmLogext(FrmLogextService frmlogextService) {
-		this.frmlogextService = frmlogextService;
-	}
-		
 	@RequestMapping("/")
 	public String index() {
 		return "framework/frmlogext/FrmLogext";

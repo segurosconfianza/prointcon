@@ -121,7 +121,7 @@ public class FrmTransaccionRepositoryImpl implements FrmTransaccionRepository{
 	@Override
 	@Transactional
 	public FrmTransaccion insert(FrmTransaccion frmtransaccion){
-		//getSession().insert(frmtransaccion);
+		getSession().save(frmtransaccion);
 		return frmtransaccion;
 	}
 }

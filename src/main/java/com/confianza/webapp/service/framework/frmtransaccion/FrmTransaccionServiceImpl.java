@@ -12,24 +12,14 @@ package com.confianza.webapp.service.framework.frmtransaccion;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import com.confianza.webapp.repository.framework.frmperfil.FrmPerfil;
 import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
 import com.confianza.webapp.repository.framework.frmtransaccion.FrmTransaccion;
 import com.confianza.webapp.repository.framework.frmtransaccion.FrmTransaccionRepository;
 
 @Service
-@Aspect
 public class FrmTransaccionServiceImpl implements FrmTransaccionService{
 	
 	@Autowired
@@ -74,4 +64,13 @@ public class FrmTransaccionServiceImpl implements FrmTransaccionService{
 		return frmTransaccionRepository.insert(frmtransaccion);
 	}
 	
+	@Override
+	public FrmTransaccion insert(Long frmSesion){
+		
+		FrmTransaccion frmtransaccion=new FrmTransaccion();
+		frmtransaccion.setTransesi(frmSesion);
+		frmtransaccion.setTranfecr(new Date());
+				
+	    return frmTransaccionRepository.insert(frmtransaccion);
+	}
 }

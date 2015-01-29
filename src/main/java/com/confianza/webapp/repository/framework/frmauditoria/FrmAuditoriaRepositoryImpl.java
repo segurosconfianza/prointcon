@@ -125,7 +125,7 @@ public class FrmAuditoriaRepositoryImpl implements FrmAuditoriaRepository{
 	@Override
 	@Transactional
 	public FrmAuditoria insert(FrmAuditoria frmauditoria){
-		//getSession().insert(frmauditoria);
+		getSession().save(frmauditoria);
 		return frmauditoria;
 	}
 }
