@@ -144,8 +144,9 @@ public class FrmPerfmoduRepositoryImpl implements FrmPerfmoduRepository{
 	 */
 	@Override
 	@Transactional
-	public void delete(FrmPerfmodu frmperfmodu){
+	public FrmPerfmodu delete(FrmPerfmodu frmperfmodu){
 		getSession().delete(frmperfmodu);
+		return frmperfmodu;
 	}
 	
 	/**

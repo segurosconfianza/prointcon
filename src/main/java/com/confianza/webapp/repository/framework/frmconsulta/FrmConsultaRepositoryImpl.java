@@ -20,10 +20,15 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.jdbc.Work;
+import org.hibernate.type.DateType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -114,6 +119,30 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	}
 	
 	/**
+	 * Metodo de consulta para los registros de la tabla FrmConsulta por el padre de la consulta
+	 * @value id = id de la llave primaria a consultar el registro
+	 * @return FrmConsulta = objeto de la case FrmConsulta que contiene los datos encontrados dado el id
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public FrmConsulta listChild(String id){
+		try{
+			String sql = "select "+FrmConsulta.getColumnNames()
+					   + "from Frm_Consulta "
+					   + "where conspadr = :id and constipo=1";
+						
+			Query query = getSession().createSQLQuery(sql)	
+						 .addEntity(FrmConsulta.class)	
+					     .setParameter("id", id);
+			return (FrmConsulta) query.uniqueResult();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
 	 * Metodo de consulta para los registros de la tabla FrmConsulta por el nombre de la consulta
 	 * @value id = id de la llave primaria a consultar el registro
 	 * @return FrmConsulta = objeto de la case FrmConsulta que contiene los datos encontrados dado el id
@@ -172,9 +201,9 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 */
 	@Override
 	@Transactional("transactionManagerOsiris")
-	public List<Object[]> loadDataOsiris(FrmConsulta frmConsulta,Map<String, Object> parameters){
+	public List<Object[]> loadDataOsiris(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros){
 		try{
-			Query query = getSessionOsiris().createSQLQuery(frmConsulta.getConslsql());
+			SQLQuery query = getSessionOsiris().createSQLQuery(frmConsulta.getConslsql());
 			
 			if(parameters!=null){
 				Iterator it = parameters.entrySet().iterator();			
@@ -182,7 +211,22 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 			        Map.Entry e = (Map.Entry)it.next();
 			        query.setParameter(e.getKey().toString(), e.getValue());
 			    }
-		   }
+		    }
+			
+			if(parametros!=null){
+				for(FrmParametro frmParametro:parametros){
+					if(frmParametro.getParatipo().equals("S")){
+						if(frmParametro.getParatida().equals("D"))
+							query.addScalar(frmParametro.getParanomb(), DateType.INSTANCE);
+						else if(frmParametro.getParatida().equals("CI") || frmParametro.getParatida().equals("CI"))
+							query.addScalar(frmParametro.getParanomb(), IntegerType.INSTANCE);
+						else if(frmParametro.getParatida().equals("C") || frmParametro.getParatida().equals("CS"))
+							query.addScalar(frmParametro.getParanomb(), StringType.INSTANCE);
+						else 
+							query.addScalar(frmParametro.getParanomb(), StringType.INSTANCE);
+					}
+				}
+			}
 			
 			return query.list();
 		}catch(Exception e){
@@ -550,7 +594,8 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 					default:break;
 				}
 			 }
-		}				
+		}	
+		
 	    return o;
 	}
 }

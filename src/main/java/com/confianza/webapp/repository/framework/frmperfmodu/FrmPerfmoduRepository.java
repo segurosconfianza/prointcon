@@ -17,7 +17,7 @@ public interface FrmPerfmoduRepository {
 	
 	public FrmPerfmodu update(FrmPerfmodu frmperfmodu);
 	
-	public void delete(FrmPerfmodu frmperfmodu);
+	public FrmPerfmodu delete(FrmPerfmodu frmperfmodu);
 	
 	public FrmPerfmodu insert(FrmPerfmodu frmperfmodu);
 

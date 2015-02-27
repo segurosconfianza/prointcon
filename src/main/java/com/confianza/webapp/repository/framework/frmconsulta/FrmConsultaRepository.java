@@ -34,8 +34,6 @@ public interface FrmConsultaRepository {
 
 	public List<Object[]> loadData(FrmConsulta frmConsulta,	Map<String, Object> parameters);
 
-	public List<Object[]> loadDataOsiris(FrmConsulta frmConsulta, Map<String, Object> parameters);
-
 	public FrmConsulta listProcedureChild(String id);
 
 	public Map<String, Object> loadProcedure(FrmConsulta frmConsulta, List<FrmParametro> parametros, Map<String, Object> parameters, Map<String, Object> parametersData);
@@ -47,5 +45,9 @@ public interface FrmConsultaRepository {
 	public CallableStatement putParameterOutput(List<FrmParametro> fp, CallableStatement cst) throws SQLException;
 
 	public CallableStatement putParametersInput(Map<String, Object> p, List<FrmParametro> fp, CallableStatement cst, String tipo) throws SQLException;
+
+	public FrmConsulta listChild(String id);
+
+	public List<Object[]> loadDataOsiris(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros);
 	
 }

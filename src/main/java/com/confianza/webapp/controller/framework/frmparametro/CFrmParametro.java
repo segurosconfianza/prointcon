@@ -35,9 +35,6 @@ public class CFrmParametro {
 	@Autowired
 	private FrmParametroService frmParametroService;
 	
-	@Autowired
-	Gson gson;
-	
 	public CFrmParametro() {
 		super();
 	}
@@ -51,47 +48,21 @@ public class CFrmParametro {
 	@ResponseBody
 	public String list(@PathVariable("paracons") Long paracons){
 		
-		try{
-			return gson.toJson(this.frmParametroService.list(paracons));
-		}catch(AccessDeniedException e){
-			return "Acceso denegado";
-		}
+		return this.frmParametroService.list(paracons);
 	}
 	
 	@RequestMapping(value = "/params.json", params = {"paracons"}, method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listParamsCosu(@RequestParam("paracons") Long paracons){
 		
-		try{			
-			Map<String, Object> result = new HashMap<String, Object>();
-			List<FrmParametro> listAll=this.frmParametroService.listParamsCosu(paracons);
-			
-			result.put("data", listAll);
-			
-			return gson.toJson(result);
-		}catch(AccessDeniedException e){
-			return "Acceso denegado";
-		}
+		return this.frmParametroService.listParamsCosu(paracons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		try{
-			List<FrmParametro> listAll=this.frmParametroService.listAll(pageSize, page);
-			
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("data", listAll);
-			result.put("count", this.frmParametroService.getCount());
-			
-			return gson.toJson(result);
-		}catch(AccessDeniedException e){
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("tituloError", "Acceso denegado");
-			result.put("error", "No posee los permisos para esta accion");
-			return gson.toJson(result);
-		}
+		return this.frmParametroService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -99,14 +70,7 @@ public class CFrmParametro {
 	@ResponseBody
 	public String update(@RequestBody FrmParametro frmparametro, HttpServletRequest request){
 	
-		try{		
-			return gson.toJson(this.frmParametroService.update(frmparametro) );
-		}catch(AccessDeniedException e){
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("tituloError", "Acceso denegado");
-			result.put("error", "No posee los permisos para esta accion");
-			return gson.toJson(result);
-		}
+		return this.frmParametroService.update(frmparametro);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -114,15 +78,8 @@ public class CFrmParametro {
 	@ResponseBody
 	public String delete(@RequestBody FrmParametro frmparametro, HttpServletRequest request){
 	
-		try{
-			//frmparametro.setesta("B");
-			return gson.toJson(this.frmParametroService.update(frmparametro));
-		}catch(AccessDeniedException e){
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("tituloError", "Acceso denegado");
-			result.put("error", "No posee los permisos para esta accion");
-			return gson.toJson(result);
-		}
+		//frmparametro.setesta("B");
+		return this.frmParametroService.update(frmparametro);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -130,16 +87,9 @@ public class CFrmParametro {
 	@ResponseBody
 	public String insert(@RequestBody FrmParametro frmparametro, HttpServletRequest request){
 		
-		try{
-			//frmparametro.setesta("A");
-			//frmparametro.setfecr(new Date());
-			
-			return gson.toJson(this.frmParametroService.insert(frmparametro));
-		}catch(AccessDeniedException e){
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("tituloError", "Acceso denegado");
-			result.put("error", "No posee los permisos para esta accion");
-			return gson.toJson(result);
-		}
+		//frmparametro.setesta("A");
+		//frmparametro.setfecr(new Date());
+		
+		return this.frmParametroService.insert(frmparametro);
 	}
 }

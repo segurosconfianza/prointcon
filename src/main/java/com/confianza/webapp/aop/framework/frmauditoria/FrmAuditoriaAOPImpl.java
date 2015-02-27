@@ -64,46 +64,75 @@ public class FrmAuditoriaAOPImpl{
 	public void pointUpdateRecord(){		
 	}
 		
-	@AfterReturning(value="pointUpdateRecord()", returning="result")
-	public void interceptUpdateRecord(JoinPoint point, String result) throws Throwable{
-		Type type = new TypeToken<Map<String, Object>>(){}.getType();
-		Map<String, Object> resultData=gson.fromJson(result, type);
+	@Around("pointUpdateRecord()")
+	public String interceptUpdateRecord(ProceedingJoinPoint point) throws Throwable{
 		
-		if(resultData.get("AUDITORIA")!=null){
-			String []auditoria=resultData.get("AUDITORIA").toString().split(";");
-			String campos[];
-			//recupero la sesion del usuario
-			FrmSesion frmSesion = (FrmSesion) session.getAttribute("frmSesion");
-			//creo la transaccion de este proceso
-			FrmTransaccion frmtransaccion=frmTransaccionService.insert(frmSesion.getSesicons());
-			FrmAuditoria frmAuditoria;
-			FrmLog frmLog;
-			
-			//creo la auditoria por cada campo actualizado
-			for(String aux:auditoria){
-				campos=aux.split(",");
+		try{
+			String result=(String)point.proceed();
+			Type type = new TypeToken<Map<String, Object>>(){}.getType();
+			Map<String, Object> resultData=gson.fromJson(result, type);
+		
+			if(resultData.get("AUDITORIA")!=null){
+				String []auditoria=resultData.get("AUDITORIA").toString().split(";");
+				String campos[];
+				//recupero la sesion del usuario
+				FrmSesion frmSesion = (FrmSesion) session.getAttribute("frmSesion");
+				//creo la transaccion de este proceso
+				FrmTransaccion frmtransaccion=frmTransaccionService.insert(frmSesion.getSesicons());
+				FrmAuditoria frmAuditoria;
+				FrmLog frmLog;
 				
-				if(campos[0].equals("DELETE") || campos[0].equals("INSERT")){
-					frmLog=new FrmLog();
-					frmLog.setSlogtran(frmtransaccion.getTrancons());
-					frmLog.setSlogtabl(campos[1]);
-					frmLog.setSlogacci(campos[0]);
-					frmLog.setSlogregi(campos[2]);
-					frmLogService.insert(frmLog);
-				}
-				else if(campos[0].equals("UPDATE") ){
-					frmAuditoria=new FrmAuditoria();
-					frmAuditoria.setAuditran(frmtransaccion.getTrancons());
-					frmAuditoria.setAuditabl(campos[1]);
-					frmAuditoria.setAudicopk(campos[2]);
-					frmAuditoria.setAudicamp(campos[3]);
-					frmAuditoria.setAudivaan(campos[4]);
-					frmAuditoria.setAudivanu(campos[5]);
-					frmAuditoriaService.insert(frmAuditoria);
-				}				
+				//creo la auditoria por cada campo actualizado
+				generarAuditoriaPorRegistro(auditoria, frmtransaccion);
+				
+				resultData.remove("AUDITORIA");
+				resultData.put("TRANSACCION", frmtransaccion.getTrancons().toString());
 			}
 			
+			return gson.toJson(resultData);
+		}catch(Exception e){
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("tituloError", "Error");
+			result.put("error", e.getMessage());
+			return gson.toJson(result);
 		}
+	}
+
+	private void generarAuditoriaPorRegistro(String[] auditoria,
+			FrmTransaccion frmtransaccion) {
+		String[] campos;
+		for(String aux:auditoria){
+			campos=aux.split(",");
+			
+			if(campos[0].equals("DELETE") || campos[0].equals("INSERT")){
+				crearLog(campos, frmtransaccion);
+			}
+			else if(campos[0].equals("UPDATE") ){
+				crearAuditoria(campos, frmtransaccion);
+			}				
+		}
+	}
+
+	private void crearAuditoria(String[] campos, FrmTransaccion frmtransaccion) {
+		FrmAuditoria frmAuditoria;
+		frmAuditoria=new FrmAuditoria();
+		frmAuditoria.setAuditran(frmtransaccion.getTrancons());
+		frmAuditoria.setAuditabl(campos[1]);
+		frmAuditoria.setAudicopk(campos[2]);
+		frmAuditoria.setAudicamp(campos[3]);
+		frmAuditoria.setAudivaan(campos[4]);
+		frmAuditoria.setAudivanu(campos[5]);
+		frmAuditoriaService.insert(frmAuditoria);
+	}
+
+	private void crearLog(String[] campos, FrmTransaccion frmtransaccion) {
+		FrmLog frmLog;
+		frmLog=new FrmLog();
+		frmLog.setSlogtran(frmtransaccion.getTrancons());
+		frmLog.setSlogtabl(campos[1]);
+		frmLog.setSlogacci(campos[0]);
+		frmLog.setSlogregi(campos[2]);
+		frmLogService.insert(frmLog);
 	}
 	
 	public static HttpSession getSession() {

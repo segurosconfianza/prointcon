@@ -15,18 +15,20 @@ import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
 
 public interface FrmParametroService{
 	
-	public FrmParametro list(Long id);
+	public String list(Long id);
 	
-	public List<FrmParametro> listAll(int pageSize, int page);	
+	public String listAll(int pageSize, int page);	
 	
-	public FrmParametro insert(FrmParametro frmparametro);
+	public String insert(FrmParametro frmparametro);
 	
-	public FrmParametro update(FrmParametro frmparametro);
+	public String update(FrmParametro frmparametro);
 	
 	public void delete(FrmParametro frmparametro);	
 	
 	public int getCount();
 
-	public List<FrmParametro> listParamsCosu(Long id);
+	public String listParamsCosu(Long id);
+
+	public List<FrmParametro> listParamsCosuType(Long id);
 	
 }

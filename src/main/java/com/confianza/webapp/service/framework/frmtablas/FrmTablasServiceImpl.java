@@ -10,6 +10,7 @@ package com.confianza.webapp.service.framework.frmtablas;
   */                          
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +60,11 @@ public class FrmTablasServiceImpl implements FrmTablasService{
 	@Override
 	public FrmTablas insert(FrmTablas frmtablas){
 		return frmTablasRepository.insert(frmtablas);
+	}
+
+	@Override
+	public FrmTablas listByTablcodi(String tablcodi) {
+		return frmTablasRepository.listByTablcodi(tablcodi);
 	}
 	
 }

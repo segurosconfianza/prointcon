@@ -9,7 +9,9 @@ package com.confianza.webapp.service.framework.frmperfmodu;
   * @app		framework  
   */                          
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -18,12 +20,17 @@ import org.springframework.stereotype.Service;
 
 import com.confianza.webapp.repository.framework.frmperfmodu.FrmPerfmodu;
 import com.confianza.webapp.repository.framework.frmperfmodu.FrmPerfmoduRepository;
+import com.confianza.webapp.utils.JSONUtil;
+import com.google.gson.Gson;
 
 @Service
 public class FrmPerfmoduServiceImpl implements FrmPerfmoduService{
 	
 	@Autowired
 	private FrmPerfmoduRepository frmperfmoduRepository;
+	
+	@Autowired
+	Gson gson;
 	
 	/**
 	 * @return the frmperfmoduRepository
@@ -40,36 +47,48 @@ public class FrmPerfmoduServiceImpl implements FrmPerfmoduService{
 	}
 	
 	@Override
-	public FrmPerfmodu list(Long id){
-		return frmperfmoduRepository.list(id);
+	public String list(Long id){
+		return gson.toJson(frmperfmoduRepository.list(id));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PERFMODU_ALL", "FRM_PERFMODU_READ"})
-	public List<Object[]> listAll(int pageSize, int page, Long pemopefi){
+	public String listAll(int pageSize, int page, Long pemopefi){
 		
 		int limit=pageSize*page;
 		int init=limit-pageSize;
 		
-		return frmperfmoduRepository.listAll(init, limit, pemopefi);
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		List<Object[]> listAll=frmperfmoduRepository.listAll(init, limit, pemopefi);
+		
+		//cast de los menu a ser mapeados por cada campo
+		List<Map<String, Object>> rolAll = JSONUtil.toNameList(
+				new String[]{"pemocons", "pemopefi", "pemomoro", "morocons", "moromodu", "mororope", "moducons", "moduapli", "modunomb", "modunemo", "modudurl", "ropecons", "ropenomb", "ropedesc", "ropetipo", "aplicons", "aplinomb", "aplidesc", "apliesta", "aplifecr", "tablvast"},listAll
+		);
+		
+		result.put("data", rolAll);
+		result.put("count", this.getCount());
+		
+		return gson.toJson(result);
 	}	
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PERFMODU_ALL", "FRM_PERFMODU_UPDATE"})
-	public FrmPerfmodu update(FrmPerfmodu frmperfmodu){
-		return frmperfmoduRepository.update(frmperfmodu);
+	public String update(FrmPerfmodu frmperfmodu){
+		return gson.toJson(frmperfmoduRepository.update(frmperfmodu));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PERFMODU_ALL", "FRM_PERFMODU_DELETE"})
-	public void delete(FrmPerfmodu frmperfmodu){
-		frmperfmoduRepository.delete(frmperfmodu);
+	public String delete(FrmPerfmodu frmperfmodu){
+		return gson.toJson(frmperfmoduRepository.delete(frmperfmodu));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PERFMODU_ALL", "FRM_PERFMODU_CREATE"})
-	public FrmPerfmodu insert(FrmPerfmodu frmperfmodu){
-		return frmperfmoduRepository.insert(frmperfmodu);
+	public String insert(FrmPerfmodu frmperfmodu){
+		return gson.toJson(frmperfmoduRepository.insert(frmperfmodu));
 	}
 
 	@Override
@@ -79,9 +98,16 @@ public class FrmPerfmoduServiceImpl implements FrmPerfmoduService{
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PERFMODU_ALL", "FRM_PERFMODU_READ"})
-	public List<Object[]> listComboMoro(){
-				
-		return frmperfmoduRepository.listComboMoro();
+	public String listComboMoro(){
+		
+		List<Object[]> listAll=frmperfmoduRepository.listComboMoro();
+		
+		//cast de los menu a ser mapeados por cada campo
+		List<Map<String, Object>> rolAll = JSONUtil.toNameList(
+				new String[]{"value", "label"},listAll
+		);
+		
+		return gson.toJson(rolAll);
 	}
 	
 }

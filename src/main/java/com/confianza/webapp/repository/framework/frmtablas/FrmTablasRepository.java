@@ -22,4 +22,6 @@ public interface FrmTablasRepository {
 	public void delete(Long id);
 	
 	public FrmTablas insert(FrmTablas frmtablas);
+
+	public FrmTablas listByTablcodi(String tablcodi);
 }

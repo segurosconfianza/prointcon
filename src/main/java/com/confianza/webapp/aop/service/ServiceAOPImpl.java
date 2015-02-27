@@ -1,4 +1,4 @@
-package com.confianza.webapp.aop.controller;
+package com.confianza.webapp.aop.service;
 
  /**                          
   *                           
@@ -27,16 +27,16 @@ import com.google.gson.Gson;
 
 @Service
 @Aspect
-public class ControllerAOPImpl{
+public class ServiceAOPImpl{
 	
 	@Autowired
 	Gson gson;
 		
-	public ControllerAOPImpl(){
+	public ServiceAOPImpl(){
 		
 	}
 	
-	@Pointcut("execution(* com.confianza.webapp.controller..*(..))")
+	@Pointcut("execution(String com.confianza.webapp.service..*(..))")
 	public void pointIntercepController(){		
 	}
 	
@@ -44,11 +44,11 @@ public class ControllerAOPImpl{
 	public String interceptController(ProceedingJoinPoint point) throws Throwable{
 		try{
 			return (String) point.proceed();
-		}catch(AccessDeniedException e){
+		}catch(NullPointerException e){
 			
 			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("tituloError", "Acceso denegado");
-			result.put("error", "No posee los permisos para esta accion");
+			result.put("tituloError", "Datos no encontrados");
+			result.put("error", "No se encontraron datos con los criterios dados");
 			return gson.toJson(result);
 		}
 	}

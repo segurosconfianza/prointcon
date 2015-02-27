@@ -32,6 +32,12 @@ public class RolServiceImpl implements RolService{
 	@Transactional
 	public List<Object[]> loadRoles(List<String> perfiles) {		
 		return personAttributesMapper.loadRoles(perfiles);
-	}		
+	}
+	
+	@Override
+	public boolean validateRoles(String perfiles) {
+		
+		return personAttributesMapper.validateRoles(perfiles.split(","));
+	}
 
 }

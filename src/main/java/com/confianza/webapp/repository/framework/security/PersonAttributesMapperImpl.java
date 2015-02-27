@@ -117,4 +117,30 @@ public class PersonAttributesMapperImpl implements PersonAttributesMapper,Attrib
 		}
 	}	
 	
+	@Override
+	@Transactional
+	public boolean validateRoles(String[] roles) {
+				
+		try{
+			String sql = "select modunomb, ropenomb "
+					   + "from frm_perfil "
+					   + "join frm_perfmodu on (pemopefi=peficons) "
+					   + "join frm_modurope on (morocons=pemomoro) "
+					   + "join frm_roleperm on (ropecons=mororope) "
+					   + "join frm_modulo   on (moducons=moromodu) "
+					   + "where modunomb ||'_'|| ropenomb in (:roles)";
+						
+			Query query = getSession().createSQLQuery(sql)					
+					     .setParameterList("roles", roles);
+			
+			if(query.list().size()>0)
+				return true;
+			else
+				return false;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}	
+	
 }

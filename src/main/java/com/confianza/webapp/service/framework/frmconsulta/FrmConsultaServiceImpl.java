@@ -10,6 +10,7 @@ package com.confianza.webapp.service.framework.frmconsulta;
   */                          
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +20,19 @@ import javax.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.confianza.webapp.repository.framework.frmarchivo.FrmArchivo;
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsulta;
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsultaRepository;
 import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
+import com.confianza.webapp.repository.soporte.sopmotivo.SopMotivo;
+import com.confianza.webapp.service.framework.frmarchivo.FrmArchivoService;
 import com.confianza.webapp.service.framework.frmparametro.FrmParametroService;
+import com.confianza.webapp.service.soporte.sopadjunto.SopAdjuntoService;
+import com.confianza.webapp.service.soporte.sopmotivo.SopMotivoService;
+import com.confianza.webapp.utils.CFile;
+import com.confianza.webapp.utils.FileImpl;
 import com.confianza.webapp.utils.JSONUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -39,6 +48,9 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	
 	@Autowired
 	private FrmParametroService frmParametroService;
+	
+	@Autowired
+	private SopMotivoService sopMotivoService;
 	
 	/**
 	 * @return the frmconsultaRepository
@@ -67,6 +79,11 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override	
+	public FrmConsulta listChild(String id){
+		return frmConsultaRepository.listChild(id);
+	}
+	
+	@Override	
 	public FrmConsulta listProcedureChild(String id){
 		return frmConsultaRepository.listProcedureChild(id);
 	}
@@ -75,93 +92,73 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
 	public String loadRecord(String conscons, String params){
 		
-	        Type type = new TypeToken<Map<String, Object>>(){}.getType();
-			Map<String, Object> parameters=gson.fromJson(params, type);   						
-			
-			//carga la consulta dinamica
-			FrmConsulta frmConsulta=this.listName(conscons);
-			if(frmConsulta!=null){
-				//carga los datos de la consulta
-				List<Object[]> rAll=this.loadData(frmConsulta, parameters);
-				//cast delresultado a ser mapeado por cada campo
-				List<Map<String, Object>> listAll = JSONUtil.toNameList(frmConsulta.getConscolu().split(","),rAll);			
-				
-				Map<String, Object> result = new HashMap<String, Object>();
-				result.put("data", listAll);
-				result.put("camp", frmConsulta.getConscolu().split(","));
-				
-				return gson.toJson(result);
-			}else{
-				Map<String, Object> result = new HashMap<String, Object>();
-				result.put("tituloError", "Datos no encontrados");
-				result.put("error", "No se encontraron datos con los criterios dados");
-				return gson.toJson(result);
-			}
+        Type type = new TypeToken<Map<String, Object>>(){}.getType();
+		Map<String, Object> parameters=gson.fromJson(params, type);   						
+		
+		//carga la consulta dinamica
+		FrmConsulta frmConsulta=this.listName(conscons);
+		List<FrmParametro> parametros=this.frmParametroService.listParamsCosuType(new Long(conscons));
+		
+		//carga los datos de la consulta
+		List<Object[]> rAll=this.loadListData(frmConsulta, parameters);
+		//cast delresultado a ser mapeado por cada campo
+		List<Map<String, Object>> listAll = JSONUtil.toNameList(frmConsulta.getConscolu().split(","),rAll);			
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", listAll);
+		result.put("camp", frmConsulta.getConscolu().split(","));
+		
+		return gson.toJson(result);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
 	public String listCombo(String conscons){
-			//carga la consulta dinamica
-			FrmConsulta frmConsulta=this.listName(conscons);
-			
-			if(frmConsulta!=null){
-				//carga los datos de la consulta
-				List<Object[]> rAll=this.loadData(frmConsulta, null);
-				
-				//cast de los menu a ser mapeados por cada campo
-				List<Map<String, Object>> rolAll = JSONUtil.toNameList(
-						new String[]{"value", "label"},rAll
-				);											
-								
-				return gson.toJson(rolAll);
-			}else{
-				Map<String, Object> result = new HashMap<String, Object>();
-				result.put("tituloError", "Datos no encontrados");
-				result.put("error", "No se encontraron datos con los criterios dados");
-				return gson.toJson(result);
-			}												
+		//carga la consulta dinamica
+		FrmConsulta frmConsulta=this.listName(conscons);
 		
+		//carga los datos de la consulta
+		List<Object[]> rAll=this.loadListData(frmConsulta, null);
+		
+		//cast de los menu a ser mapeados por cada campo
+		List<Map<String, Object>> rolAll = JSONUtil.toNameList(
+				new String[]{"value", "label"},rAll
+		);											
+						
+		return gson.toJson(rolAll);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
 	public String listComboDynamic(String conscons){
 		
-			//carga la consulta dinamica
-			FrmConsulta frmConsulta=this.listName(conscons);
+		//carga la consulta dinamica
+		FrmConsulta frmConsulta=this.listName(conscons);
+		
+		//carga los datos de la consulta
+		List<Object[]> rAll=this.loadListData(frmConsulta, null);		
+	
+		//cast de los menu a ser mapeados por cada campo
+		List<Map<String, Object>> rolAll = JSONUtil.toNameList(
+				new String[]{"value", "label"},rAll
+		);											
 			
-			if(frmConsulta!=null){
-				//carga los datos de la consulta
-				List<Object[]> rAll=this.loadData(frmConsulta, null);
-				
-				//cast de los menu a ser mapeados por cada campo
-				List<Map<String, Object>> rolAll = JSONUtil.toNameList(
-						new String[]{"value", "label"},rAll
-				);											
-					
-				Map<String, Object> result = new HashMap<String, Object>();
-				result.put("data", rolAll);
-				result.put("combo", conscons);
-				
-				return gson.toJson(result);
-			}else{
-				Map<String, Object> result = new HashMap<String, Object>();
-				result.put("tituloError", "Datos no encontrados");
-				result.put("error", "No se encontraron datos con los criterios dados");
-				return gson.toJson(result);
-			}												
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", rolAll);
+		result.put("combo", conscons);
+		
+		return gson.toJson(result);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
-	public List<Object[]> loadData(FrmConsulta frmConsulta,Map<String, Object> parameters){
+	public List<Object[]> loadListData(FrmConsulta frmConsulta, Map<String, Object> parameters){
 		
 		if(frmConsulta.getConscaco().equals("dataSource")){
 			return frmConsultaRepository.loadData(frmConsulta, parameters);
 		}
 		else if(frmConsulta.getConscaco().equals("dataSourceOsiris")){
-			return frmConsultaRepository.loadDataOsiris(frmConsulta, parameters);
+			return frmConsultaRepository.loadDataOsiris(frmConsulta, parameters, null);
 		}
 		return null;
 		
@@ -215,30 +212,55 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_UPDATE"})
-	public String updateRecord(String conscons, String params, String paramsData){
+	public String updateRecord(String conscons, String params, String paramsData, ArrayList<MultipartFile> file){
 		
-			Type type = new TypeToken<Map<String, Object>>(){}.getType();
-			Map<String, Object> parameters=gson.fromJson(params, type);   						
-			Map<String, Object> parametersData=gson.fromJson(paramsData, type);
-			
-			//carga la consulta dinamica					
-			FrmConsulta frmConsulta=this.listProcedureChild(conscons);
-			List<FrmParametro> parametros=this.frmParametroService.listParamsCosu(new Long(conscons));
-			
-			if(frmConsulta!=null){
-				Map<String, Object> p=this.loadProcedure(frmConsulta, parametros, parameters, parametersData);				
-				return gson.toJson(p);								
-			}else{
-				Map<String, Object> result = new HashMap<String, Object>();
-				result.put("tituloError", "Datos no encontrados");
-				result.put("error", "No se encontraron datos con los criterios dados");
-				return gson.toJson(result);
-			}
+		Type type = new TypeToken<Map<String, Object>>(){}.getType();
+		Map<String, Object> parameters=gson.fromJson(params, type);   						
+		Map<String, Object> parametersData=gson.fromJson(paramsData, type);
+		
+		//carga la consulta dinamica					
+		FrmConsulta frmConsulta=this.listProcedureChild(conscons);
+		List<FrmParametro> parametros=this.frmParametroService.listParamsCosuType(new Long(conscons));
+		
+		Map<String, Object> p=this.loadProcedure(frmConsulta, parametros, parameters, parametersData);				
+		return gson.toJson(p);								
 	} 
+	
+	@Override
+	public void uploadFiles(String motidesc, ArrayList<MultipartFile> file, String result){
+		Type type = new TypeToken<Map<String, Object>>(){}.getType();
+		Map<String, Object> resultData=gson.fromJson(result, type);
+		
+		Long transcons= Long.parseLong((resultData.get("TRANSACCION").toString()));
+		
+		this.sopMotivoService.insertMotivo(motidesc, transcons, file);
+	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_UPDATE"})
 	public Map<String, Object> loadProcedure(FrmConsulta frmConsulta, List<FrmParametro> parametros, Map<String, Object> parameters, Map<String, Object> parametersData){
 		return frmConsultaRepository.loadProcedure(frmConsulta, parametros, parameters, parametersData);	
+	}
+	
+	@Override
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
+	public String loadData(String conscons){
+			        
+		//carga la consulta dinamica
+		FrmConsulta frmConsulta=this.listName(conscons);
+							
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("titulo", frmConsulta.getConsnomb());
+		result.put("descri", frmConsulta.getConsdesc());
+		return gson.toJson(result);
+	}
+	
+	@Override
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
+	public String loadConsChield(String conscons){
+		
+		//carga la consulta dinamica
+		FrmConsulta frmConsulta=this.listChild(conscons);
+		return gson.toJson(frmConsulta.getConscons());	
 	}
 }

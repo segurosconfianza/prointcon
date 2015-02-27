@@ -9,19 +9,27 @@ package com.confianza.webapp.service.framework.frmparametro;
   * @app		framework  
   */                          
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
 import com.confianza.webapp.repository.framework.frmparametro.FrmParametroRepository;
+import com.google.gson.Gson;
 
 @Service
 public class FrmParametroServiceImpl implements FrmParametroService{
 	
 	@Autowired
 	private FrmParametroRepository frmParametroRepository;
+	
+	@Autowired
+	Gson gson;
 	
 	/**
 	 * @return the frmparametroRepository
@@ -39,24 +47,34 @@ public class FrmParametroServiceImpl implements FrmParametroService{
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__READ"})
-	public FrmParametro list(Long id){
-		return frmParametroRepository.list(id);
+	public String list(Long id){
+		return gson.toJson(frmParametroRepository.list(id));
 	}
 	
 	@Override
-	public List<FrmParametro> listParamsCosu(Long id){
+	public String listParamsCosu(Long id){
 	
-		return frmParametroRepository.listParamsCosu(id);
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<FrmParametro> listAll=frmParametroRepository.listParamsCosu(id);
+		
+		result.put("data", listAll);
+		return gson.toJson(result);
 	}	
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__READ"})
-	public List<FrmParametro> listAll(int pageSize, int page){
+	public String listAll(int pageSize, int page){
 	
 		int limit=pageSize*page;
 		int init=limit-pageSize;
 		
-		return frmParametroRepository.listAll(init, limit);
+		List<FrmParametro> listAll=frmParametroRepository.listAll(init, limit);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", listAll);
+		result.put("count", this.getCount());
+		
+		return gson.toJson(result);
 	}	
 	
 	@Override
@@ -67,8 +85,8 @@ public class FrmParametroServiceImpl implements FrmParametroService{
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__UPDATE"})
-	public FrmParametro update(FrmParametro frmparametro){
-		return frmParametroRepository.update(frmparametro);
+	public String update(FrmParametro frmparametro){
+		return gson.toJson(frmParametroRepository.update(frmparametro));
 	}
 	
 	@Override
@@ -79,8 +97,13 @@ public class FrmParametroServiceImpl implements FrmParametroService{
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__CREATE"})
-	public FrmParametro insert(FrmParametro frmparametro){
-		return frmParametroRepository.insert(frmparametro);
+	public String insert(FrmParametro frmparametro){
+		return gson.toJson(frmParametroRepository.insert(frmparametro));
 	}
 	
+	@Override
+	public List<FrmParametro> listParamsCosuType(Long id){
+	
+		return frmParametroRepository.listParamsCosu(id);
+	}	
 }

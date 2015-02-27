@@ -10,6 +10,7 @@ package com.confianza.webapp.service.framework.frmtablas;
   */                          
 
 import java.util.List;
+
 import com.confianza.webapp.repository.framework.frmtablas.FrmTablas;
 
 public interface FrmTablasService{
@@ -23,5 +24,7 @@ public interface FrmTablasService{
 	public void delete(Long id);
 	
 	public FrmTablas insert(FrmTablas frmtablas);
+
+	public FrmTablas listByTablcodi(String string);
 	
 }

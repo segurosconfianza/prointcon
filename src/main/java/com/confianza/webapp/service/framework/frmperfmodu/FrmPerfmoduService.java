@@ -15,18 +15,18 @@ import com.confianza.webapp.repository.framework.frmperfmodu.FrmPerfmodu;
 
 public interface FrmPerfmoduService{
 	
-	public FrmPerfmodu list(Long id);	
+	public String list(Long id);	
 	
-	public FrmPerfmodu update(FrmPerfmodu frmperfmodu);
+	public String update(FrmPerfmodu frmperfmodu);
 	
-	public void delete(FrmPerfmodu frmperfmodu);
+	public String delete(FrmPerfmodu frmperfmodu);
 	
-	public FrmPerfmodu insert(FrmPerfmodu frmperfmodu);
+	public String insert(FrmPerfmodu frmperfmodu);
 
 	public int getCount();
 
-	public List<Object[]> listAll(int pageSize, int page, Long pemopefi);
+	public String listAll(int pageSize, int page, Long pemopefi);
 
-	public List<Object[]> listComboMoro();
+	public String listComboMoro();
 	
 }
