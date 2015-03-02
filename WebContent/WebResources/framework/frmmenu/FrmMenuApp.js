@@ -1,4 +1,4 @@
-var FrmMainApp=angular.module('FrmMainApp', ['ui.tree', 'ngGrid', 'ngRoute', 'ui.bootstrap', 'ngRoute' ]);  
+var FrmMainApp=angular.module('FrmMainApp', ['ui.tree', 'ngGrid', 'ngRoute', 'ui.bootstrap', 'ngRoute', 'ngFileUpload' ]);  
 
 FrmMainApp.config(['$routeProvider',
    	function($routeProvider) {

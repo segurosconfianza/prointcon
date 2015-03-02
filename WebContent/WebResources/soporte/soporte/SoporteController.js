@@ -1,6 +1,6 @@
 var FrmMainApp=angular.module('FrmMainApp');
 
-FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter', function($scope, SoporteService, $filter) {
+FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter', '$upload', function($scope, SoporteService, $filter, $upload) {
 	
 	$scope.Params = {};
 	$scope.Result = false;
@@ -88,7 +88,7 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 	}
 	
 	//evento de modificar datos
-	$scope.updateRecord= function(){				
+	$scope.updateRecord= function(file, Motivo){				
 		
 		$scope.BotonLoader=true;
 		$scope.Boton=false;		
@@ -101,7 +101,7 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 				//Tomar solo los datos de entrada para enviarlos a la consulta
 				$scope.paramsSend[$scope.columns[i].paranomb]=$scope.Params[$scope.columns[i].paranomb];
 				//Verificar si los datos requeridos cumplen con haber sido digitados
-				if(!formData.$valid && ($scope.Params[$scope.columns[i].paranomb]==undefined || $scope.Params[$scope.columns[i].paranomb]=='' || ($scope.Params[$scope.columns[i].paranomb])==' ')){
+				if(!formData.$valid && !formData2.$valid && ($scope.Params[$scope.columns[i].paranomb]==undefined || $scope.Params[$scope.columns[i].paranomb]=='' || ($scope.Params[$scope.columns[i].paranomb])==' ')){
 					verify=false;
 					break;
 				}
@@ -118,8 +118,20 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 			}
 		}					
 		
-		if(verify){									
-			SoporteService.updateRecord($scope.paramsSend, $scope.paramsSendData).then(function(dataResponse) {
+		//validar si subieron adjuntos
+		if(file!=undefined && file.length<1)
+			verify=false;
+		
+		if(verify){		
+						
+			formData=new FormData();
+			for(i=0;i<file.length;i++){
+				formData.append("file", file[i]);
+			}
+			
+			console.log(formData);
+			
+			SoporteService.updateRecord($scope.paramsSend, $scope.paramsSendData, formData, Motivo).then(function(dataResponse) {
 										
 				if(dataResponse.data.error!=undefined){
 	    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error); 

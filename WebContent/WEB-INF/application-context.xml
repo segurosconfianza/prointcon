@@ -32,9 +32,11 @@
 	<!-- Beans generales al proyecto -->
 	<bean id="gson" class="com.google.gson.Gson" />
 	<bean id="typeConverter" class="com.confianza.webapp.utils.TypeConverter"/>
-		
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+    	
 	<import resource="security-config.xml"/>
-	<import resource="datasource-webapp-config.xml"/>
+	<import resource="datasource-webapp-pruebas-config.xml"/>
 	<import resource="datasource-osiris-config.xml"/>
 	
 </beans>

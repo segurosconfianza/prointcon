@@ -14,11 +14,11 @@ public class FileImpl {
 		super();
 		
 		files=new ArrayList<CFile>();
-		
 		for(MultipartFile obj:file){
 			CFile fileobj=new CFile(obj);
 			
 			files.add(fileobj);
+			System.out.println(fileobj.toString());
 		}
 	}
 	
@@ -34,6 +34,7 @@ public class FileImpl {
 		ArrayList<String> listAll=new ArrayList<String>();
 		for(CFile obj:files){
 			listAll.add(obj.getType());
+			System.out.println(obj.getType());
 		}
 		return listAll;
 	}

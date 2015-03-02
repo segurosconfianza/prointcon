@@ -10,11 +10,12 @@
 	    %>	    
 	    <script >var WEB_SERVER='<%out.print(WEB_SERVER);%>';</script>
 	    
-		<script  src="lib/Angular/1.3.2/angular.js"></script>
-	    <script  src="lib/Angular/1.3.2/angular.min.js"></script>
+		<script  src="lib/Angular/1.3.2/angular.js"></script>	    		
 	    <script  src="lib/Angular/1.3.2/angular-route.js"></script>
 	    <script  src="lib/Angular/1.3.2/angular-ui-tree.js"></script>
 	    <script  src="lib/Angular/1.3.2/i18n/angular-locale_es-co.js"></script>
+	    <script  src="lib/Angular/Multipart/angular-file-upload.js"></script>
+	    <script  src="lib/Angular/Multipart/angular-file-upload-shim.js"></script>	    
 	    <script  src="lib/bootstrap/Angular/ui-bootstrap-tpls-0.11.2.min.js"></script>    	    	          
 	    	    
     	<!--ng grid...-->

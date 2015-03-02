@@ -56,11 +56,25 @@
 		    <form name="formData2" class="form-horizontal" role="form">
 			   <div class="form-group" ng-repeat="column in columns | filter: {paratipo: 'S'}" ng-include="'form_renderer.jsp'"></div>
 			  
+			   <div class="form-group">
+				  <label for="file" class="col-sm-3 control-label"><font color="red">*</font>Seleccione el/los adjunto(s): </label>
+				  <div class="col-sm-3">			
+					<input type="file" ng-file-select ng-model="picFile" name="file" multiple="multiple" required>
+				  </div>
+			   </div>
+			   
+			   <div class="form-group">
+				  <label for="motivo" class="col-sm-3 control-label">Ingrese el motivo: </label>
+				  <div class="col-sm-3">			
+					<input type="text" ng-model="Motivo" name="Motivo" required>
+				  </div>
+			   </div>			  			  
+			  
 			   <div align="center">	
 			   		<div class="col-sm-3"></div>
 			   		<div class="col-sm-3">			   			  			   			 			   
 		        		<button type="reset" class="btn btn-default btn-lg active" >Limpiar Datos</button>		        	
-		        		<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,SOPORTE_ALL,SOPORTE_ALL"><button type="button" class="btn btn-success btn-lg active" ng-click="updateRecord()" ng-show="Boton">Modificar Datos <span class="glyphicon glyphicon-floppy-disk"></span></button></sec:authorize>
+		        		<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,SOPORTE_ALL,SOPORTE_ALL"><button type="button" class="btn btn-success btn-lg active" ng-click="updateRecord(picFile, Motivo)" ng-show="Boton">Modificar Datos <span class="glyphicon glyphicon-floppy-disk"></span></button></sec:authorize>
 		        	</div>		      
 		      </div>	
 			</form>				
