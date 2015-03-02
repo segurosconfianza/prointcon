@@ -8,7 +8,12 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 	$scope.BotonLoader = false;
 	$scope.options={};	
 	$scope.paramsSend={};	
-	 
+	
+	$scope.dateOptions = {
+		type: 'string',
+	    dateFormat: 'dd/MM/yyyy',
+	};		
+	
 	SoporteService.getParams().then(function(dataResponse) {  
     	
     	if(dataResponse.data.error!=undefined)
@@ -74,7 +79,12 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 	        	else{ 	        			        	
 	        		$scope.Params=dataResponse.data.data[0];
 	        		$scope.Result=true;
-	        		$scope.BotonLoader=false;	        			        		
+	        		$scope.BotonLoader=false;	 
+	        		
+	        		console.log($scope.Params['FECDOC']);
+	        		console.log(new Date($scope.Params['FECDOC']));
+	        		$scope.Params["FECDOC"]='01/01/2015';
+	        		$scope.Params["dt"]='01/01/2015';
 	        	}
 				$scope.Boton = true;
 				

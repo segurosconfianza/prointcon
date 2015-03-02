@@ -54,8 +54,7 @@ public interface FrmConsultaService{
 
 	public void uploadFiles(String motidesc, ArrayList<MultipartFile> file,	String result);
 
-	public List<Object[]> loadListData(FrmConsulta frmConsulta, Map<String, Object> parameters);
+	public List<Object[]> loadListData(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros);
 
-	
 	
 }

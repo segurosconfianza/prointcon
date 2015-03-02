@@ -213,11 +213,12 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 			    }
 		    }
 			
-			if(parametros!=null){
+			/*if(parametros!=null){
 				for(FrmParametro frmParametro:parametros){
 					if(frmParametro.getParatipo().equals("S")){
-						if(frmParametro.getParatida().equals("D"))
+						if(frmParametro.getParatida().equals("D")){
 							query.addScalar(frmParametro.getParanomb(), DateType.INSTANCE);
+						}
 						else if(frmParametro.getParatida().equals("CI") || frmParametro.getParatida().equals("CI"))
 							query.addScalar(frmParametro.getParanomb(), IntegerType.INSTANCE);
 						else if(frmParametro.getParatida().equals("C") || frmParametro.getParatida().equals("CS"))
@@ -226,7 +227,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 							query.addScalar(frmParametro.getParanomb(), StringType.INSTANCE);
 					}
 				}
-			}
+			}*/
 			
 			return query.list();
 		}catch(Exception e){

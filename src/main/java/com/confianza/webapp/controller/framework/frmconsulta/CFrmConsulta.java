@@ -1,7 +1,6 @@
 package com.confianza.webapp.controller.framework.frmconsulta;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsulta;
 import com.confianza.webapp.service.framework.frmconsulta.FrmConsultaService;
@@ -148,19 +146,5 @@ public class CFrmConsulta {
 			
 		return this.frmConsultaService.loadConsChield(conscons);
 	}	
-	
-	@RequestMapping(value = "/updateRecord2.json", method = RequestMethod.POST, produces={"application/json"})
-	@ResponseBody
-	public String updateRecord2(@RequestParam("file") ArrayList<MultipartFile> file) throws Throwable{
-			
-		ArrayList<CFile> files=new FileImpl(file).getFiles();
 		
-		for(CFile obj:files){
-			System.out.println(obj.toString());			
-		}
-					   
-		UploadFile up = new UploadFile(files);
-		
-		return "";
-	}
 }

@@ -18,21 +18,14 @@ import java.util.Map;
 import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.confianza.webapp.repository.framework.frmarchivo.FrmArchivo;
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsulta;
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsultaRepository;
 import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
-import com.confianza.webapp.repository.soporte.sopmotivo.SopMotivo;
-import com.confianza.webapp.service.framework.frmarchivo.FrmArchivoService;
 import com.confianza.webapp.service.framework.frmparametro.FrmParametroService;
-import com.confianza.webapp.service.soporte.sopadjunto.SopAdjuntoService;
 import com.confianza.webapp.service.soporte.sopmotivo.SopMotivoService;
-import com.confianza.webapp.utils.CFile;
-import com.confianza.webapp.utils.FileImpl;
 import com.confianza.webapp.utils.JSONUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -100,7 +93,7 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		List<FrmParametro> parametros=this.frmParametroService.listParamsCosuType(new Long(conscons));
 		
 		//carga los datos de la consulta
-		List<Object[]> rAll=this.loadListData(frmConsulta, parameters);
+		List<Object[]> rAll=this.loadListData(frmConsulta, parameters, parametros);
 		//cast delresultado a ser mapeado por cada campo
 		List<Map<String, Object>> listAll = JSONUtil.toNameList(frmConsulta.getConscolu().split(","),rAll);			
 		
@@ -118,7 +111,7 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		FrmConsulta frmConsulta=this.listName(conscons);
 		
 		//carga los datos de la consulta
-		List<Object[]> rAll=this.loadListData(frmConsulta, null);
+		List<Object[]> rAll=this.loadListData(frmConsulta, null, null);
 		
 		//cast de los menu a ser mapeados por cada campo
 		List<Map<String, Object>> rolAll = JSONUtil.toNameList(
@@ -136,7 +129,7 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		FrmConsulta frmConsulta=this.listName(conscons);
 		
 		//carga los datos de la consulta
-		List<Object[]> rAll=this.loadListData(frmConsulta, null);		
+		List<Object[]> rAll=this.loadListData(frmConsulta, null, null);		
 	
 		//cast de los menu a ser mapeados por cada campo
 		List<Map<String, Object>> rolAll = JSONUtil.toNameList(
@@ -152,13 +145,13 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
-	public List<Object[]> loadListData(FrmConsulta frmConsulta, Map<String, Object> parameters){
+	public List<Object[]> loadListData(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros){
 		
 		if(frmConsulta.getConscaco().equals("dataSource")){
 			return frmConsultaRepository.loadData(frmConsulta, parameters);
 		}
 		else if(frmConsulta.getConscaco().equals("dataSourceOsiris")){
-			return frmConsultaRepository.loadDataOsiris(frmConsulta, parameters, null);
+			return frmConsultaRepository.loadDataOsiris(frmConsulta, parameters, parametros);
 		}
 		return null;
 		
