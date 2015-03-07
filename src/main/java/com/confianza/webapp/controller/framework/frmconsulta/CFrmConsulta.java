@@ -52,28 +52,28 @@ public class CFrmConsulta {
 		return "soporte/soporte/Soporte";
 	}
 	
-	@RequestMapping(value = "/{conscons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{conscons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("conscons") Long conscons){
 		
 		return this.frmConsultaService.list(conscons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.frmConsultaService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/loadRecord.json", params = {"conscons","params"}, method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/loadRecord.json", params = {"conscons","params"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String loadRecord(@RequestParam("conscons") String conscons, @RequestParam("params") String params) throws Throwable{
 			
 		return this.frmConsultaService.loadRecord(conscons, params);
 	}
 	
-	@RequestMapping(value = "/updateRecord.json", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/updateRecord.json", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String updateRecord(@RequestParam("conscons") String conscons, @RequestParam("params") String params,  @RequestParam("paramsData") String paramsData,  @RequestParam("motidesc") String motidesc, @RequestParam("file") ArrayList<MultipartFile> file) throws Throwable{
 			
@@ -82,7 +82,7 @@ public class CFrmConsulta {
 		return result;
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FrmConsulta frmconsulta, HttpServletRequest request){
@@ -90,7 +90,7 @@ public class CFrmConsulta {
 		return this.frmConsultaService.update(frmconsulta);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FrmConsulta frmconsulta, HttpServletRequest request){
@@ -99,7 +99,7 @@ public class CFrmConsulta {
 		return this.frmConsultaService.update(frmconsulta);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FrmConsulta frmconsulta, HttpServletRequest request){
@@ -107,28 +107,28 @@ public class CFrmConsulta {
 		return this.frmConsultaService.insert(frmconsulta);
 	}
 	
-	@RequestMapping(value = "/listCombo.json", params = {"conscons"}, method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listCombo.json", params = {"conscons"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listCombo(@RequestParam("conscons") String conscons) throws Exception{
 
 		return this.frmConsultaService.listCombo(conscons);
 	}
 	
-	@RequestMapping(value = "/listComboDynamic.json", params = {"conscons"}, method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listComboDynamic.json", params = {"conscons"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listComboDynamic(@RequestParam("conscons") String conscons) throws Exception{
 		
 		return this.frmConsultaService.listComboDynamic(conscons);
 	}
 	
-	@RequestMapping(value = "/loadData.json", params = {"conscons"}, method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/loadData.json", params = {"conscons"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String loadData(@RequestParam("conscons") String conscons) throws Throwable{
 			
 		return this.frmConsultaService.loadData(conscons);
 	}
 	
-	@RequestMapping(value = "/validateRol.json", params = {"roles"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/validateRol.json", params = {"roles"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String validateRol(@RequestParam("roles") String roles){
 	
@@ -140,7 +140,7 @@ public class CFrmConsulta {
 			return "false";
 	}
 	
-	@RequestMapping(value = "/loadConsChield.json", params = {"conscons"}, method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/loadConsChield.json", params = {"conscons"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String loadConsChield(@RequestParam("conscons") String conscons) throws Throwable{
 			

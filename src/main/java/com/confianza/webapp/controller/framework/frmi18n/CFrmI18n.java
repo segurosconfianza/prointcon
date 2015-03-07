@@ -44,21 +44,21 @@ public class CFrmI18n {
 		return "framework/frmi18n/FrmI18n";
 	}
 	
-	@RequestMapping(value = "/{etincons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{etincons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("etincons") Long etincons){
 		
 		return gson.toJson(this.frmI18nService.list(etincons));
 	}
 	
-	@RequestMapping(value = "/listModulo.json", params = {"modulo"}, method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listModulo.json", params = {"modulo"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listModulo(@RequestParam("modulo") String modulo){
 		
 		return gson.toJson(this.frmI18nService.listModulo(modulo));
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
@@ -93,7 +93,7 @@ public class CFrmI18n {
 		this.frmI18nService.delete(etincons);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FrmI18n frmi18n, HttpServletRequest request){

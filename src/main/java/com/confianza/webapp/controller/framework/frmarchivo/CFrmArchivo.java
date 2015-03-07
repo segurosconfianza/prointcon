@@ -42,21 +42,21 @@ public class CFrmArchivo {
 		return "framework/frmarchivo/FrmArchivo";
 	}
 	
-	@RequestMapping(value = "/{archcodi}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{archcodi}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"} )
 	@ResponseBody
 	public String list(@PathVariable("archcodi") Long archcodi){
 		
 		return this.frmArchivoService.list(archcodi);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.frmArchivoService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FrmArchivo frmarchivo, HttpServletRequest request){
@@ -64,7 +64,7 @@ public class CFrmArchivo {
 		return this.frmArchivoService.update(frmarchivo);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FrmArchivo frmarchivo, HttpServletRequest request){
@@ -73,7 +73,7 @@ public class CFrmArchivo {
 		return this.frmArchivoService.update(frmarchivo);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FrmArchivo frmarchivo, HttpServletRequest request){

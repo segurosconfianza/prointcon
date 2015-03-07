@@ -40,21 +40,21 @@ public class CFrmPerfmodu {
 		return this.frmPerfmoduService.list(id);
 	}
 		
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"}, method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("pemopefi") Long pemopefi) throws Exception{
 		
 		return this.frmPerfmoduService.listAll(pageSize, page, pemopefi);
 	}
 		
-	@RequestMapping(value = "/listComboMoro.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listComboMoro.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listComboMoro() throws Exception{
 
 		return this.frmPerfmoduService.listComboMoro();
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FrmPerfmodu frmperfmodu){
@@ -62,7 +62,7 @@ public class CFrmPerfmodu {
 		return this.frmPerfmoduService.update(frmperfmodu);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FrmPerfmodu frmperfmodu, HttpServletRequest request){
@@ -70,7 +70,7 @@ public class CFrmPerfmodu {
 		return this.frmPerfmoduService.delete(frmperfmodu);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FrmPerfmodu frmperfmodu, HttpServletRequest request){

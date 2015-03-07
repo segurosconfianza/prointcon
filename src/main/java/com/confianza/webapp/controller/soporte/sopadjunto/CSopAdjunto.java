@@ -33,21 +33,21 @@ public class CSopAdjunto {
 		return "framework/sopadjunto/SopAdjunto";
 	}
 	
-	@RequestMapping(value = "/{adjucodi}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{adjucodi}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("adjucodi") Long adjucodi){
 		
 		return this.sopAdjuntoService.list(adjucodi);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.sopAdjuntoService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody SopAdjunto sopadjunto, HttpServletRequest request){
@@ -55,7 +55,7 @@ public class CSopAdjunto {
 		return this.sopAdjuntoService.update(sopadjunto);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody SopAdjunto sopadjunto, HttpServletRequest request){
@@ -64,7 +64,7 @@ public class CSopAdjunto {
 		return this.sopAdjuntoService.update(sopadjunto);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody SopAdjunto sopadjunto, HttpServletRequest request){

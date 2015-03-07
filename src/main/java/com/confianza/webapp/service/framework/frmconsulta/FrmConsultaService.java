@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsulta;
@@ -56,5 +58,5 @@ public interface FrmConsultaService{
 
 	public List<Object[]> loadListData(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros);
 
-	
+
 }

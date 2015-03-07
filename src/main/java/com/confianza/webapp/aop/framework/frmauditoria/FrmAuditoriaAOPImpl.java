@@ -71,9 +71,9 @@ public class FrmAuditoriaAOPImpl{
 			String result=(String)point.proceed();
 			Type type = new TypeToken<Map<String, Object>>(){}.getType();
 			Map<String, Object> resultData=gson.fromJson(result, type);
-		
+			
 			if(resultData.get("AUDITORIA")!=null){
-				String []auditoria=resultData.get("AUDITORIA").toString().split(";");
+				String []auditoria=resultData.get("AUDITORIA").toString().split("--//--");
 				String campos[];
 				//recupero la sesion del usuario
 				FrmSesion frmSesion = (FrmSesion) session.getAttribute("frmSesion");
@@ -98,11 +98,11 @@ public class FrmAuditoriaAOPImpl{
 		}
 	}
 
-	private void generarAuditoriaPorRegistro(String[] auditoria,
-			FrmTransaccion frmtransaccion) {
+	private void generarAuditoriaPorRegistro(String[] auditoria, FrmTransaccion frmtransaccion) {
 		String[] campos;
+		
 		for(String aux:auditoria){
-			campos=aux.split(",");
+			campos=aux.split("--,--");
 			
 			if(campos[0].equals("DELETE") || campos[0].equals("INSERT")){
 				crearLog(campos, frmtransaccion);

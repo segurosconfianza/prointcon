@@ -32,14 +32,14 @@ public class CFrmAplicaciones {
 		super();
 	}
 	
-	@RequestMapping(value = "/{aplicons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{aplicons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("aplicons") Long aplicons){
 		
 		return gson.toJson(this.frmaplicacionesService.list(aplicons));
 	}
 	
-	@RequestMapping(value = "/.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(){
 	
@@ -62,7 +62,7 @@ public class CFrmAplicaciones {
 		this.frmaplicacionesService.delete(aplicons);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FrmAplicaciones frmaplicaciones){

@@ -12,6 +12,8 @@ package com.confianza.webapp.repository.framework.frmconsulta;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,7 +30,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.DateType;
 import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.ObjectType;
 import org.hibernate.type.StringType;
+import org.hibernate.type.TextType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +49,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	@Autowired
 	private SessionFactory sessionFactoryOsiris;
 	
-	private enum typesData { S, CS, CI, D, I, L, T, O, B, F};	
+	private enum typesData { S, CS, CI, D, I, L, T, O, B, F, TA, TL};	
 	
 	public SessionFactory getSessionFactoryOsiris() {
 		return sessionFactoryOsiris;
@@ -216,12 +221,13 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 			/*if(parametros!=null){
 				for(FrmParametro frmParametro:parametros){
 					if(frmParametro.getParatipo().equals("S")){
-						if(frmParametro.getParatida().equals("D")){
+						if(frmParametro.getParatida().equals("D"))
 							query.addScalar(frmParametro.getParanomb(), DateType.INSTANCE);
-						}
 						else if(frmParametro.getParatida().equals("CI") || frmParametro.getParatida().equals("CI"))
 							query.addScalar(frmParametro.getParanomb(), IntegerType.INSTANCE);
 						else if(frmParametro.getParatida().equals("C") || frmParametro.getParatida().equals("CS"))
+							query.addScalar(frmParametro.getParanomb(), StringType.INSTANCE);
+						else if(frmParametro.getParatida().equals("L"))
 							query.addScalar(frmParametro.getParanomb(), StringType.INSTANCE);
 						else 
 							query.addScalar(frmParametro.getParanomb(), StringType.INSTANCE);
@@ -405,7 +411,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 			final Map<String, Object> pd= parametersData;
 			final List<FrmParametro> fp = parametros;
 			
-			final Map<String, Object> output= new HashMap<String, Object>();			
+			final Map<String, Object> output= new HashMap<String, Object>();
 			
 			getSessionOsiris().doWork(new Work() {
 								
@@ -413,7 +419,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 				public void execute(Connection connection) throws SQLException {
 					// TODO Auto-generated method stub
 					CallableStatement cst = connection.prepareCall(procedure);
-					
+															
 					cst=putParametersInput(p, fp, cst, "E");
 					cst=putParametersInput(pd, fp, cst, "S");
 					
@@ -421,7 +427,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 					
 				    cst.execute();
 
-				    output.putAll(getParametersOutput(fp, cst));				    				    
+				    output.putAll(getParametersOutput(fp, cst));
 				}								
 												
 			});						
@@ -451,7 +457,10 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 			
 			if(objP.getParatipo().equals(tipo))
 			{
+				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			        
 				typesData typeData=typesData.valueOf(objP.getParatida());
+
 				switch(typeData){
 					case S: if(p.get(objP.getParanomb())!=null)
 						    	cst.setString(objP.getParanomb(),p.get(objP.getParanomb()).toString());
@@ -462,9 +471,26 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 								cst.setString(objP.getParanomb(), p.get(objP.getParanomb()).toString());
 							else
 								cst.setNull(objP.getParanomb(), java.sql.Types.VARCHAR);
-							break;		
-					case D: if(p.get(objP.getParanomb())!=null && !p.get(objP.getParanomb()).toString().trim().isEmpty())
-					    		cst.setDate(objP.getParanomb(), new java.sql.Date(new Date(p.get(objP.getParanomb()).toString()).getTime()));
+							break;
+					case TA: if(p.get(objP.getParanomb())!=null) 
+								cst.setString(objP.getParanomb(), p.get(objP.getParanomb()).toString());
+							else
+								cst.setNull(objP.getParanomb(), java.sql.Types.VARCHAR);
+							break;	
+					case TL: if(p.get(objP.getParanomb())!=null) 
+								cst.setNString(objP.getParanomb(), p.get(objP.getParanomb()).toString());
+							else
+								cst.setNull(objP.getParanomb(), java.sql.Types.VARCHAR);
+							break;
+					case D: if(p.get(objP.getParanomb())!=null && !p.get(objP.getParanomb()).toString().trim().isEmpty()){
+								Date parsed=null;
+								try {
+									parsed = format.parse(p.get(objP.getParanomb()).toString());
+									cst.setDate(objP.getParanomb(), new java.sql.Date(parsed.getTime()));
+								} catch (ParseException e) {
+									cst.setNull(objP.getParanomb(), java.sql.Types.DATE);
+								}
+							}
 							else
 								cst.setNull(objP.getParanomb(), java.sql.Types.DATE);
 							break;
@@ -531,7 +557,11 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 				case S: cst.registerOutParameter(objP.getParanomb(), java.sql.Types.VARCHAR);
 						break;
 				case CS: cst.registerOutParameter(objP.getParanomb(), java.sql.Types.VARCHAR);
-						break;		
+						break;
+				case TA: cst.registerOutParameter(objP.getParanomb(), java.sql.Types.VARCHAR);
+						break;	
+				case TL: cst.registerOutParameter(objP.getParanomb(), java.sql.Types.LONGVARCHAR);
+						break;				
 				case D: cst.registerOutParameter(objP.getParanomb(), java.sql.Types.DATE);
 						break;
 				case I: cst.registerOutParameter(objP.getParanomb(), java.sql.Types.NUMERIC);
@@ -575,7 +605,11 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 					case S: o.put(objP.getParanomb(), cst.getString(objP.getParanomb()));
 							break;
 					case CS: o.put(objP.getParanomb(), cst.getString(objP.getParanomb()));
-							break;		
+							break;
+					case TA: o.put(objP.getParanomb(), cst.getString(objP.getParanomb()));
+							break;
+					case TL: o.put(objP.getParanomb(), cst.getString(objP.getParanomb()));
+							break;						
 					case D: o.put(objP.getParanomb(), cst.getDate(objP.getParanomb()));
 							break;
 					case I: o.put(objP.getParanomb(), cst.getInt(objP.getParanomb()));

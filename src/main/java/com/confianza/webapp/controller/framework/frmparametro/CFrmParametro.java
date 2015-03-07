@@ -44,28 +44,28 @@ public class CFrmParametro {
 		return "framework/frmparametro/FrmParametro";
 	}
 	
-	@RequestMapping(value = "/{paracons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{paracons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("paracons") Long paracons){
 		
 		return this.frmParametroService.list(paracons);
 	}
 	
-	@RequestMapping(value = "/params.json", params = {"paracons"}, method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/params.json", params = {"paracons"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listParamsCosu(@RequestParam("paracons") Long paracons){
 		
 		return this.frmParametroService.listParamsCosu(paracons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.frmParametroService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FrmParametro frmparametro, HttpServletRequest request){
@@ -73,7 +73,7 @@ public class CFrmParametro {
 		return this.frmParametroService.update(frmparametro);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FrmParametro frmparametro, HttpServletRequest request){
@@ -82,7 +82,7 @@ public class CFrmParametro {
 		return this.frmParametroService.update(frmparametro);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FrmParametro frmparametro, HttpServletRequest request){

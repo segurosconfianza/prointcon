@@ -36,6 +36,7 @@
 	    <script  src="WebResources/framework/frmmenu/FrmMenuApp.js"></script>
 	    <script  src="WebResources/framework/frmmenu/FrmMenuService.js"></script>
 	    <script  src="WebResources/framework/frmmenu/FrmMenuController.js"></script>
+	    <script  src="WebResources/framework/frmmenu/FrmMenuFilter.js"></script>
 	        					
 		<script  src="WebResources/framework/frmperfil/FrmPerfilApp.js"></script>
 	    <script  src="WebResources/framework/frmperfil/FrmPerfilService.js"></script>
@@ -45,6 +46,8 @@
 	    <script  src="WebResources/soporte/soporte/SoporteApp.js"></script>
 	    <script  src="WebResources/soporte/soporte/SoporteService.js"></script>
 	    <script  src="WebResources/soporte/soporte/SoporteController.js"></script>
+	    <script  src="WebResources/soporte/soporte/SoporteChildService.js"></script>
+	    <script  src="WebResources/soporte/soporte/SoporteChildController.js"></script>
 		
 		
 		<script type="text/javascript" Language="JavaScript">

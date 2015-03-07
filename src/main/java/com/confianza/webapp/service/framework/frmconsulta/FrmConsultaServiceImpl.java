@@ -95,12 +95,12 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		//carga los datos de la consulta
 		List<Object[]> rAll=this.loadListData(frmConsulta, parameters, parametros);
 		//cast delresultado a ser mapeado por cada campo
-		List<Map<String, Object>> listAll = JSONUtil.toNameList(frmConsulta.getConscolu().split(","),rAll);			
+		List<Map<String, Object>> listAll = JSONUtil.toNameList2(frmConsulta.getConscolu().split(","),rAll);			
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
 		result.put("camp", frmConsulta.getConscolu().split(","));
-		
+
 		return gson.toJson(result);
 	}
 	
@@ -215,7 +215,8 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		FrmConsulta frmConsulta=this.listProcedureChild(conscons);
 		List<FrmParametro> parametros=this.frmParametroService.listParamsCosuType(new Long(conscons));
 		
-		Map<String, Object> p=this.loadProcedure(frmConsulta, parametros, parameters, parametersData);				
+		Map<String, Object> p=this.loadProcedure(frmConsulta, parametros, parameters, parametersData);	
+		
 		return gson.toJson(p);								
 	} 
 	
@@ -232,7 +233,15 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_UPDATE"})
 	public Map<String, Object> loadProcedure(FrmConsulta frmConsulta, List<FrmParametro> parametros, Map<String, Object> parameters, Map<String, Object> parametersData){
-		return frmConsultaRepository.loadProcedure(frmConsulta, parametros, parameters, parametersData);	
+		
+		if(frmConsulta.getConscaco().equals("dataSource")){
+			return frmConsultaRepository.loadProcedure(frmConsulta, parametros, parameters, parametersData);
+		}
+		else if(frmConsulta.getConscaco().equals("dataSourceOsiris")){
+			return frmConsultaRepository.loadProcedureOsiris(frmConsulta, parametros, parameters, parametersData);
+		}
+		return null;
+		
 	}
 	
 	@Override

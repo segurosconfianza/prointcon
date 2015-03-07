@@ -46,7 +46,7 @@ public class CFrmLogext {
 		return "framework/frmlogext/FrmLogext";
 	}
 	
-	@RequestMapping(value = "/{loexcons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{loexcons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("loexcons") Long loexcons){
 		
@@ -57,7 +57,7 @@ public class CFrmLogext {
 		}
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
@@ -77,7 +77,7 @@ public class CFrmLogext {
 		}
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FrmLogext frmlogext, HttpServletRequest request){
@@ -92,7 +92,7 @@ public class CFrmLogext {
 		}
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FrmLogext frmlogext, HttpServletRequest request){
@@ -108,7 +108,7 @@ public class CFrmLogext {
 		}
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FrmLogext frmlogext, HttpServletRequest request){

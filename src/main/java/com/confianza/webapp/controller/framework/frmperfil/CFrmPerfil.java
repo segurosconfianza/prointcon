@@ -41,14 +41,14 @@ public class CFrmPerfil {
 		return "framework/frmperfil/FrmPerfil";
 	}
 	
-	@RequestMapping(value = "/{peficons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{peficons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("peficons") Long peficons) throws Exception{
 		
 		return this.frmPerfilService.list(peficons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"}, method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page) throws Exception{
 		
@@ -56,7 +56,7 @@ public class CFrmPerfil {
 			
 	}
 	
-	@RequestMapping(value = "/deleteR", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/deleteR", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FrmPerfil frmperfil, HttpServletRequest request) throws Exception{
@@ -68,7 +68,7 @@ public class CFrmPerfil {
 		return this.frmPerfilService.update(frmperfil);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody	
 	public String insert(@RequestBody FrmPerfil frmperfil, HttpServletRequest request) throws Exception{
@@ -79,7 +79,7 @@ public class CFrmPerfil {
 		return this.frmPerfilService.insert(frmperfil);
 	}
 		
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FrmPerfil frmperfil, HttpServletRequest request) throws Exception{

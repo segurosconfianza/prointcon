@@ -6,13 +6,18 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 	$scope.Result = false;
 	$scope.Boton = true;	
 	$scope.BotonLoader = false;
+	$scope.Error = false;
 	$scope.options={};	
 	$scope.paramsSend={};	
-	
-	$scope.dateOptions = {
-		type: 'string',
-	    dateFormat: 'dd/MM/yyyy',
-	};		
+
+	SoporteService.loadData().then(function(dataResponse) {  
+		if(dataResponse.data.error!=undefined)
+    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+    	else{
+    		$scope.title=dataResponse.data.titulo;
+    		$scope.description=dataResponse.data.descri;
+    	}
+	});
 	
 	SoporteService.getParams().then(function(dataResponse) {  
     	
@@ -48,8 +53,10 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 	  }
 	  
 	//evento de carga de datos
-	$scope.loadRecord= function(){				
-			
+	$scope.loadRecord= function(){
+		
+		$scope.trans=false;
+		$scope.Error = false;
 		$scope.BotonLoader=true;
 		$scope.Boton=false;
 		$scope.Result= false;		
@@ -79,16 +86,10 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 	        	else{ 	        			        	
 	        		$scope.Params=dataResponse.data.data[0];
 	        		$scope.Result=true;
-	        		$scope.BotonLoader=false;	 
-	        		
-	        		console.log($scope.Params['FECDOC']);
-	        		console.log(new Date($scope.Params['FECDOC']));
-	        		$scope.Params["FECDOC"]='01/01/2015';
-	        		$scope.Params["dt"]='01/01/2015';
+	        		$scope.BotonLoader=false;	 	        			        		
 	        	}
 				$scope.Boton = true;
 				
-				console.log("SALIDA: "+$scope.Params['FECDOC']);
 	        }); 						
 		}else{
 			alert("Datos vacios o incorrectos: Favor diligencie todos los campos");
@@ -99,10 +100,11 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 	
 	//evento de modificar datos
 	$scope.updateRecord= function(file, Motivo){				
-		
+		$scope.trans=false;
 		$scope.BotonLoader=true;
 		$scope.Boton=false;		
-
+		$scope.Error = false;
+		
 		var verify=true;		
 		$scope.paramsSend={};	
 		$scope.paramsSendData={};
@@ -139,15 +141,22 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 				formData.append("file", file[i]);
 			}
 			
-			console.log(formData);
-			
 			SoporteService.updateRecord($scope.paramsSend, $scope.paramsSendData, formData, Motivo).then(function(dataResponse) {
 										
 				if(dataResponse.data.error!=undefined){
 	    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error); 
 				}
-	        	else{ 	        			        	
-	        		alert('Proceso Terminado Satisfactoriamente');
+	        	else{ 	      
+	        		if(dataResponse.data.SUCCESS){
+	        			$scope.trans=true;
+	        			alert('Proceso Terminado Satisfactoriamente');
+	        			$scope.transaccion=dataResponse.data.TRANSACCION;
+	        		}
+	        		else{
+	        			$scope.Error = true;
+	        			alert('Proceso no termino Satisfactoriamente');
+	        			$scope.DescripcionError = dataResponse.data.EROR;
+	        		}
 	        	}
 				$scope.BotonLoader=false;
 				$scope.Boton = true;	

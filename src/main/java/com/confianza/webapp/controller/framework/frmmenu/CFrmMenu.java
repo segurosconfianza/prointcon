@@ -33,13 +33,13 @@ public class CFrmMenu {
 		return "framework/frmmenu/FrmMenu";
 	}
 
-	@RequestMapping(value = "/{menucons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{menucons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	public @ResponseBody String list(@PathVariable("menucons") Long menucons){
 		
 		return this.frmMenuService.list(menucons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(HttpServletRequest request){
 		
@@ -60,7 +60,7 @@ public class CFrmMenu {
 		this.frmMenuService.delete(menucons);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FrmMenu frmmenu){
