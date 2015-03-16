@@ -51,7 +51,7 @@
 		<div class="alert alert-danger" role="alert" ng-if="Error" align="center"><h4><b>Error:</b> {{EROR}}</h4></div>
 		
 		<div align="left" ng-show="Result">		    		    		    
-		    <form name="formData2" class="form-horizontal" role="form">
+		    <form name="formData2" class="form-horizontal" role="form" accept-charset="utf-8">
 			   <div class="form-group" ng-repeat="column in columns | filter: {paratipo: 'S'}" ng-include="'form_renderer.jsp'"></div>
 			  
 			   <div class="form-group">
@@ -64,7 +64,7 @@
 			   <div class="form-group">
 				  <label for="motivo" class="col-sm-3 control-label">Ingrese el motivo: </label>
 				  <div class="col-sm-3">			
-					<input type="text" ng-model="Motivo" name="Motivo" required>
+					<input type="text" ng-model="Motivo" name="Motivo">
 				  </div>
 			   </div>			  			  
 			  

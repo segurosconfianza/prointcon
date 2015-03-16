@@ -75,7 +75,7 @@ public class CFrmConsulta {
 	
 	@RequestMapping(value = "/updateRecord.json", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
-	public String updateRecord(@RequestParam("conscons") String conscons, @RequestParam("params") String params,  @RequestParam("paramsData") String paramsData,  @RequestParam("motidesc") String motidesc, @RequestParam("file") ArrayList<MultipartFile> file) throws Throwable{
+	public String updateRecord(@RequestParam("conscons") String conscons, @RequestParam("motidesc") String motidesc, @RequestParam("file") ArrayList<MultipartFile> file, @RequestParam("params") String params,  @RequestParam("paramsData") String paramsData ) throws Throwable{
 			
 		String result=this.frmConsultaService.updateRecord(conscons, params, paramsData, file);
 		this.frmConsultaService.uploadFiles(motidesc, file, result);

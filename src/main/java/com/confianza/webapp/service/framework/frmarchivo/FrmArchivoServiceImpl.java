@@ -168,4 +168,19 @@ public class FrmArchivoServiceImpl implements FrmArchivoService{
 		return false;
 	}
 	
+	@Override
+	public String ingresarArchivoSoporte(String nombreArchivo, String valor) throws Exception{
+		
+		String ruta=frmTablasService.listByTablcodi("archsopo").getTablvast();
+		File dir = new File(ruta+(new Date().getYear()+1900)+"\\"+(new Date().getMonth()+1));
+		if (!dir.exists())
+            dir.mkdirs();
+		
+		CFile obj=new CFile(nombreArchivo+".rtf", "application/msword", valor.getBytes());
+		
+		uploadFileServer(dir, obj);									
+		
+		return (new Date().getYear()+1900)+"\\\\"+(new Date().getMonth()+1)+"\\\\"+nombreArchivo;
+	}
+	
 }

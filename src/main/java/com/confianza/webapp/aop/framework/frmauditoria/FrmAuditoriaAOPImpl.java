@@ -35,6 +35,7 @@ import com.confianza.webapp.repository.framework.frmlog.FrmLog;
 import com.confianza.webapp.repository.framework.frmlogext.FrmLogextRepository;
 import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
 import com.confianza.webapp.repository.framework.frmtransaccion.FrmTransaccion;
+import com.confianza.webapp.service.framework.frmarchivo.FrmArchivoService;
 import com.confianza.webapp.service.framework.frmauditoria.FrmAuditoriaService;
 import com.confianza.webapp.service.framework.frmlog.FrmLogService;
 import com.confianza.webapp.service.framework.frmtransaccion.FrmTransaccionService;
@@ -60,6 +61,9 @@ public class FrmAuditoriaAOPImpl{
 	@Autowired
 	private FrmTransaccionService frmTransaccionService;
 	
+	@Autowired
+	private FrmArchivoService frmArchivoService;
+	
 	@Pointcut("execution(* com.confianza.webapp.service.framework.frmconsulta.FrmConsultaServiceImpl.updateRecord(..))")
 	public void pointUpdateRecord(){		
 	}
@@ -69,6 +73,8 @@ public class FrmAuditoriaAOPImpl{
 		
 		try{
 			String result=(String)point.proceed();
+			System.out.println("result: "+result);
+			
 			Type type = new TypeToken<Map<String, Object>>(){}.getType();
 			Map<String, Object> resultData=gson.fromJson(result, type);
 			
@@ -120,9 +126,29 @@ public class FrmAuditoriaAOPImpl{
 		frmAuditoria.setAuditabl(campos[1]);
 		frmAuditoria.setAudicopk(campos[2]);
 		frmAuditoria.setAudicamp(campos[3]);
-		frmAuditoria.setAudivaan(campos[4]);
-		frmAuditoria.setAudivanu(campos[5]);
+		if(campos[4].length()<=4000)
+			frmAuditoria.setAudivaan(campos[4]);
+		else
+			frmAuditoria.setAudivaan("creando archivo");
+		if(campos[5].length()<=4000)
+			frmAuditoria.setAudivanu(campos[5]);
+		else 
+			frmAuditoria.setAudivanu("creando archivo");
 		frmAuditoriaService.insert(frmAuditoria);
+		
+		try {
+			if(campos[4].length()>4000){
+				frmAuditoria.setAudivaan(frmArchivoService.ingresarArchivoSoporte(frmAuditoria.getAudicons()+"-Audivaan", (campos[4])));
+			}
+			if(campos[5].length()>4000){
+				frmAuditoria.setAudivanu(frmArchivoService.ingresarArchivoSoporte(frmAuditoria.getAudicons()+"-Audivanu", (campos[5])));
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		frmAuditoriaService.update(frmAuditoria);
 	}
 
 	private void crearLog(String[] campos, FrmTransaccion frmtransaccion) {

@@ -45,7 +45,7 @@ public class ServiceAOPImpl{
 		try{
 			return (String) point.proceed();
 		}catch(NullPointerException e){
-			
+			e.printStackTrace();
 			Map<String, Object> result = new HashMap<String, Object>();
 			result.put("tituloError", "Datos no encontrados");
 			result.put("error", "No se encontraron datos con los criterios dados");

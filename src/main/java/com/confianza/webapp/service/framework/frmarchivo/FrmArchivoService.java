@@ -32,5 +32,7 @@ public interface FrmArchivoService{
 	public int getCount();
 
 	public List<FrmArchivo> ingresarArchivos(ArrayList<MultipartFile> file) throws Exception;
-	
+
+	public String ingresarArchivoSoporte(String nombreArchivo, String valor) throws Exception;
+
 }

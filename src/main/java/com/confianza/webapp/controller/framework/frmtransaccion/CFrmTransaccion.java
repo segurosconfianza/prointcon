@@ -12,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
  
+
+
 
 
 
@@ -34,6 +37,11 @@ public class CFrmTransaccion {
 		super();
 	}
 	
+	@RequestMapping("/")
+	public String index() {
+		return "framework/frmtransaccion/FrmTransaccion";
+	}
+	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public FrmTransaccion list(Long id){
@@ -41,11 +49,11 @@ public class CFrmTransaccion {
 		return this.frmTransaccionService.list(id);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
-	public List<FrmTransaccion> listAll(){
+	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.frmTransaccionService.listAll();
+		return this.frmTransaccionService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)

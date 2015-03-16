@@ -90,8 +90,7 @@ public class FrmAuditoriaRepositoryImpl implements FrmAuditoriaRepository{
 	 */
 	@Override
 	@Transactional
-	public FrmAuditoria update(Long id){
-		FrmAuditoria frmauditoria = this.list(id);
+	public FrmAuditoria update(FrmAuditoria frmauditoria){
 		getSession().update(frmauditoria);
 		return frmauditoria;
 	}

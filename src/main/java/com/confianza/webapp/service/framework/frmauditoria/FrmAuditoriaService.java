@@ -18,10 +18,10 @@ public interface FrmAuditoriaService{
 	
 	public List<FrmAuditoria> listAll();	
 	
-	public FrmAuditoria update(Long id);
-	
 	public void delete(Long id);
 	
 	public FrmAuditoria insert(FrmAuditoria frmauditoria);
+
+	public FrmAuditoria update(FrmAuditoria frmAuditoria);
 	
 }

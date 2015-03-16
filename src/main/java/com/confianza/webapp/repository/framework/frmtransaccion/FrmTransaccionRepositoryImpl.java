@@ -9,6 +9,7 @@ package com.confianza.webapp.repository.framework.frmtransaccion;
   * @app		framework  
   */                          
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -67,20 +68,52 @@ public class FrmTransaccionRepositoryImpl implements FrmTransaccionRepository{
 	 */
 	@Override
 	@Transactional
-	public List<FrmTransaccion> listAll(){
+	public List<FrmTransaccion> listAll(int init, int limit){
 		try{
 			String sql = "select trancons ,transesi ,tranfecr "
 					   + "from FrmTransaccion ";
 						
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(FrmTransaccion.class);
-					     
+			if(init==0 && limit!=0){
+				query.setFirstResult(init);			
+				query.setMaxResults(limit);
+			}		     
 			return query.list();
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;
 		}
 	}	
+	
+	/**
+	 * Metodo de consulta para el conteo de los registros de la tabla FrmPerfil
+	 * @return int = cantidad de registros encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public int getCount(){
+		try{
+			String sql = "select count(*) "
+					   + "from FrmTransaccion ";
+						
+			Query query = getSession().createQuery(sql);
+	        
+			Iterator it = query.list().iterator();
+	        Long ret = new Long(0);
+	        
+	        if (it != null)
+		        if (it.hasNext()){
+		        	ret = (Long) it.next();
+		        }
+	        
+			return ret.intValue();
+		}catch(Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+	}
 	
 	/**
 	 * Metodo para actualizar los datos de un registro de la tabla FrmTransaccion por id

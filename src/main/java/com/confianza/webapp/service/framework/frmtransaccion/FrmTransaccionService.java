@@ -17,8 +17,6 @@ public interface FrmTransaccionService{
 	
 	public FrmTransaccion list(Long id);
 	
-	public List<FrmTransaccion> listAll();	
-	
 	public FrmTransaccion update(Long id);
 	
 	public void delete(Long id);
@@ -26,5 +24,9 @@ public interface FrmTransaccionService{
 	public FrmTransaccion insert(FrmTransaccion frmtransaccion);
 
 	public FrmTransaccion insert(Long frmSesion);
+
+	public String listAll(int pageSize, int page);
+
+	public int getCount();
 	
 }

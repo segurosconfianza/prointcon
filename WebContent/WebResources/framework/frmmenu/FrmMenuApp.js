@@ -14,7 +14,14 @@ FrmMainApp.config(['$routeProvider',
   	          return  WEB_SERVER+'FrmConsulta/Soporte/';
   	      },
   	      controller: 'SoporteController'
-  	    }).	    
+  	    }).	  
+  	    when('/FrmTransaccion', {
+   	      templateUrl: function(params) {
+   	    	  console.log(WEB_SERVER+'FrmTransaccion/');
+   	          return  WEB_SERVER+'FrmTransaccion/';
+   	      },
+   	      controller: 'FrmTransaccionController'
+   	    }).
    	    otherwise({
    	      
    	    });

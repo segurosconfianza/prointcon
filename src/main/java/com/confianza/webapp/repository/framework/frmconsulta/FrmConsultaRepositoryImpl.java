@@ -413,16 +413,21 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 			
 			final Map<String, Object> output= new HashMap<String, Object>();
 			
+			System.out.println("loadProcedureOsiris: "+procedure);
+			
 			getSessionOsiris().doWork(new Work() {
 								
 				@Override
 				public void execute(Connection connection) throws SQLException {
 					// TODO Auto-generated method stub
 					CallableStatement cst = connection.prepareCall(procedure);
-															
+												
+					System.out.println("E");
 					cst=putParametersInput(p, fp, cst, "E");
+					System.out.println("S");
 					cst=putParametersInput(pd, fp, cst, "S");
 					
+					System.out.println("out");
 					cst=putParameterOutput(fp, cst);
 					
 				    cst.execute();
@@ -568,7 +573,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 						break;
 				case CI:cst.registerOutParameter(objP.getParanomb(), java.sql.Types.NUMERIC);
 						break;		
-				case L: cst.registerOutParameter(objP.getParanomb(), java.sql.Types.NUMERIC);
+				case L: cst.registerOutParameter(objP.getParanomb(), java.sql.Types.LONGVARCHAR);
 						break;
 				case T: cst.registerOutParameter(objP.getParanomb(), java.sql.Types.TIMESTAMP);
 						break;
@@ -603,12 +608,18 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 				typesData typeData=typesData.valueOf(objP.getParatida());
 				switch(typeData){
 					case S: o.put(objP.getParanomb(), cst.getString(objP.getParanomb()));
+					System.out.println("objP.getParanomb(): "+objP.getParanomb());
+					System.out.println(cst.getString(objP.getParanomb()));
 							break;
 					case CS: o.put(objP.getParanomb(), cst.getString(objP.getParanomb()));
+					System.out.println("objP.getParanomb(): "+objP.getParanomb());
+					System.out.println(cst.getString(objP.getParanomb()));
 							break;
 					case TA: o.put(objP.getParanomb(), cst.getString(objP.getParanomb()));
 							break;
 					case TL: o.put(objP.getParanomb(), cst.getString(objP.getParanomb()));
+					System.out.println("objP.getParanomb(): "+objP.getParanomb());
+					System.out.println(cst.getString(objP.getParanomb()));
 							break;						
 					case D: o.put(objP.getParanomb(), cst.getDate(objP.getParanomb()));
 							break;
@@ -617,6 +628,8 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 					case CI: o.put(objP.getParanomb(), cst.getInt(objP.getParanomb()));
 							break;		
 					case L: o.put(objP.getParanomb(), cst.getLong(objP.getParanomb()));
+							System.out.println("objP.getParanomb(): "+objP.getParanomb());
+							System.out.println(cst.getLong(objP.getParanomb()));
 							break;
 					case T: o.put(objP.getParanomb(), cst.getTimestamp(objP.getParanomb()));
 							break;

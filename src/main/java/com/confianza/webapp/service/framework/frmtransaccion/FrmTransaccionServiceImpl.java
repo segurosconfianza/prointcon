@@ -10,17 +10,26 @@ package com.confianza.webapp.service.framework.frmtransaccion;
   */                          
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.confianza.webapp.repository.framework.frmperfil.FrmPerfil;
 import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
 import com.confianza.webapp.repository.framework.frmtransaccion.FrmTransaccion;
 import com.confianza.webapp.repository.framework.frmtransaccion.FrmTransaccionRepository;
+import com.google.gson.Gson;
 
 @Service
 public class FrmTransaccionServiceImpl implements FrmTransaccionService{
+	
+	@Autowired
+	Gson gson;
 	
 	@Autowired
 	private FrmTransaccionRepository frmTransaccionRepository;
@@ -45,9 +54,25 @@ public class FrmTransaccionServiceImpl implements FrmTransaccionService{
 	}
 	
 	@Override
-	public List<FrmTransaccion> listAll(){
-		return frmTransaccionRepository.listAll();
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_TRANSACCION_ALL", "FRM_TRANSACCION_READ"})
+	public String listAll(int pageSize, int page){
+		int limit=pageSize*page;
+		int init=limit-pageSize;
+		
+		List<FrmTransaccion> listAll=this.frmTransaccionRepository.listAll(pageSize, page);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", listAll);
+		result.put("count", this.getCount());
+		
+		return gson.toJson(result);
 	}	
+	
+	@Override
+	public int getCount(){
+				
+		return frmTransaccionRepository.getCount();
+	}
 	
 	@Override
 	public FrmTransaccion update(Long id){

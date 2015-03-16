@@ -40,13 +40,6 @@ public class CFrmAuditoria {
 		return this.frmAuditoriaService.listAll();
 	}
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	@ResponseStatus( HttpStatus.OK )
-	@ResponseBody
-	public FrmAuditoria update(Long id){
-		return this.frmAuditoriaService.update(id);
-	}
-	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody

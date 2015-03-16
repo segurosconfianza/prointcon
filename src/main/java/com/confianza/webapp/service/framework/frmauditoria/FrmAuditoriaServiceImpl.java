@@ -47,8 +47,8 @@ public class FrmAuditoriaServiceImpl implements FrmAuditoriaService{
 	}	
 	
 	@Override
-	public FrmAuditoria update(Long id){
-		return frmAuditoriaRepository.update(id);
+	public FrmAuditoria update(FrmAuditoria frmAuditoria){
+		return frmAuditoriaRepository.update(frmAuditoria); 
 	}
 	
 	@Override

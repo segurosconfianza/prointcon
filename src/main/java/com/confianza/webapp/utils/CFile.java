@@ -24,6 +24,13 @@ public class CFile {
 		this.bytes = multipartFile.getBytes();
 	}
 
+	public CFile(String name, String type, byte[] bytes) throws Exception {
+		super();
+		this.name = name;
+		this.type = type;
+		this.bytes = bytes;
+	}
+	
 	private String castMd5(MultipartFile multipartFile) throws Exception {
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		md.update(multipartFile.getBytes());

@@ -15,11 +15,13 @@ public interface FrmTransaccionRepository {
 	
 	public FrmTransaccion list(Long id);
 	
-	public List<FrmTransaccion> listAll();	
+	public List<FrmTransaccion> listAll(int pageSize, int page);	
 	
 	public FrmTransaccion update(Long id);
 	
 	public void delete(Long id);
 	
 	public FrmTransaccion insert(FrmTransaccion frmtransaccion);
+
+	public int getCount();
 }

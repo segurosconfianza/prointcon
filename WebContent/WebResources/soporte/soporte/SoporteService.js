@@ -18,14 +18,14 @@ FrmMainApp.service('SoporteService', function($http, $rootScope, $routeParams) {
     	     });
     	 }    			
 		    	    	
-    	this.updateRecord = function(params, paramsData, formData, motidesc) {    	
+    	this.updateRecord = function(formData, motidesc) {    	
     		return $http({
     	        method: 'POST', 
     	        url: WEB_SERVER+'FrmConsulta/updateRecord.json',
     	        data: formData,
-    	        params: {conscons: $routeParams.soporteId, params: params, paramsData: paramsData, motidesc: motidesc},
+    	        params: {conscons: $routeParams.soporteId, motidesc: motidesc},
     	        transformRequest: angular.identity,
-                headers: {'Content-Type': undefined, 'Content-length': (params.length+paramsData.length)}
+                headers: {'Content-Type': undefined, 'Content-Transfer-Encoding': 'utf-8'}
     	     });
     	 }
     	

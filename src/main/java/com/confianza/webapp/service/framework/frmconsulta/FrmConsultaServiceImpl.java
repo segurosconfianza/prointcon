@@ -26,6 +26,7 @@ import com.confianza.webapp.repository.framework.frmconsulta.FrmConsultaReposito
 import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
 import com.confianza.webapp.service.framework.frmparametro.FrmParametroService;
 import com.confianza.webapp.service.soporte.sopmotivo.SopMotivoService;
+import com.confianza.webapp.utils.CharsetString;
 import com.confianza.webapp.utils.JSONUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -44,6 +45,8 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	
 	@Autowired
 	private SopMotivoService sopMotivoService;
+	
+	private CharsetString charsetString=new CharsetString();
 	
 	/**
 	 * @return the frmconsultaRepository
@@ -208,14 +211,20 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	public String updateRecord(String conscons, String params, String paramsData, ArrayList<MultipartFile> file){
 		
 		Type type = new TypeToken<Map<String, Object>>(){}.getType();
-		Map<String, Object> parameters=gson.fromJson(params, type);   						
-		Map<String, Object> parametersData=gson.fromJson(paramsData, type);
+		
+		System.out.println(charsetString.convertISO88591ToUTF8(params));
+		System.out.println(charsetString.convertISO88591ToUTF8(paramsData));
+		
+		Map<String, Object> parameters=gson.fromJson(charsetString.convertISO88591ToUTF8(params), type);   						
+		Map<String, Object> parametersData=gson.fromJson(charsetString.convertISO88591ToUTF8(paramsData), type);
 		
 		//carga la consulta dinamica					
 		FrmConsulta frmConsulta=this.listProcedureChild(conscons);
 		List<FrmParametro> parametros=this.frmParametroService.listParamsCosuType(new Long(conscons));
 		
 		Map<String, Object> p=this.loadProcedure(frmConsulta, parametros, parameters, parametersData);	
+		
+		System.out.println("p: "+p);
 		
 		return gson.toJson(p);								
 	} 
