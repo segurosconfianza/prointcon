@@ -413,8 +413,6 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 			
 			final Map<String, Object> output= new HashMap<String, Object>();
 			
-			System.out.println("loadProcedureOsiris: "+procedure);
-			
 			getSessionOsiris().doWork(new Work() {
 								
 				@Override
@@ -422,12 +420,9 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 					// TODO Auto-generated method stub
 					CallableStatement cst = connection.prepareCall(procedure);
 												
-					System.out.println("E");
 					cst=putParametersInput(p, fp, cst, "E");
-					System.out.println("S");
 					cst=putParametersInput(pd, fp, cst, "S");
 					
-					System.out.println("out");
 					cst=putParameterOutput(fp, cst);
 					
 				    cst.execute();

@@ -212,9 +212,6 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		
 		Type type = new TypeToken<Map<String, Object>>(){}.getType();
 		
-		System.out.println(charsetString.convertISO88591ToUTF8(params));
-		System.out.println(charsetString.convertISO88591ToUTF8(paramsData));
-		
 		Map<String, Object> parameters=gson.fromJson(charsetString.convertISO88591ToUTF8(params), type);   						
 		Map<String, Object> parametersData=gson.fromJson(charsetString.convertISO88591ToUTF8(paramsData), type);
 		
@@ -223,8 +220,6 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		List<FrmParametro> parametros=this.frmParametroService.listParamsCosuType(new Long(conscons));
 		
 		Map<String, Object> p=this.loadProcedure(frmConsulta, parametros, parameters, parametersData);	
-		
-		System.out.println("p: "+p);
 		
 		return gson.toJson(p);								
 	} 

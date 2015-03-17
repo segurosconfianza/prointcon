@@ -73,7 +73,6 @@ public class FrmAuditoriaAOPImpl{
 		
 		try{
 			String result=(String)point.proceed();
-			System.out.println("result: "+result);
 			
 			Type type = new TypeToken<Map<String, Object>>(){}.getType();
 			Map<String, Object> resultData=gson.fromJson(result, type);
