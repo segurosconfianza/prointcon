@@ -64,7 +64,7 @@
 			   <div class="form-group">
 				  <label for="motivo" class="col-sm-3 control-label">Ingrese el motivo: </label>
 				  <div class="col-sm-3">			
-					<input type="text" ng-model="Motivo" name="Motivo">
+					<input type="text" ng-model="Motivo" name="Motivo" >
 				  </div>
 			   </div>			  			  
 			  

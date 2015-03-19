@@ -131,7 +131,7 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 		}					
 		
 		//validar si subieron adjuntos
-		if(file!=undefined && file.length<1){
+		if(file==undefined || file.length<1){
 			alert("Datos vacios o incorrectos: Favor adjunte el/los archivo(s) de soporte");
 			verify=false;			
 			$scope.BotonLoader=false;
@@ -146,6 +146,9 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 			
 			formData.append("params", angular.toJson($scope.paramsSend));
 			formData.append("paramsData", angular.toJson($scope.paramsSendData));
+			
+			if(Motivo==null || Motivo==undefined)
+				Motivo="";
 			
 			SoporteService.updateRecord(formData, Motivo).then(function(dataResponse) {
 										
