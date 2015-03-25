@@ -457,7 +457,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 			
 			if(objP.getParatipo().equals(tipo))
 			{
-				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
 			        
 				typesData typeData=typesData.valueOf(objP.getParatida());
 
@@ -485,8 +485,8 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 					case D: if(p.get(objP.getParanomb())!=null && !p.get(objP.getParanomb()).toString().trim().isEmpty()){
 								Date parsed=null;
 								try {
-									parsed = format.parse(p.get(objP.getParanomb()).toString());
-									cst.setDate(objP.getParanomb(), new java.sql.Date(parsed.getTime()));
+									parsed = format.parse(p.get(objP.getParanomb()).toString());									
+									cst.setDate(objP.getParanomb(),new java.sql.Date(parsed.getTime()));
 								} catch (ParseException e) {
 									cst.setNull(objP.getParanomb(), java.sql.Types.DATE);
 								}
@@ -495,7 +495,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 								cst.setNull(objP.getParanomb(), java.sql.Types.DATE);
 							break;
 					case I: if(p.get(objP.getParanomb())!=null){
-								aux=Float.parseFloat( p.get(objP.getParanomb()).toString());							
+								aux=Float.parseFloat( p.get(objP.getParanomb()).toString());
 								cst.setInt(objP.getParanomb(), (int)aux );
 							}
 							else

@@ -83,10 +83,13 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 	    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error); 
 	    			$scope.BotonLoader=false;
 				}
-	        	else{ 	        			        	
-	        		$scope.Params=dataResponse.data.data[0];
+	        	else{ 	     
+	        		
+	        		if(dataResponse.data.data[0]!=null || dataResponse.data.data[0]!=undefined)
+		        		$scope.Params=dataResponse.data.data[0];		        		
+	        		
 	        		$scope.Result=true;
-	        		$scope.BotonLoader=false;	 	        			        		
+	        		$scope.BotonLoader=false;
 	        	}
 				$scope.Boton = true;
 				
@@ -121,11 +124,25 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 				//Tomar solo los datos de salida para enviarlos a la consulta
 				if($scope.Params[$scope.columns[i].paranomb]==undefined)
 					$scope.paramsSendData[$scope.columns[i].paranomb]=' ';
-				else if($scope.columns[i].paratida=='D')//date
-					$scope.paramsSendData[$scope.columns[i].paranomb]=$filter('date')(new Date($scope.Params[$scope.columns[i].paranomb]), 'dd/MM/yyyy');
-				else if($scope.columns[i].paratida=='T')//timestamp
-					$scope.paramsSendData[$scope.columns[i].paranomb]=$filter('date')(new Date($scope.Params[$scope.columns[i].paranomb]), 'dd/MM/yyyy HH:mm:ss');					
-				else	
+				else if($scope.columns[i].paratida=='D'){//date
+					if(typeof $scope.Params[$scope.columns[i].paranomb]=="string"){
+						//console.log("string");
+						$scope.paramsSendData[$scope.columns[i].paranomb]=$scope.Params[$scope.columns[i].paranomb];
+					}
+					else{
+						//console.log("no string");
+						$scope.paramsSendData[$scope.columns[i].paranomb]=$filter('date')(new Date($scope.Params[$scope.columns[i].paranomb]), 'dd/MM/yyyy');
+					}
+				} else if($scope.columns[i].paratida=='T'){//timestamp
+					if(typeof $scope.Params[$scope.columns[i].paranomb]=="string"){
+						//console.log("string");
+						$scope.paramsSendData[$scope.columns[i].paranomb]=$scope.Params[$scope.columns[i].paranomb];
+					}
+					else{
+						//console.log("no string");
+						$scope.paramsSendData[$scope.columns[i].paranomb]=$filter('date')(new Date($scope.Params[$scope.columns[i].paranomb]), 'dd/MM/yyyy HH:mm:ss');
+					}
+				} else	
 					$scope.paramsSendData[$scope.columns[i].paranomb]=$scope.Params[$scope.columns[i].paranomb];
 			}
 		}					

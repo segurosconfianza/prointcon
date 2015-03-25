@@ -229,9 +229,13 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		Type type = new TypeToken<Map<String, Object>>(){}.getType();
 		Map<String, Object> resultData=gson.fromJson(result, type);
 		
-		Long transcons= Long.parseLong((resultData.get("TRANSACCION").toString()));
+		try{
+			Long transcons= Long.parseLong((resultData.get("TRANSACCION").toString()));
 		
-		this.sopMotivoService.insertMotivo(motidesc, transcons, file);
+			this.sopMotivoService.insertMotivo(motidesc, transcons, file);
+		}catch(NullPointerException e){
+			
+		}
 	}
 	
 	@Override
