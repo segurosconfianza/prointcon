@@ -14,8 +14,8 @@
   </context-param>
   <context-param>
     <param-name>WEB_SERVER</param-name>
-     <param-value>http://192.168.100.202:8080/Confianza/confianza/</param-value>   
-    <!--<param-value>http://192.168.60.231:8080/Confianza/confianza/</param-value>-->
+     <!--<param-value>http://192.168.100.202:8080/Confianza/confianza/</param-value>-->   
+    <param-value>http://192.168.60.231:8080/Confianza/confianza/</param-value>
   </context-param>
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

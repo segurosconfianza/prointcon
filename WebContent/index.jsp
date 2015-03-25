@@ -1,4 +1,6 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html lang="es" xmlns:ng="http://angularjs.org" id="ng-app" ng-app=FrmMainApp> 
 	<head>		
@@ -89,9 +91,18 @@
         	  		</script>
 				    <div ui-tree="options">
 				      <ol ui-tree-nodes ng-model="menu" id="llista_imatges" data-nodrag>
-				        <li ng-repeat="item in menu" ui-tree-node ng-include="'items_renderer.html'" data-nodrag></li>
+				        <li ng-repeat="item in menu" ui-tree-node ng-include="'items_renderer.html'" data-nodrag></li>				        
+				        
+				        <li ui-tree-node data-nodrag>
+				        	<div ui-tree-handle>
+	                  			<a class="btn btn-danger btn-xs" data-nodrag ng-click="toggle(this)"><span class="glyphicon glyphicon-log-out"></span></a>
+               					<a href="<c:url value="j_spring_security_logout" />" data-nodrag >Logout</a>
+	                		</div>	                		
+				        </li>
+				        
 				      </ol>
-				    </div>
+				    </div>				    				    
+
 			        
 			</div><!--ng-controller="FrmMenuController"-->	
 			

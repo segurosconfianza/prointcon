@@ -2,23 +2,95 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:security="http://www.springframework.org/schema/security"
 	xmlns:ldap="http://www.springframework.org/schema/ldap"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="http://www.springframework.org/schema/ldap http://www.springframework.org/schema/ldap/spring-ldap.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<security:global-method-security jsr250-annotations="enabled"/>
-
-	<security:http use-expressions="true" access-denied-page="/WEB-INF/denied.jsp" >
-		<security:form-login login-page="/login.jsp" authentication-failure-url="/login.jsp?login_error=true" default-target-url="/index.jsp" authentication-success-handler-ref="myAuthenticationSuccessHandler"/>
+	<security:http entry-point-ref="casEntryPoint" use-expressions="true" auto-config="true">				
+		<security:form-login login-page="http://192.168.100.202:8080/casldap/login.jsp" authentication-failure-handler-ref="failureHandler" authentication-success-handler-ref="successHandler"/>
+		<security:logout invalidate-session="true" logout-success-url="http://192.168.60.231:8080/Confianza" />
 		<security:intercept-url pattern="/index.jsp" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/menu.jsp"  access="isAuthenticated()"/>
 		<security:intercept-url pattern="/confianza/**" access="isAuthenticated()"/>
-		<security:logout invalidate-session="true" logout-url="/logout"/>
-	</security:http>		
+		<security:custom-filter position="CAS_FILTER" ref="casFilter" />
+	</security:http>
 	
-	<security:authentication-manager>
-		<security:authentication-provider ref="authenticate" />								  
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider ref="casAuthenticationProvider" />
 	</security:authentication-manager>
+	
+	<bean id="casFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter"
+		p:authenticationManager-ref="authenticationManager"
+		p:authenticationFailureHandler-ref="authenticationFailureHandler"         	
+     	p:authenticationSuccessHandler-ref="authenticationSuccessHandler"
+	/>
+	
+	<bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler"
+		p:alwaysUseDefaultTargetUrl="true"
+        p:defaultTargetUrl="http://192.168.60.231:8080/Confianza/index.jsp"
+    />
+
+    <bean id="failureHandler" class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler"
+        p:defaultFailureUrl="/login.jsp?login_cas=true"
+    />  
+    
+	<bean id="casEntryPoint" class="org.springframework.security.cas.web.CasAuthenticationEntryPoint"
+		p:loginUrl="http://192.168.100.202:8080/casldap/login"
+		p:serviceProperties-ref="serviceProperties"
+	/>		  					
+
+	<bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" 
+		p:defaultFailureUrl="/login.jsp?login_cas_authentication=true"
+	/>
+			
+	<bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler"
+        p:defaultTargetUrl="http://192.168.60.231:8080/Confianza/index.jsp"
+        p:targetUrlParameter="spring-security-redirect"
+    />		
+    
+	<bean id="casAuthenticationProvider" class="org.springframework.security.cas.authentication.CasAuthenticationProvider"
+		p:authenticationUserDetailsService-ref="userDetailsService"
+		p:serviceProperties-ref="serviceProperties" 
+		p:ticketValidator-ref="ticketValidator"
+		p:key="casldap"
+	/>	 	
+
+	<bean id="userDetailsService" class="com.confianza.webapp.service.security.userDetailsService"/>
+	
+	<bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties"
+		p:service="http://192.168.60.231:8080/Confianza/j_spring_cas_security_check" 
+		p:sendRenew="false"
+	/>
+	
+	<bean id="ticketValidator" class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator"
+		c:_0="http://192.168.100.202:8080/casldap"						
+	/> 		
+		
+	<bean id="authenticationUserDetailsService" class="org.springframework.security.cas.userdetails.GrantedAuthorityFromAssertionAttributesUserDetailsService">
+        <constructor-arg>
+            <array>
+                <value>authorities</value>
+            </array>
+        </constructor-arg>
+    </bean>
+    	
+	<security:global-method-security secured-annotations="enabled" jsr250-annotations="enabled" access-decision-manager-ref="accessDecisionManager" />
+	
+	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+		<property name="decisionVoters">
+			<list>
+				<bean class="org.springframework.security.access.vote.RoleVoter">
+					<property name="rolePrefix">
+						<value />
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
 	
 	<ldap:context-source
           url="ldap://192.168.100.2:389"
@@ -27,11 +99,5 @@
           password="Confianza01" />
           
     <ldap:ldap-template id="ldapTemplate" ignore-partial-result="true" search-scope="SUBTREE" />
-    
-    <bean id="authenticate" class="com.confianza.webapp.service.security.AutenticateImpl"/>
-    
-    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder"/>    
-    
-    <bean id="myAuthenticationSuccessHandler" class="com.confianza.webapp.service.security.MySimpleUrlAuthenticationSuccessHandler" />
 		
 </beans>
