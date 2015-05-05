@@ -12,6 +12,8 @@ package com.confianza.webapp.repository.framework.frmconsulta;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
 
 @Repository
+@Transactional
 public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	
 	@Autowired
@@ -82,7 +85,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional
+	@Transactional(readOnly=true)
 	public FrmConsulta list(Long id){
 		try{
 			String sql = "select "+FrmConsulta.getColumnNames()
@@ -106,7 +109,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional
+	@Transactional(readOnly=true)
 	public FrmConsulta listName(String id){
 		try{
 			String sql = "select "+FrmConsulta.getColumnNames()
@@ -130,7 +133,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional
+	@Transactional(readOnly=true)
 	public FrmConsulta listChild(String id){
 		try{
 			String sql = "select "+FrmConsulta.getColumnNames()
@@ -154,7 +157,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional
+	@Transactional(readOnly=true)
 	public FrmConsulta listProcedureChild(String id){
 		try{
 			String sql = "select "+FrmConsulta.getColumnNames()
@@ -178,7 +181,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional
+	@Transactional(readOnly=true)
 	public List<Object[]> loadData(FrmConsulta frmConsulta,Map<String, Object> parameters){
 		try{
 			Query query =  getSession().createSQLQuery(frmConsulta.getConslsql());
@@ -205,7 +208,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional("transactionManagerOsiris")
+	@Transactional(value="transactionManagerOsiris", readOnly=true)
 	public List<Object[]> loadDataOsiris(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros){
 		try{
 			SQLQuery query = getSessionOsiris().createSQLQuery(frmConsulta.getConslsql());
@@ -248,7 +251,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional
+	@Transactional(readOnly=true)
 	public List<FrmConsulta> listAll(int init, int limit){
 		try{
 			String sql = "select "+FrmConsulta.getColumnNames()
@@ -275,7 +278,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional
+	@Transactional(readOnly=true)
 	public int getCount(){
 		try{
 			String sql = "select count(*) "
@@ -305,7 +308,6 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional
 	public FrmConsulta update(FrmConsulta frmconsulta){
 		getSession().update(frmconsulta);
 		return frmconsulta;
@@ -318,7 +320,6 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional
 	public void delete(FrmConsulta frmconsulta){
 		
 	}
@@ -354,7 +355,6 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional
 	public Map<String, Object> loadProcedure(FrmConsulta frmConsulta, List<FrmParametro> parametros, Map<String, Object> parameters, Map<String, Object> parametersData){
 		try{
 			
@@ -412,7 +412,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 			final List<FrmParametro> fp = parametros;
 			
 			final Map<String, Object> output= new HashMap<String, Object>();
-			
+						
 			getSessionOsiris().doWork(new Work() {
 								
 				@Override
@@ -460,7 +460,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
 			        
 				typesData typeData=typesData.valueOf(objP.getParatida());
-
+				System.out.println(objP.getParanomb());
 				switch(typeData){
 					case S: if(p.get(objP.getParanomb())!=null)
 						    	cst.setString(objP.getParanomb(),p.get(objP.getParanomb()).toString());
@@ -529,7 +529,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 								cst.setNull(objP.getParanomb(), java.sql.Types.NUMERIC);
 							break;
 					case F: if(p.get(objP.getParanomb())!=null)
-								cst.setFloat(objP.getParanomb(), Float.parseFloat(p.get(objP.getParanomb()).toString()) );
+								cst.setDouble(objP.getParanomb(), Double.parseDouble(p.get(objP.getParanomb()).toString()) );
 							else
 								cst.setNull(objP.getParanomb(), java.sql.Types.NUMERIC);
 							break;
@@ -603,18 +603,12 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 				typesData typeData=typesData.valueOf(objP.getParatida());
 				switch(typeData){
 					case S: o.put(objP.getParanomb(), cst.getString(objP.getParanomb()));
-					System.out.println("objP.getParanomb(): "+objP.getParanomb());
-					System.out.println(cst.getString(objP.getParanomb()));
 							break;
 					case CS: o.put(objP.getParanomb(), cst.getString(objP.getParanomb()));
-					System.out.println("objP.getParanomb(): "+objP.getParanomb());
-					System.out.println(cst.getString(objP.getParanomb()));
 							break;
 					case TA: o.put(objP.getParanomb(), cst.getString(objP.getParanomb()));
 							break;
 					case TL: o.put(objP.getParanomb(), cst.getString(objP.getParanomb()));
-					System.out.println("objP.getParanomb(): "+objP.getParanomb());
-					System.out.println(cst.getString(objP.getParanomb()));
 							break;						
 					case D: o.put(objP.getParanomb(), cst.getDate(objP.getParanomb()));
 							break;
@@ -623,8 +617,6 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 					case CI: o.put(objP.getParanomb(), cst.getInt(objP.getParanomb()));
 							break;		
 					case L: o.put(objP.getParanomb(), cst.getLong(objP.getParanomb()));
-							System.out.println("objP.getParanomb(): "+objP.getParanomb());
-							System.out.println(cst.getLong(objP.getParanomb()));
 							break;
 					case T: o.put(objP.getParanomb(), cst.getTimestamp(objP.getParanomb()));
 							break;

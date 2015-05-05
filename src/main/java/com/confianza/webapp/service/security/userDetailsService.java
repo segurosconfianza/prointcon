@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.confianza.webapp.repository.framework.security.Person;
 import com.confianza.webapp.repository.framework.security.PersonAttributesMapperImpl;
+import com.confianza.webapp.service.framework.frmsesion.FrmSesionService;
 
 public class userDetailsService implements UserDetailsService, AuthenticationUserDetailsService{
 
@@ -27,7 +28,11 @@ public class userDetailsService implements UserDetailsService, AuthenticationUse
 	@Autowired
 	private RolService rolService;
 	
+	@Autowired
+	private FrmSesionService frmSesionService;		
+	
 	private String userName;
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
@@ -45,7 +50,7 @@ public class userDetailsService implements UserDetailsService, AuthenticationUse
 		List<Object[]> roles=rolService.loadRoles(persona.getGroups());
 		
 		UserDetails user = new User(userName, token.getCredentials().toString(), true, true, true, true, assignRolesForGrups(roles));
-		
+						
 		return user;
 	}
 	
@@ -66,5 +71,6 @@ public class userDetailsService implements UserDetailsService, AuthenticationUse
 				
 		return autorities;
 	}
+	    
 
 }

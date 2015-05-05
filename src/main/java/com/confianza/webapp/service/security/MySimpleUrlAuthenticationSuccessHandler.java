@@ -22,6 +22,8 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         
+    	System.out.println("onAuthenticationSuccess");
+    	
     	String sesion = request.getRequestedSessionId();
         FrmSesion frmSesion=frmSesionService.insert(authentication.getName(), sesion);
 		

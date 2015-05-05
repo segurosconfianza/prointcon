@@ -137,7 +137,7 @@ public class FrmMenuRepositoryImpl implements FrmMenuRepository{
 			Query query;
 			
 			if(id==null){
-			    sql= "select menucons, menuicon, menutitu, modudurl, '' hijos "
+			    sql= "select menucons, menuicon, menutitu, nvl(modudurl,' '), ' ' hijos "
 				   + "from frm_modulo "
 				   + "join frm_menu  on (menumodu=moducons) "
 				   + "where modunomb in (:roles) and menuesta='A' and menupadr is null "
@@ -147,7 +147,7 @@ public class FrmMenuRepositoryImpl implements FrmMenuRepository{
 				        .setParameterList("roles", roles);
 			}
 			else{
-				sql= "select menucons, menuicon, menutitu, modudurl, '' hijos "
+				sql= "select menucons, menuicon, menutitu, nvl(modudurl,' '), ' ' hijos "
 				   + "from frm_modulo "
 				   + "join frm_menu  on (menumodu=moducons) "
 				   + "where modunomb in (:roles) and menuesta='A' and menupadr=:id "

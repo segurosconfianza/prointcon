@@ -2,14 +2,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
+<%@page import="java.util.Properties"%>
+
 <html lang="es" xmlns:ng="http://angularjs.org" id="ng-app" ng-app=FrmMainApp> 
 	<head>		
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Seguros Confianza</title>			
 		<%
-		  	ServletContext context = pageContext.getServletContext();
-		  	String WEB_SERVER = context.getInitParameter("WEB_SERVER");
-	    %>	    
+			Properties prop=new Properties();
+			prop.load(getServletContext().getResourceAsStream("/WEB-INF/Confianza.properties"));
+			
+			String WEB_SERVER = prop.getProperty("WEB_SERVER");				  	
+	    %>	
+	        
 	    <script >var WEB_SERVER='<%out.print(WEB_SERVER);%>';</script>
 	    
 		<script  src="lib/Angular/1.3.2/angular.js"></script>	    		
@@ -45,12 +50,15 @@
 	    <script  src="WebResources/framework/frmperfil/FrmPerfilController.js"></script>
 	    <script  src="WebResources/framework/frmperfil/FrmPerfmoduController.js"></script>
 	    
+	    <script  src="WebResources/framework/frmtransaccion/FrmTransaccionApp.js"></script>
+	    <script  src="WebResources/framework/frmtransaccion/FrmTransaccionService.js"></script>
+	    <script  src="WebResources/framework/frmtransaccion/FrmTransaccionController.js"></script>
+	    
 	    <script  src="WebResources/soporte/soporte/SoporteApp.js"></script>
 	    <script  src="WebResources/soporte/soporte/SoporteService.js"></script>
 	    <script  src="WebResources/soporte/soporte/SoporteController.js"></script>
 	    <script  src="WebResources/soporte/soporte/SoporteChildService.js"></script>
 	    <script  src="WebResources/soporte/soporte/SoporteChildController.js"></script>
-		
 		
 		<script type="text/javascript" Language="JavaScript">
 			document.createElement('ng-view');
@@ -78,31 +86,28 @@
 		
 			<div ng-controller="FrmMenuController">    
 			  
-				    <!-- Nested list template -->
-				    <script type="text/ng-template" id="items_renderer.html">
-                		<div ui-tree-handle>
-                  			<a class="btn btn-danger btn-xs" data-nodrag ng-click="toggle(this)"><span class="glyphicon" ng-class="whatClassIsIt(this,item.menuhijo,item.modudurl)"></span></a>
-                  			<a href="#/{{item.modudurl}}" data-nodrag >{{item.menutitu}}</a>
-                		</div>
-                		<ol ui-tree-nodes="options" ng-model="item.menuhijo" ng-class="{hidden: !collapsed}" data-nodrag>
-                  			<li ng-repeat="item in item.menuhijo" ng-include="'items_renderer.html'" id="llista_imatges" data-nodrag>
-                  			</li>
-                		</ol>
-        	  		</script>
-				    <div ui-tree="options">
-				      <ol ui-tree-nodes ng-model="menu" id="llista_imatges" data-nodrag>
-				        <li ng-repeat="item in menu" ui-tree-node ng-include="'items_renderer.html'" data-nodrag></li>				        
-				        
-				        <li ui-tree-node data-nodrag>
-				        	<div ui-tree-handle>
-	                  			<a class="btn btn-danger btn-xs" data-nodrag ng-click="toggle(this)"><span class="glyphicon glyphicon-log-out"></span></a>
-               					<a href="<c:url value="j_spring_security_logout" />" data-nodrag >Logout</a>
-	                		</div>	                		
-				        </li>
-				        
-				      </ol>
-				    </div>				    				    
-
+				 <!-- Nested list template -->
+              <script type="text/ng-template" id="items_renderer.html">
+                <div ui-tree-handle>
+				  <div ng-if="urlVerify(item.modudurl)==0">
+                  	<a class="btn btn-danger btn-xs" data-nodrag ng-click="toggle(this)"><span class="glyphicon" ng-class="whatClassIsIt(this,item.menuhijo,item.modudurl)"></span></a>
+                  	<a href="#/{{item.modudurl}}" data-nodrag >{{item.menutitu}}</a>
+				  </div>
+				  <div ng-if="urlVerify(item.modudurl)==1">
+                  	<a class="btn btn-danger btn-xs" data-nodrag ng-click="toggle(this)"><span class="glyphicon" ng-class="whatClassIsIt(this,item.menuhijo,item.modudurl)"></span></a>
+                  	<a href="{{item.modudurl}}" data-nodrag >{{item.menutitu}}</a>
+                  </div>
+                </div>
+                <ol ui-tree-nodes="options" ng-model="item.menuhijo" ng-class="{hidden: !collapsed}"">
+                  <li ng-repeat="item in item.menuhijo" ui-tree-node ng-include="'items_renderer.html'">
+                  </li>
+                </ol>
+              </script>
+              <div ui-tree="options">
+                <ol ui-tree-nodes ng-model="menu" >
+                  <li ng-repeat="item in menu" ui-tree-node ng-include="'items_renderer.html'"></li>
+                </ol>
+              </div>             				    			    				   
 			        
 			</div><!--ng-controller="FrmMenuController"-->	
 			

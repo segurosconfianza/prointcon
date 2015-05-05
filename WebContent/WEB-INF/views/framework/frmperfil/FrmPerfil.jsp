@@ -67,9 +67,9 @@
       </div>
       <div class="col-md-6" ng-controller="FrmPerfmoduController"><!-- Division grid detalle -->      	
         <div class="well well-sm">
-			<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,FRM_PERFMODU_ALL,FRM_PERFMODU_CREATE"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalChildren" ng-click="createRecordFormChildren()" ng-show="rCreate"> Nuevo <span class="glyphicon glyphicon-file"> </span></button></sec:authorize>
-			<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,FRM_PERFMODU_ALL,FRM_PERFMODU_UPDATE"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalChildren" ng-click="loadDatatoFormChildren()" ng-show="rUpdate"> Editar <span class="glyphicon glyphicon-edit"> </span></button></sec:authorize>
-			<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,FRM_PERFMODU_ALL,FRM_PERFMODU_DELETE"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModalChildren" ng-click="deleteRecordFormChildren()" ng-show="rDelete"> Borrar <span class="glyphicon glyphicon-trash"> </span></button></sec:authorize>
+			<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,FRM_PERFMODU_ALL,FRM_PERFMODU_CREATE"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalChildren" ng-click="createRecordFormChildren()"> Nuevo <span class="glyphicon glyphicon-file"> </span></button></sec:authorize>
+			<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,FRM_PERFMODU_ALL,FRM_PERFMODU_UPDATE"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalChildren" ng-click="loadDatatoFormChildren()"> Editar <span class="glyphicon glyphicon-edit"> </span></button></sec:authorize>
+			<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,FRM_PERFMODU_ALL,FRM_PERFMODU_DELETE"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModalChildren" ng-click="deleteRecordFormChildren()"> Borrar <span class="glyphicon glyphicon-trash"> </span></button></sec:authorize>
 			<a href="#"><span class="badge"><span class="glyphicon glyphicon-info-sign"> </span></span></a>
 		</div>
 		<h3>{{ventanaTituloChildren}}</h3>

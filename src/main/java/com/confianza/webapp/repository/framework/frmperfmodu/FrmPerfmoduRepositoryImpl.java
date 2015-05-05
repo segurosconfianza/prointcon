@@ -173,7 +173,7 @@ public class FrmPerfmoduRepositoryImpl implements FrmPerfmoduRepository{
 	@Transactional
 	public List<Object[]> listComboMoro(){
 		try{
-			String sql = "select morocons, concat(modunomb,'-',ropenomb) "
+			String sql = "select morocons, MODUNOMB || '-' ||ROPENOMB "
 					   + "from Frm_modurope "
 					   + "join Frm_Modulo       on (moducons=moromodu) "
 					   + "join Frm_Roleperm     on (ropecons=mororope) "

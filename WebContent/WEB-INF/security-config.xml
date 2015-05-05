@@ -4,54 +4,58 @@
 	xmlns:ldap="http://www.springframework.org/schema/ldap"
 	xmlns:c="http://www.springframework.org/schema/c"
 	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/ldap http://www.springframework.org/schema/ldap/spring-ldap.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<context:property-placeholder system-properties-mode="OVERRIDE" location="WEB-INF/Confianza.properties"/>
 
 	<security:http entry-point-ref="casEntryPoint" use-expressions="true" auto-config="true">				
-		<security:form-login login-page="http://192.168.100.202:8080/casldap/login.jsp" authentication-failure-handler-ref="failureHandler" authentication-success-handler-ref="successHandler"/>
-		<security:logout invalidate-session="true" logout-success-url="http://192.168.60.231:8080/Confianza" />
+		<security:form-login login-page="${CASSERVER}login.jsp" authentication-failure-handler-ref="failureHandler" />
+		<security:logout invalidate-session="true" logout-success-url="${SERVER}" delete-cookies="JSESSIONID"/>
 		<security:intercept-url pattern="/index.jsp" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/menu.jsp"  access="isAuthenticated()"/>
 		<security:intercept-url pattern="/confianza/**" access="isAuthenticated()"/>
-		<security:custom-filter position="CAS_FILTER" ref="casFilter" />
+		<security:custom-filter position="CAS_FILTER" ref="casFilter" />		
+		<security:custom-filter ref="requestSingleLogoutFilter" before="LOGOUT_FILTER"/>
+    	<security:custom-filter ref="singleLogoutFilter" before="CAS_FILTER"/>
 	</security:http>
+	
+	<bean id="myAuthenticationSuccessHandler" class="com.confianza.webapp.service.security.MySimpleUrlAuthenticationSuccessHandler" />
 	
 	<security:authentication-manager alias="authenticationManager">
 		<security:authentication-provider ref="casAuthenticationProvider" />
 	</security:authentication-manager>
 	
-	<bean id="casFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter"
-		p:authenticationManager-ref="authenticationManager"
-		p:authenticationFailureHandler-ref="authenticationFailureHandler"         	
-     	p:authenticationSuccessHandler-ref="authenticationSuccessHandler"
-	/>
+	<bean id="casFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter" p:authenticationManager-ref="authenticationManager"/>
 	
-	<bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler"
-		p:alwaysUseDefaultTargetUrl="true"
-        p:defaultTargetUrl="http://192.168.60.231:8080/Confianza/index.jsp"
-    />
-
+	<bean id="singleLogoutFilter" class="org.jasig.cas.client.session.SingleSignOutFilter"/>
+    
+    <bean id="requestSingleLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+	    <constructor-arg value="${CASSERVER}logout"/>
+	    <constructor-arg>
+	      <bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>
+	    </constructor-arg>
+	    <property name="filterProcessesUrl" value="/j_spring_cas_security_logout"/>
+  	</bean>
+  	
     <bean id="failureHandler" class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler"
-        p:defaultFailureUrl="/login.jsp?login_cas=true"
+        p:defaultFailureUrl="${CASSERVER}login.jsp"
     />  
     
 	<bean id="casEntryPoint" class="org.springframework.security.cas.web.CasAuthenticationEntryPoint"
-		p:loginUrl="http://192.168.100.202:8080/casldap/login"
+		p:loginUrl="${CASSERVER}login"
 		p:serviceProperties-ref="serviceProperties"
 	/>		  					
 
 	<bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" 
-		p:defaultFailureUrl="/login.jsp?login_cas_authentication=true"
+		p:defaultFailureUrl="${CASSERVER}login.jsp"
 	/>
-			
-	<bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler"
-        p:defaultTargetUrl="http://192.168.60.231:8080/Confianza/index.jsp"
-        p:targetUrlParameter="spring-security-redirect"
-    />		
-    
+			    
 	<bean id="casAuthenticationProvider" class="org.springframework.security.cas.authentication.CasAuthenticationProvider"
-		p:authenticationUserDetailsService-ref="userDetailsService"
+		p:authenticationUserDetailsService-ref="userDetailsService"		
 		p:serviceProperties-ref="serviceProperties" 
 		p:ticketValidator-ref="ticketValidator"
 		p:key="casldap"
@@ -59,23 +63,17 @@
 
 	<bean id="userDetailsService" class="com.confianza.webapp.service.security.userDetailsService"/>
 	
-	<bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties"
-		p:service="http://192.168.60.231:8080/Confianza/j_spring_cas_security_check" 
+	<bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties"		
+		p:service="${SERVER}/j_spring_cas_security_check" 	
 		p:sendRenew="false"
 	/>
 	
-	<bean id="ticketValidator" class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator"
-		c:_0="http://192.168.100.202:8080/casldap"						
-	/> 		
+      <bean id="ticketValidator" class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator"
+		c:_0="${CASSERVER}"						
+	/> 	 	
 		
-	<bean id="authenticationUserDetailsService" class="org.springframework.security.cas.userdetails.GrantedAuthorityFromAssertionAttributesUserDetailsService">
-        <constructor-arg>
-            <array>
-                <value>authorities</value>
-            </array>
-        </constructor-arg>
-    </bean>
-    	
+	<bean id="pgtStorage" class="org.jasig.cas.client.proxy.ProxyGrantingTicketStorageImpl"/>
+		    	
 	<security:global-method-security secured-annotations="enabled" jsr250-annotations="enabled" access-decision-manager-ref="accessDecisionManager" />
 	
 	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">

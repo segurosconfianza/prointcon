@@ -60,6 +60,7 @@ public class FrmSesionServiceImpl implements FrmSesionService{
 	
 	@Override
 	public FrmSesion insert(String usuario, String sesion){
+		
 		FrmSesion frmsesion=new FrmSesion();
 		frmsesion.setSesiusua(usuario);
 		frmsesion.setSesisesi(sesion);

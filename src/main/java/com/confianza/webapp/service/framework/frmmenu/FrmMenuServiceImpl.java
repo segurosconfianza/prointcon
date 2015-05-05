@@ -13,14 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.confianza.webapp.repository.framework.frmmenu.FrmMenu;
 import com.confianza.webapp.repository.framework.frmmenu.FrmMenuRepository;
+import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
+import com.confianza.webapp.service.framework.frmsesion.FrmSesionService;
 import com.confianza.webapp.utils.JSONUtil;
 import com.google.gson.Gson;
 
@@ -32,6 +38,9 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 	
 	@Autowired
 	private FrmMenuRepository frmMenuRepository;
+	
+	@Autowired
+	private FrmSesionService frmSesionService;
 	
 	/**
 	 * @return the frmmenuRepository
@@ -78,9 +87,38 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 			menuAll = JSONUtil.toNameList(new String[]{"menucons", "menuicon", "menutitu", "modudurl", "menuhijo"},menu
 			);
 		}
+		
+		onAuthenticationSuccess();
+		
 		return gson.toJson(menuAll);
 	}	
 	
+	public void onAuthenticationSuccess(){       
+	    
+    	HttpSession session=this.getSession();
+    	
+    	FrmSesion frmSesion = (FrmSesion) session.getAttribute("frmSesion");
+    	
+    	if(frmSesion==null){
+	        
+	    	String sesion = session.getId();
+	    	
+	    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    	String user = authentication.getName();
+	    	
+	    	FrmSesion frmSesionNew=frmSesionService.insert(user, sesion);
+	        //asigno la session del usuario al HttpSession para luego ser tomada
+	        
+	        session.setAttribute("frmSesion", frmSesionNew);
+		}        
+		
+    }
+	
+	public static HttpSession getSession() {
+	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	    return attr.getRequest().getSession(); // true == allow create
+	}	   
+    
 	@Override
 	public FrmMenu update(Long id){
 		return frmMenuRepository.update(id);

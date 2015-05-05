@@ -74,7 +74,7 @@ FrmMainApp.service('FrmPerfilService', function($http, $rootScope) {
 	    	        params: {page: page, pageSize: pageSize, pemopefi: id }
 	    	     });
 			}
-    	 }
+    	 };
     	    	
     	this.insertRecordChildren = function(pemocons, pemopefi, pemomoro) {    	
     		

@@ -74,7 +74,7 @@ FrmMainApp.controller('SoporteChildController', ['$scope', 'SoporteChildService'
 				//Tomar solo los datos de entrada para enviarlos a la consulta
 				$scope.paramsSend[$scope.columns[i].paranomb]=$scope.Params[$scope.columns[i].paranomb];
 				//Verificar si los datos requeridos cumplen con haber sido digitados
-				if(!formData.$valid && ($scope.Params[$scope.columns[i].paranomb]==undefined || $scope.Params[$scope.columns[i].paranomb]=='')){
+				if(!formData3.$valid && ($scope.Params[$scope.columns[i].paranomb]==undefined || $scope.Params[$scope.columns[i].paranomb]=='')){
 					verify=false;
 					break;
 				}
@@ -90,7 +90,7 @@ FrmMainApp.controller('SoporteChildController', ['$scope', 'SoporteChildService'
 	    			$scope.BotonLoader=false;
 				}
 	        	else{ 	        			        	
-	        		$scope.Data=dataResponse.data.data[0];
+	        		$scope.Data=dataResponse.data.data;
 	        		$scope.Camp=dataResponse.data.camp;
 	        		
 	        		$scope.Result=true;

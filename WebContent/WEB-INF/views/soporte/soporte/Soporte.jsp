@@ -8,13 +8,13 @@
 	    <script type="text/ng-template" id="form_renderer.jsp">  
 			  <label for="{{column.paralabe}}" class="col-sm-3 control-label"><label ng-if="column.pararequ == 1"><font color="red">*</font></label>{{column.paralabe}}</label>
 			  <div class="col-sm-3" ng-if="column.paratida == 'S'">			
-				<input ng-pattern="/^[a-zA-Z0-9]*$/" style="width:100%;" type="text" name ="{{column.paracons}}" id="{{column.paracons}}" ng-model="Params[column.paranomb]" ng-required="column.pararequ">
+				<input style="width:100%;" type="text" name ="{{column.paracons}}" id="{{column.paracons}}" ng-model="Params[column.paranomb]" ng-required="column.pararequ">
 			  </div>
               <div class="col-sm-3" ng-if="column.paratida == 'I' || column.paratida == 'L'">				
-				<input ng-pattern="/^[0-9]*$/" style="width:100%;" type="number" name ="{{column.paracons}}" id="{{column.paracons}}" ng-model="Params[column.paranomb]" ng-required="column.pararequ">
+				<input ng-pattern="/^(0|\-?[1-9][0-9]*)$/" style="width:100%;" type="number" name ="{{column.paracons}}" id="{{column.paracons}}" ng-model="Params[column.paranomb]" ng-required="column.pararequ">
 			  </div>
 			  <div class="col-sm-3" ng-if="column.paratida == 'F' || column.paratida == 'O'">				
-				<input ng-pattern="/^[0-9]*$/" style="width:100%;" type="number" name ="{{column.paracons}}" id="{{column.paracons}}" ng-model="Params[column.paranomb]" ng-required="column.pararequ" step="any">
+				<input ng-pattern="/^(0|\-?{0,9}\.\d{1,9})$/" style="width:100%;" type="number" name ="{{column.paracons}}" id="{{column.paracons}}" ng-model="Params[column.paranomb]" ng-required="column.pararequ" step="any">
 			  </div>
 			  <div class="col-sm-3" ng-if="column.paratida == 'D'">			
               	<input style="width:100%;" type="text" datepicker-popup="dd/MM/yyyy" ng-model="Params[column.paranomb]" is-open="campoDate" ng-click="campoDate=true" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="column.pararequ" ui-date ui-date-format="dd/MM/yyyy" close-text="Cerrar" current-text="Hoy" clear-text="Limpiar"/>
@@ -23,7 +23,7 @@
 				<select class="form-control" name ="{{column.paracons}}" id="{{column.paracons}}" ng-model="Params[column.paranomb]" ng-options="opt.value as opt.label for opt in options[column.paracomb]" ng-required="column.pararequ"></select>
 	  	      </div>
 			  <div class="col-sm-3" ng-if="column.paratida == 'TA' || column.paratida == 'TL'">
-				<textarea name ="{{column.paracons}}" id="{{column.paracons}}" ng-model="Params[column.paranomb]" ng-required="column.pararequ" rows="20" cols="50%"></textarea>
+				<textarea name ="{{column.paracons}}" id="{{column.paracons}}" ng-model="Params[column.paranomb]" ng-required="column.pararequ" rows="20" cols="50%" ng-trim="false"></textarea>
 	  	      </div>
         </script>
         	    
@@ -47,8 +47,8 @@
 			<button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Cargando...</button>
 		</div>				
 		
-		<div class="alert alert-success" role="alert" ng-if="trans" align="center"><h4><b>Transacci&oacute;n:</b> {{transaccion}}</h4></div>
-		<div class="alert alert-danger" role="alert" ng-if="Error" align="center"><h4><b>Error:</b> {{EROR}}</h4></div>
+		<div class="alert alert-success" role="alert" ng-if="trans" align="center"><h4><label ng-bind-html="transaccion |to_trusted"></label></h4></div>
+		<div class="alert alert-danger" role="alert" ng-if="Error" align="center"><h4><b>Error:</b> <label ng-bind-html="DescripcionError |to_trusted"></label></h4></div>
 		
 		<div align="left" ng-show="Result">		    		    		    
 		    <form name="formData2" class="form-horizontal" role="form" accept-charset="utf-8">
@@ -68,8 +68,7 @@
 				  </div>
 			   </div>			  			  
 			  
-			   <div align="center">	
-	        		<button type="reset" class="btn btn-default btn-lg active" >Limpiar Datos</button>		        	
+			   <div align="center">		        			        
 	        		<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,SOPORTE_ALL,SOPORTE_ALL"><button type="button" class="btn btn-success btn-lg active" ng-click="updateRecord(picFile, Motivo)" ng-show="Boton">Modificar Datos <span class="glyphicon glyphicon-floppy-disk"></span></button></sec:authorize>
 		      </div>	
 			</form>				
@@ -96,7 +95,7 @@
 	  	      </div>
         </script> 
         <script type="text/ng-template" id="data_renderer.jsp">
-			<td width="20%"><b ng-bind-html="column |to_trusted"></b>: </td><td width="80%" ng-bind-html="Data[column] | nl2br">&nbsp;</td>	
+			<td width="20%"><b ng-bind-html="column |to_trusted"></b>: </td><td width="80%" ng-bind-html="rowData[column] | nl2br">&nbsp;</td>	
         </script>
          
         <div align="left">
@@ -105,7 +104,7 @@
 		    <h4><label ng-bind-html="description | to_trusted"></label></h4>
 		    <h4>Por favor, ingrese los siguientes datos para consultar la informaci&oacute;n. (<font color="red">*</font>) Campos obligatorios.<h4><br/>
 		    		    
-		    <form name="formData" class="form-horizontal" role="form">
+		    <form name="formData3" class="form-horizontal" role="form">
 			   <div class="form-group" ng-repeat="column in columns | filter: {paratipo: 'E'}" ng-include="'form_renderer_children.jsp'"></div>			 			 
 			  
 			   <div align="center">	
@@ -118,9 +117,12 @@
 			<button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Cargando...</button>
 		</div>
 		
-		<div class="panel" align="left" ng-if="Result">			
-			<table class="table table-condensed" border=0 width="80%">						  
+		<div class="panel" align="left" ng-if="Result">		    
+			<table class="table table-condensed" border=0 width="80%" ng-repeat="rowData in Data">						  
 				<tr ng-repeat="column in Camp" ng-include="'data_renderer.jsp'">			   			   		 
+			   	</tr>
+			   	<tr >	
+			   		<td width="20%"></td><td width="80%">&nbsp;</td>			   			   		 
 			   	</tr>
 			</table>			   		
 		</div>

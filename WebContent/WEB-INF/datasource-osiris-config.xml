@@ -4,15 +4,14 @@
 	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-	<bean id="dataSourceOsiris" parent="abstractDataSourceOracle"		
-		  p:url="jdbc:oracle:thin:@192.168.100.211:1521:PRUEBAS2"
-		  p:username="confidesa"
-		  p:password="confidesapruebas" />
+	<bean id="dataSourceOsiris" class="org.springframework.jndi.JndiObjectFactoryBean"	
+		  p:jndiName="java:comp/env/jdbc/OsirisDB"/>
 
 	<bean id="sessionFactoryOsiris" parent="abstractSessionFactoryOracle"
-		  p:dataSource-ref="dataSourceOsiris"/>			
+		p:dataSource-ref="dataSourceOsiris"
+        p:packagesToScan="com.confianza.webapp.repository.*"/>
 
 	<bean id="transactionManagerOsiris" parent="abstractTransactionManager"
-	 	p:sessionFactory-ref="sessionFactoryOsiris"/>
+	 	p:sessionFactory-ref="sessionFactoryOsiris" />
 
 </beans>

@@ -13,26 +13,21 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
 import javax.servlet.http.HttpSession;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.confianza.webapp.repository.framework.frmauditoria.FrmAuditoria;
-import com.confianza.webapp.repository.framework.frmconsulta.FrmConsultaRepository;
 import com.confianza.webapp.repository.framework.frmlog.FrmLog;
-import com.confianza.webapp.repository.framework.frmlogext.FrmLogextRepository;
 import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
 import com.confianza.webapp.repository.framework.frmtransaccion.FrmTransaccion;
 import com.confianza.webapp.service.framework.frmarchivo.FrmArchivoService;
@@ -47,10 +42,7 @@ import com.google.gson.reflect.TypeToken;
 public class FrmAuditoriaAOPImpl{
 	
 	@Autowired
-	private Gson gson;
-		
-	@Autowired
-	private HttpSession session;
+	private Gson gson;		
 	
 	@Autowired
 	private FrmLogService frmLogService;
@@ -81,7 +73,8 @@ public class FrmAuditoriaAOPImpl{
 				String []auditoria=resultData.get("AUDITORIA").toString().split("--//--");
 				String campos[];
 				//recupero la sesion del usuario
-				FrmSesion frmSesion = (FrmSesion) session.getAttribute("frmSesion");
+				
+				FrmSesion frmSesion = (FrmSesion) getSession().getAttribute("frmSesion");
 				//creo la transaccion de este proceso
 				FrmTransaccion frmtransaccion=frmTransaccionService.insert(frmSesion.getSesicons());
 				FrmAuditoria frmAuditoria;
@@ -96,6 +89,7 @@ public class FrmAuditoriaAOPImpl{
 			
 			return gson.toJson(resultData);
 		}catch(Exception e){
+			e.printStackTrace();
 			Map<String, Object> result = new HashMap<String, Object>();
 			result.put("tituloError", "Error");
 			result.put("error", e.getMessage());
@@ -109,11 +103,11 @@ public class FrmAuditoriaAOPImpl{
 		for(String aux:auditoria){
 			campos=aux.split("--,--");
 			
-			if(campos[0].equals("DELETE") || campos[0].equals("INSERT")){
-				crearLog(campos, frmtransaccion);
-			}
-			else if(campos[0].equals("UPDATE") ){
+			if(campos[0].equals("UPDATE") ){
 				crearAuditoria(campos, frmtransaccion);
+			}
+			else {				
+				crearLog(campos, frmtransaccion);
 			}				
 		}
 	}

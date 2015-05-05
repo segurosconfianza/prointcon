@@ -63,12 +63,13 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 		
 		var verify=true;		
 		$scope.paramsSend={};	
+		
 		for(i=0; i<$scope.columns.length;i++){
-			if($scope.columns[i].paratipo=='E' ){
+			if($scope.columns[i].paratipo=='E' ){			
 				//Tomar solo los datos de entrada para enviarlos a la consulta
 				$scope.paramsSend[$scope.columns[i].paranomb]=$scope.Params[$scope.columns[i].paranomb];
 				//Verificar si los datos requeridos cumplen con haber sido digitados
-				if(!formData.$valid && ($scope.Params[$scope.columns[i].paranomb]==undefined || $scope.Params[$scope.columns[i].paranomb]=='')){
+				if(($scope.Params[$scope.columns[i].paranomb]==undefined || $scope.Params[$scope.columns[i].paranomb]=='') && $scope.Params[$scope.columns[i].paranomb]!=0){
 					verify=false;
 					break;
 				}
@@ -85,10 +86,12 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 				}
 	        	else{ 	     
 	        		
-	        		if(dataResponse.data.data[0]!=null || dataResponse.data.data[0]!=undefined)
-		        		$scope.Params=dataResponse.data.data[0];		        		
-	        		
-	        		$scope.Result=true;
+	        		if(dataResponse.data.data[0]!=null || dataResponse.data.data[0]!=undefined){
+		        		$scope.Params=dataResponse.data.data[0];
+		        		$scope.Result=true;
+	        		}
+	        		else
+	        			alert("La consulta no encontro resultados");
 	        		$scope.BotonLoader=false;
 	        	}
 				$scope.Boton = true;
@@ -122,8 +125,9 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 				}
 			} else if($scope.columns[i].paratipo=='S' ){
 				//Tomar solo los datos de salida para enviarlos a la consulta
-				if($scope.Params[$scope.columns[i].paranomb]==undefined)
-					$scope.paramsSendData[$scope.columns[i].paranomb]=' ';
+				if($scope.Params[$scope.columns[i].paranomb]==undefined){
+					$scope.paramsSendData[$scope.columns[i].paranomb]=null;
+				}
 				else if($scope.columns[i].paratida=='D'){//date
 					if(typeof $scope.Params[$scope.columns[i].paranomb]=="string"){
 						//console.log("string");
@@ -142,8 +146,9 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 						//console.log("no string");
 						$scope.paramsSendData[$scope.columns[i].paranomb]=$filter('date')(new Date($scope.Params[$scope.columns[i].paranomb]), 'dd/MM/yyyy HH:mm:ss');
 					}
-				} else	
+				} else	{
 					$scope.paramsSendData[$scope.columns[i].paranomb]=$scope.Params[$scope.columns[i].paranomb];
+				}
 			}
 		}					
 		
@@ -168,22 +173,27 @@ FrmMainApp.controller('SoporteController', ['$scope', 'SoporteService', '$filter
 				Motivo="";
 			
 			SoporteService.updateRecord(formData, Motivo).then(function(dataResponse) {
-										
-				if(dataResponse.data.error!=undefined){
-	    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error); 
+				 	      
+        		if(dataResponse.data.SUCCESS==true || dataResponse.data.SUCCESS=="true"){
+        			$scope.trans=true;
+        			alert('Proceso Terminado Satisfactoriamente');
+        			
+        			$scope.transaccion='<b>Transacci&oacute;n:</b>'+dataResponse.data.TRANSACCION;
+        			if (dataResponse.data.EROR!=undefined)
+        				$scope.transaccion=$scope.transaccion + '<br>' + dataResponse.data.EROR;
+        		}
+        		else{
+        			$scope.Error = true;
+        			alert('Proceso no termino Satisfactoriamente');
+        			if(dataResponse.data.EROR=="")
+        				$scope.DescripcionError = "Este proceso no genero ningun cambio";
+        			else
+        				$scope.DescripcionError = dataResponse.data.EROR;
+        		
+        			if(dataResponse.data.error!=undefined)
+        				$scope.DescripcionError = dataResponse.data.tituloError+': '+dataResponse.data.error; 
 				}
-	        	else{ 	      
-	        		if(dataResponse.data.SUCCESS){
-	        			$scope.trans=true;
-	        			alert('Proceso Terminado Satisfactoriamente');
-	        			$scope.transaccion=dataResponse.data.TRANSACCION;
-	        		}
-	        		else{
-	        			$scope.Error = true;
-	        			alert('Proceso no termino Satisfactoriamente');
-	        			$scope.DescripcionError = dataResponse.data.EROR;
-	        		}
-	        	}
+	        	
 				$scope.BotonLoader=false;
 				$scope.Boton = true;	
 	        }); 						

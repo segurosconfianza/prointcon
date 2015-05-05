@@ -261,13 +261,13 @@ FrmMainApp.controller('FrmPerfmoduController', ['$scope', '$modal', 'FrmPerfilSe
         }
 		
 		//funcion del combo
-		function getComboMoro() {		
+		function getComboMoro() {	
+			
 			if($scope.optionsMoro == null){
 				FrmPerfilService.getComboMoro().then(function(dataResponse) {  
 					
-					if(dataResponse.data.error!=undefined){
+					if(dataResponse.data.error==undefined){
 						$scope.optionsMoro = dataResponse.data;
-						
 						$scope.pemomoro = $scope.optionsMoro[1];
 					}
 		        }); 
