@@ -229,6 +229,7 @@ FrmMainApp.controller('FrmPerfmoduController', ['$scope', '$modal', 'FrmPerfilSe
 				$scope.pemocons=row.pemocons;
 	        	$scope.pemopefi=row.pemopefi;
 	        	$scope.pemomoro=row.pemomoro;
+	        	alert("Se creo el registro correctamente");
 	        	
 	        	FrmPerfilService.loadChildren();
 	        }); 
@@ -236,13 +237,12 @@ FrmMainApp.controller('FrmPerfmoduController', ['$scope', '$modal', 'FrmPerfilSe
 		
 		$scope.updateRecordChildren= function(){
 			
-			console.log("$scope.updateRecordChildren");
-			
 			FrmPerfilService.updateRecordChildren($scope.pemocons, FrmPerfilService.id, $scope.pemomoro).then(function(dataResponse) {        	            
 				row=dataResponse.data;
 				$scope.pemocons=row.pemocons;
 	        	$scope.pemopefi=row.pemopefi;
 	        	$scope.pemomoro=row.pemomoro;
+	        	alert("Se actualizo el registro correctamente");
 	        	
 	        	FrmPerfilService.loadChildren();
 	        }); 
@@ -255,6 +255,7 @@ FrmMainApp.controller('FrmPerfmoduController', ['$scope', '$modal', 'FrmPerfilSe
 				$scope.pemocons=row.pemocons;
 	        	$scope.pemopefi=row.pemopefi;
 	        	$scope.pemomoro=row.pemomoro;
+	        	alert("Se borro el registro correctamente");
 	        	
 	        	FrmPerfilService.loadChildren();				
 	        }); 

@@ -65,12 +65,13 @@
 		
 		    $(document).ready(function() {
 		        angular.bootstrap(document);
-		    });
+		    });	
+	        
 		</script>
-			        					
+										
 	</head>		      
 	
-	<body>		
+	<body ng-controller="FrmMenuController">		
 		<div id="encabezado">
 			<header>
 				<div>
@@ -83,19 +84,21 @@
 		</div><!--encabezado-->	
 		
 		<div id="menu">
-		
-			<div ng-controller="FrmMenuController">    
-			  
-				 <!-- Nested list template -->
+			<div>    
+			  <!-- Nested list template -->
               <script type="text/ng-template" id="items_renderer.html">
                 <div ui-tree-handle>
 				  <div ng-if="urlVerify(item.modudurl)==0">
                   	<a class="btn btn-danger btn-xs" data-nodrag ng-click="toggle(this)"><span class="glyphicon" ng-class="whatClassIsIt(this,item.menuhijo,item.modudurl)"></span></a>
-                  	<a href="#/{{item.modudurl}}" data-nodrag >{{item.menutitu}}</a>
+                  	<a href="#/{{item.modudurl}}" ng-click="setAngular()" data-nodrag ><span ng-click="toggle(this)">{{item.menutitu}}</span></a>
 				  </div>
 				  <div ng-if="urlVerify(item.modudurl)==1">
                   	<a class="btn btn-danger btn-xs" data-nodrag ng-click="toggle(this)"><span class="glyphicon" ng-class="whatClassIsIt(this,item.menuhijo,item.modudurl)"></span></a>
-                  	<a href="{{item.modudurl}}" data-nodrag >{{item.menutitu}}</a>
+                  	<a ng-click="setProject(item.modudurl)" href="" data-nodrag >{{item.menutitu}}</a>
+                  </div>
+				  <div ng-if="urlVerify(item.modudurl)==2">
+                  	<a class="btn btn-danger btn-xs" data-nodrag ng-click="toggle(this)"><span class="glyphicon" ng-class="item.menuicon"></span></a>
+                  	<a href="<c:url value="j_spring_security_logout" />" data-nodrag >{{item.menutitu}}</a>
                   </div>
                 </div>
                 <ol ui-tree-nodes="options" ng-model="item.menuhijo" ng-class="{hidden: !collapsed}"">
@@ -105,17 +108,22 @@
               </script>
               <div ui-tree="options">
                 <ol ui-tree-nodes ng-model="menu" >
-                  <li ng-repeat="item in menu" ui-tree-node ng-include="'items_renderer.html'"></li>
+                  <li ng-repeat="item in menu" ui-tree-node ng-include="'items_renderer.html'"></li>                                                                 
                 </ol>
               </div>             				    			    				   
 			        
-			</div><!--ng-controller="FrmMenuController"-->	
+			</div>
 			
-		</div><!--menu ng-app="FrmMenuApp"-->	
+		</div>
 		
 		<div id="contenido" >
 			<aside>
-				<div ng-view></div>			
+				<div ng-show="angularView" ng-view></div>					
+				
+				<iframe ng-show="iframeView" ng-src="{{iframeUrl}}" frameborder="0" marginheight="0" width="99%" height="150%">
+			        Something wrong...
+			    </iframe>    
+			    	
 			</aside>
 		</div><!--contenido-->	
 		
@@ -181,5 +189,5 @@
 			</footer>
 		</div><!--pie-->	
 		
-	</body>
+	</body><!--ng-controller="FrmMenuController"-->	
 </html>

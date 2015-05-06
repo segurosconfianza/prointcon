@@ -10,6 +10,7 @@ package com.confianza.webapp.service.framework.frmmenu;
   */                          
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,6 +90,14 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 		}
 		
 		onAuthenticationSuccess();
+		
+		Map<String, Object> logout=new HashMap<String, Object>();
+		logout.put("menucons", "0");
+		logout.put("menuicon", "glyphicon glyphicon-log-out");
+		logout.put("menutitu", "Logout");
+		logout.put("modudurl", "<c:url value=\"j_spring_security_logout\" />");
+		logout.put("menuhijo", null);		
+		menuAll.add(logout);
 		
 		return gson.toJson(menuAll);
 	}	

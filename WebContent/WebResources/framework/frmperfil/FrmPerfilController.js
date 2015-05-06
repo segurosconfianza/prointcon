@@ -188,6 +188,8 @@ FrmMainApp.controller('FrmPerfilController', ['$scope', 'FrmPerfilService',funct
 	        	$scope.pefidesc=row.pefidesc;
 	        	$scope.pefifecr=row.pefifecr;	        	
 	        	$scope.pefiesta=row.pefiesta;
+	        	
+	        	alert("Se creo el registro correctamente");
 	        }); 
         }
 		
@@ -204,6 +206,8 @@ FrmMainApp.controller('FrmPerfilController', ['$scope', 'FrmPerfilService',funct
 	        	$scope.pefidesc=row.pefidesc;
 	        	$scope.pefifecr=row.pefifecr;	        	
 	        	$scope.pefiesta=row.pefiesta;
+	        	
+	        	alert("Se actualizo el registro correctamente");
 	        }); 
         }
 		
@@ -218,6 +222,8 @@ FrmMainApp.controller('FrmPerfilController', ['$scope', 'FrmPerfilService',funct
 	        	$scope.pefidesc=row.pefidesc;
 	        	$scope.pefifecr=row.pefifecr;	        	
 	        	$scope.pefiesta=row.pefiesta;
+	        	
+	        	alert("Se borro el registro correctamente");
 	        }); 
         }				
     }            

@@ -16,7 +16,6 @@
 		<security:form-login login-page="${CASSERVER}login.jsp" authentication-failure-handler-ref="failureHandler" />
 		<security:logout invalidate-session="true" logout-success-url="${SERVER}" delete-cookies="JSESSIONID"/>
 		<security:intercept-url pattern="/index.jsp" access="isAuthenticated()"/>
-		<security:intercept-url pattern="/menu.jsp"  access="isAuthenticated()"/>
 		<security:intercept-url pattern="/confianza/**" access="isAuthenticated()"/>
 		<security:custom-filter position="CAS_FILTER" ref="casFilter" />		
 		<security:custom-filter ref="requestSingleLogoutFilter" before="LOGOUT_FILTER"/>
@@ -42,7 +41,7 @@
   	</bean>
   	
     <bean id="failureHandler" class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler"
-        p:defaultFailureUrl="${CASSERVER}login.jsp"
+        p:defaultFailureUrl="${CASSERVER}login.jsp?login_error=true"
     />  
     
 	<bean id="casEntryPoint" class="org.springframework.security.cas.web.CasAuthenticationEntryPoint"
@@ -72,8 +71,6 @@
 		c:_0="${CASSERVER}"						
 	/> 	 	
 		
-	<bean id="pgtStorage" class="org.jasig.cas.client.proxy.ProxyGrantingTicketStorageImpl"/>
-		    	
 	<security:global-method-security secured-annotations="enabled" jsr250-annotations="enabled" access-decision-manager-ref="accessDecisionManager" />
 	
 	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">

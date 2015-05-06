@@ -1,6 +1,9 @@
-FrmMainApp.controller('FrmMenuController', ['$scope', 'FrmMenuService', function ($scope, FrmMenuService) {
+FrmMainApp.controller('FrmMenuController', ['$scope', 'FrmMenuService', '$sce', function ($scope, FrmMenuService, $sce) {
 	    	$scope.oneAtATime = false;
-	    		    	
+	    	$scope.iframeView = false;
+	    	$scope.angularView = false;
+	    	$scope.iframeUrl  = "";
+	    	
 	    	FrmMenuService.getData().then(function(dataResponse) {
 	            $scope.menu = dataResponse.data;
 	        });
@@ -32,15 +35,23 @@ FrmMainApp.controller('FrmMenuController', ['$scope', 'FrmMenuService', function
 	        	if(url!=undefined){
 		        	var result=url.match(/http/g);
 		            if(result!=null && result=="http")
-		            	return 1;
+		            	return 1;		           
+		            var result=url.match(/<c:/g);
+		            if(result!=null && result=="<c:")
+		            	return 2;
 	        	}
             	return 0;
 	        }
 	        
-	        $scope.modelVerify= function(model){
-	        	if(model!=undefined || model!=null){		        	
-		            return model;
-	        	}
-            	return "modelOwn";
+	        $scope.setProject = function (id) {	        
+	            $scope.iframeUrl = $sce.trustAsResourceUrl(id);
+	            $scope.iframeView = true;
+	            $scope.angularView = false;
 	        }
+	        
+	        $scope.setAngular = function () {
+	            $scope.iframeView = false;
+	            $scope.angularView = true;
+	        }
+	        	        
     	}]);
