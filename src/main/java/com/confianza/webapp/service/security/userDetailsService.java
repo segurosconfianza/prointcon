@@ -5,21 +5,29 @@ import static org.springframework.ldap.query.LdapQueryBuilder.query;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
 import com.confianza.webapp.repository.framework.security.Person;
 import com.confianza.webapp.repository.framework.security.PersonAttributesMapperImpl;
 import com.confianza.webapp.service.framework.frmsesion.FrmSesionService;
 
+@Service
 public class userDetailsService implements UserDetailsService, AuthenticationUserDetailsService{
 
 	@Autowired
@@ -27,9 +35,6 @@ public class userDetailsService implements UserDetailsService, AuthenticationUse
 	
 	@Autowired
 	private RolService rolService;
-	
-	@Autowired
-	private FrmSesionService frmSesionService;		
 	
 	private String userName;
 	
@@ -70,7 +75,6 @@ public class userDetailsService implements UserDetailsService, AuthenticationUse
 			autorities.add(new SimpleGrantedAuthority(obj[0].toString()+"_"+obj[1].toString()));
 				
 		return autorities;
-	}
-	    
+	}		
 
 }

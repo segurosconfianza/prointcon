@@ -116,7 +116,7 @@ public class FrmArchivo {
 
 
 	static public String[] getNames(){
-		return new String[]{ "ARCHCODI", "ARCHRUTA", "ARCHNOMB", "ARCHMD5", "ARCHFECH", "ARCHMIME", "ARCHSIZE" };
+		return new String[]{ "archvodi", "archruta", "archnomb", "archmd5", "archfech", "archmime", "archsize" };
 	}		
 	
 	static public String getColumnNames(){

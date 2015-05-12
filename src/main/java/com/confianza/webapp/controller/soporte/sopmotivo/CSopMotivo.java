@@ -39,11 +39,11 @@ public class CSopMotivo {
 		return this.sopMotivoService.list(moticons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize","motitran"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
-	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
+	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("motitran") Long motitran){
 	
-		return this.sopMotivoService.listAll(pageSize, page);
+		return this.sopMotivoService.listAll(pageSize, page, motitran);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})

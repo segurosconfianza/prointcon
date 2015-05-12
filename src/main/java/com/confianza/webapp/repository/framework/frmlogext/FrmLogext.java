@@ -105,7 +105,7 @@ public class FrmLogext {
 
 
 	static public String[] getNames(){
-		return new String[]{ "LOEXCONS", "LOEXTABL", "LOEXACCI", "LOEXDACO", "LOEXDATA", "LOEXFECR" };
+		return new String[]{ "loexcons", "loextabl", "loexacci", "loexdaco", "loexdata", "loexfecr" };
 	}		
 	
 	static public String getColumnNames(){

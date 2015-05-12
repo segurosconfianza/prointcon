@@ -10,6 +10,7 @@ package com.confianza.webapp.repository.framework.frmauditoria;
   */                          
 
 import java.util.List;
+import java.util.Iterator;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -46,7 +47,7 @@ public class FrmAuditoriaRepositoryImpl implements FrmAuditoriaRepository{
 	@Transactional
 	public FrmAuditoria list(Long id){
 		try{
-			String sql = "select audicons ,auditran ,auditabl ,audicopk ,audicamp ,audivaan ,audivanu "
+			String sql = "select "+FrmAuditoria.getColumnNames()
 					   + "from FrmAuditoria "
 					   + "where audicons = :id ";
 						
@@ -67,13 +68,19 @@ public class FrmAuditoriaRepositoryImpl implements FrmAuditoriaRepository{
 	 */
 	@Override
 	@Transactional
-	public List<FrmAuditoria> listAll(){
+	public List<FrmAuditoria> listAll(int init, int limit, Long auditran){
 		try{
-			String sql = "select audicons ,auditran ,auditabl ,audicopk ,audicamp ,audivaan ,audivanu "
-					   + "from FrmAuditoria ";
+			String sql = "select "+FrmAuditoria.getColumnNames()
+					   + "from Frm_Auditoria where auditran = :auditran";
 						
 			Query query = getSession().createSQLQuery(sql)
-						 .addEntity(FrmAuditoria.class);
+						 .addEntity(FrmAuditoria.class)
+						 .setParameter("auditran", auditran);
+						 
+			if(init==0 && limit!=0){
+				query.setFirstResult(init);			
+				query.setMaxResults(limit);
+			}
 					     
 			return query.list();
 		}catch(Exception e){
@@ -81,6 +88,35 @@ public class FrmAuditoriaRepositoryImpl implements FrmAuditoriaRepository{
 			return null;
 		}
 	}	
+	
+	/**
+	 * Metodo de consulta para el conteo de los registros de la tabla FrmAuditoria
+	 * @return int = cantidad de registros encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public int getCount(Long auditran){
+		try{
+			String sql = "select count(*) "
+					   + "from FrmAuditoria where auditran = :auditran ";
+						
+			Query query = getSession().createQuery(sql).setParameter("auditran", auditran);
+	        
+			Iterator it = query.list().iterator();
+	        Long ret = new Long(0);
+	        
+	        if (it != null)
+		        if (it.hasNext()){
+		        	ret = (Long) it.next();
+		        }
+	        
+			return ret.intValue();
+		}catch(Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+	}
 	
 	/**
 	 * Metodo para actualizar los datos de un registro de la tabla FrmAuditoria por id
@@ -103,10 +139,8 @@ public class FrmAuditoriaRepositoryImpl implements FrmAuditoriaRepository{
 	 */
 	@Override
 	@Transactional
-	public void delete(Long id){
-		FrmAuditoria frmauditoria = this.list(id);
-		//FrmAuditoria.setEstado="B";
-		getSession().update(frmauditoria);
+	public void delete(FrmAuditoria frmauditoria){
+		
 	}
 	
 	/**
@@ -124,7 +158,7 @@ public class FrmAuditoriaRepositoryImpl implements FrmAuditoriaRepository{
 	@Override
 	@Transactional
 	public FrmAuditoria insert(FrmAuditoria frmauditoria){
-		getSession().save(frmauditoria);
+		getSession().save(frmauditoria);	
 		return frmauditoria;
 	}
 }

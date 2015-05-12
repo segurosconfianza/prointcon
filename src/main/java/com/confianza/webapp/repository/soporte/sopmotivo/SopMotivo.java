@@ -72,7 +72,7 @@ public class SopMotivo {
 
 
 	static public String[] getNames(){
-		return new String[]{ "MOTICONS", "MOTITRAN", "MOTIDESC" };
+		return new String[]{ "moticons", "motitran", "motidesc" };
 	}		
 	
 	static public String getColumnNames(){

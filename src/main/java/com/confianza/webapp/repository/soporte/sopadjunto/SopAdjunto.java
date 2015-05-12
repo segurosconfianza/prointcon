@@ -116,7 +116,7 @@ public class SopAdjunto {
 
 
 	static public String[] getNames(){
-		return new String[]{ "ADJUCODI", "ADJUARCH", "ADJUNOMB", "ADJUUSER", "ADJUFECH", "ADJUESTA", "ADJUMOTI" };
+		return new String[]{ "adjucodi", "adjuarch", "adjunomb", "adjuuser", "adjufech", "adjuesta", "adjumoti" };
 	}		
 	
 	static public String getColumnNames(){

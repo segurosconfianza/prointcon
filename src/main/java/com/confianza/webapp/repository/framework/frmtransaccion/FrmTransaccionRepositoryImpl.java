@@ -71,11 +71,12 @@ public class FrmTransaccionRepositoryImpl implements FrmTransaccionRepository{
 	public List<FrmTransaccion> listAll(int init, int limit){
 		try{
 			String sql = "select trancons ,transesi ,tranfecr "
-					   + "from FrmTransaccion ";
+					   + "from Frm_Transaccion order by trancons desc";
 						
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(FrmTransaccion.class);
-			if(init==0 && limit!=0){
+			
+			if(limit!=0){
 				query.setFirstResult(init);			
 				query.setMaxResults(limit);
 			}		     

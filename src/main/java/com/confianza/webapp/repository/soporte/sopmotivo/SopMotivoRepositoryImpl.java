@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.confianza.webapp.repository.soporte.sopadjunto.SopAdjunto;
+
 @Repository
 public class SopMotivoRepositoryImpl implements SopMotivoRepository{
 	
@@ -48,7 +50,7 @@ public class SopMotivoRepositoryImpl implements SopMotivoRepository{
 	public SopMotivo list(Long id){
 		try{
 			String sql = "select "+SopMotivo.getColumnNames()
-					   + "from SopMotivo "
+					   + "from Sop_Motivo "
 					   + "where moticons = :id ";
 						
 			Query query = getSession().createSQLQuery(sql)
@@ -68,15 +70,17 @@ public class SopMotivoRepositoryImpl implements SopMotivoRepository{
 	 */
 	@Override
 	@Transactional
-	public List<SopMotivo> listAll(int init, int limit){
+	public List<Object[]> listAll(int init, int limit, Long motitran){
 		try{
-			String sql = "select "+SopMotivo.getColumnNames()
-					   + "from SopMotivo ";
+			String sql = "select "+SopMotivo.getColumnNames()+","+SopAdjunto.getColumnNames()					   
+					   + "from Sop_Motivo "
+					   + "join Sop_Adjunto on (adjumoti = moticons) "
+					   + "where motitran = :motitran";
 						
 			Query query = getSession().createSQLQuery(sql)
-						 .addEntity(SopMotivo.class);
+						 .setParameter("motitran",motitran);
 						 
-			if(init==0 && limit!=0){
+			if(limit!=0){
 				query.setFirstResult(init);			
 				query.setMaxResults(limit);
 			}
@@ -95,12 +99,14 @@ public class SopMotivoRepositoryImpl implements SopMotivoRepository{
 	 */
 	@Override
 	@Transactional
-	public int getCount(){
+	public int getCount(Long motitran){
 		try{
 			String sql = "select count(*) "
-					   + "from SopMotivo ";
+					   + "from SopMotivo "
+					   + "where motitran = :motitran";
 						
-			Query query = getSession().createQuery(sql);
+			Query query = getSession().createQuery(sql)
+						  .setParameter("motitran",motitran);
 	        
 			Iterator it = query.list().iterator();
 	        Long ret = new Long(0);

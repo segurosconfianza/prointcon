@@ -72,7 +72,7 @@ public class FrmModurope {
 
 
 	static public String[] getNames(){
-		return new String[]{ "MOROCONS", "MOROMODU", "MOROROPE" };
+		return new String[]{ "morocons", "moromodu", "mororope" };
 	}		
 	
 	public String toString(){

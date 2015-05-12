@@ -72,7 +72,7 @@ public class FrmPerfmodu {
 
 
 	static public String[] getNames(){
-		return new String[]{ "PEMOCONS", "PEMOPEFI", "PEMOMORO" };
+		return new String[]{ "pemocons", "pemopefi", "pemomoro" };
 	}		
 	
 	public String toString(){

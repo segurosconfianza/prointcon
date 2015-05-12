@@ -56,10 +56,10 @@ public class FrmTransaccionServiceImpl implements FrmTransaccionService{
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_TRANSACCION_ALL", "FRM_TRANSACCION_READ"})
 	public String listAll(int pageSize, int page){
-		int limit=pageSize*page;
-		int init=limit-pageSize;
+		int limit=pageSize;
+		int init=(pageSize*page)-(pageSize);
 		
-		List<FrmTransaccion> listAll=this.frmTransaccionRepository.listAll(pageSize, page);
+		List<FrmTransaccion> listAll=this.frmTransaccionRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);

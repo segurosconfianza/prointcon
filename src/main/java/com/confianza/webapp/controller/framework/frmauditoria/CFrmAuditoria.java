@@ -1,17 +1,20 @@
 package com.confianza.webapp.controller.framework.frmauditoria;
 
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
-import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
- 
+
+
+
 import com.confianza.webapp.service.framework.frmauditoria.FrmAuditoriaService;
 import com.confianza.webapp.repository.framework.frmauditoria.FrmAuditoria;
 
@@ -20,37 +23,53 @@ import com.confianza.webapp.repository.framework.frmauditoria.FrmAuditoria;
 public class CFrmAuditoria {
 
 	@Autowired
-	private FrmAuditoriaService frmAuditoriaService;
+	private FrmAuditoriaService frmauditoriaService;
 	
-	public CFrmAuditoria(){
+	public CFrmAuditoria() {
 		super();
 	}
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+			
+	@RequestMapping("/")
+	public String index() {
+		return "framework/frmauditoria/FrmAuditoria";
+	}
+	
+	@RequestMapping(value = "/{audicons}.json", method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
-	public FrmAuditoria list(Long id){
+	public String list(@PathVariable("audicons") Long audicons){
 		
-		return this.frmAuditoriaService.list(id);
+		return this.frmauditoriaService.list(audicons);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize","auditran"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
-	public List<FrmAuditoria> listAll(){
+	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("auditran") Long auditran){
 	
-		return this.frmAuditoriaService.listAll();
+		return this.frmauditoriaService.listAll(pageSize, page, auditran);
 	}
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
-	public void delete(Long id){
-		this.frmAuditoriaService.delete(id);
+	public String update(@RequestBody FrmAuditoria frmauditoria, HttpServletRequest request){
+	
+		return this.frmauditoriaService.update(frmauditoria);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@ResponseStatus( HttpStatus.OK )
+	@ResponseBody
+	public String delete(@RequestBody FrmAuditoria frmauditoria, HttpServletRequest request){
+	
+		//frmauditoria.setesta("B");
+		return this.frmauditoriaService.update(frmauditoria);
+	}
+	
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
-	public FrmAuditoria insert(@RequestBody FrmAuditoria frmauditoria){
-		return this.frmAuditoriaService.insert(frmauditoria);
+	public String insert(@RequestBody FrmAuditoria frmauditoria, HttpServletRequest request){
+		
+		return this.frmauditoriaService.insert(frmauditoria);		
 	}
 }

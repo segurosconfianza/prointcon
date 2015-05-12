@@ -10,18 +10,21 @@ package com.confianza.webapp.service.framework.frmlog;
   */                          
 
 import java.util.List;
+
 import com.confianza.webapp.repository.framework.frmlog.FrmLog;
 
 public interface FrmLogService{
 	
-	public FrmLog list(Long id);
+	public String list(Long id);	
 	
-	public List<FrmLog> listAll();	
+	public String insert(FrmLog frmlog);
 	
-	public FrmLog update(Long id);
+	public String update(FrmLog frmlog);
 	
-	public void delete(Long id);
+	public void delete(FrmLog frmlog);	
 	
-	public FrmLog insert(FrmLog frmlog);
+	String listAll(int pageSize, int page, Long slogtran);
+
+	public int getCount(Long slogtran);
 	
 }

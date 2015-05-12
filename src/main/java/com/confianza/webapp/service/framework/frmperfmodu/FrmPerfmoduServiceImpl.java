@@ -9,6 +9,7 @@ package com.confianza.webapp.service.framework.frmperfmodu;
   * @app		framework  
   */                          
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,13 +19,17 @@ import javax.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.confianza.webapp.repository.framework.frmaplicaciones.FrmAplicaciones;
+import com.confianza.webapp.repository.framework.frmmodulo.FrmModulo;
+import com.confianza.webapp.repository.framework.frmmodurope.FrmModurope;
 import com.confianza.webapp.repository.framework.frmperfmodu.FrmPerfmodu;
 import com.confianza.webapp.repository.framework.frmperfmodu.FrmPerfmoduRepository;
+import com.confianza.webapp.repository.framework.frmroleperm.FrmRoleperm;
 import com.confianza.webapp.utils.JSONUtil;
 import com.google.gson.Gson;
 
 @Service
-public class FrmPerfmoduServiceImpl implements FrmPerfmoduService{
+public class FrmPerfmoduServiceImpl implements FrmPerfmoduService, getColumnsMaps{
 	
 	@Autowired
 	private FrmPerfmoduRepository frmperfmoduRepository;
@@ -63,14 +68,25 @@ public class FrmPerfmoduServiceImpl implements FrmPerfmoduService{
 		List<Object[]> listAll=frmperfmoduRepository.listAll(init, limit, pemopefi);
 		
 		//cast de los menu a ser mapeados por cada campo
-		List<Map<String, Object>> rolAll = JSONUtil.toNameList(
-				new String[]{"pemocons", "pemopefi", "pemomoro", "morocons", "moromodu", "mororope", "moducons", "moduapli", "modunomb", "modunemo", "modudurl", "ropecons", "ropenomb", "ropedesc", "ropetipo", "aplicons", "aplinomb", "aplidesc", "apliesta", "aplifecr", "tablvast"},listAll
-		);
+		List<Map<String, Object>> rolAll = JSONUtil.toNameList(getColumMap(),listAll);
 		
 		result.put("data", rolAll);
 		result.put("count", this.getCount());
 		
 		return gson.toJson(result);
+	}
+
+	private String[] getColumMap() {
+		String maestroDetalle[] = new String[FrmPerfmodu.getNames().length+FrmModurope.getNames().length+FrmModulo.getNames().length+FrmRoleperm.getNames().length+FrmAplicaciones.getNames().length+1];
+		
+		System.arraycopy(FrmPerfmodu.getNames(), 0, maestroDetalle, 0, FrmPerfmodu.getNames().length);
+		System.arraycopy(FrmModurope.getNames(), 0, maestroDetalle, FrmPerfmodu.getNames().length, FrmModurope.getNames().length);
+		System.arraycopy(FrmModulo.getNames(), 0, maestroDetalle, FrmPerfmodu.getNames().length+FrmModurope.getNames().length, FrmModulo.getNames().length);
+		System.arraycopy(FrmRoleperm.getNames(), 0, maestroDetalle, FrmPerfmodu.getNames().length+FrmModurope.getNames().length+FrmModulo.getNames().length, FrmRoleperm.getNames().length);
+		System.arraycopy(FrmAplicaciones.getNames(), 0, maestroDetalle, FrmPerfmodu.getNames().length+FrmModurope.getNames().length+FrmModulo.getNames().length+FrmRoleperm.getNames().length, FrmAplicaciones.getNames().length);
+		System.arraycopy(new String[]{"tablvast"}, 0, maestroDetalle, FrmPerfmodu.getNames().length+FrmModurope.getNames().length+FrmModulo.getNames().length+FrmRoleperm.getNames().length+FrmAplicaciones.getNames().length, 1);
+		
+		return maestroDetalle;
 	}	
 	
 	@Override

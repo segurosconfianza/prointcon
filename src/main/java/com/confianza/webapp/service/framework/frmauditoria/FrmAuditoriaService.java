@@ -10,18 +10,21 @@ package com.confianza.webapp.service.framework.frmauditoria;
   */                          
 
 import java.util.List;
+
 import com.confianza.webapp.repository.framework.frmauditoria.FrmAuditoria;
 
 public interface FrmAuditoriaService{
 	
-	public FrmAuditoria list(Long id);
+	public String list(Long id);
 	
-	public List<FrmAuditoria> listAll();	
+	public String insert(FrmAuditoria frmauditoria);
 	
-	public void delete(Long id);
+	public String update(FrmAuditoria frmauditoria);
 	
-	public FrmAuditoria insert(FrmAuditoria frmauditoria);
+	public void delete(FrmAuditoria frmauditoria);	
+	
+	public String listAll(int pageSize, int page, Long slogtran);
 
-	public FrmAuditoria update(FrmAuditoria frmAuditoria);
+	public int getCount(Long auditran);
 	
 }

@@ -126,7 +126,7 @@ public class FrmParametro {
 	}
 
 	static public String[] getNames(){
-		return new String[]{ "PARACONS", "PARACOSU", "PARANOMB", "PARATIPO", "PARATIDA", "PARACOMB", "PARAREQU", "PARALABE" };
+		return new String[]{ "paracons", "paracosu", "paranomb", "paratipo", "paratida", "paracomb", "pararequ", "pararequ" };
 	}		
 	
 	static public String getColumnNames(){

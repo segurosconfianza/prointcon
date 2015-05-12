@@ -9,10 +9,16 @@ package com.confianza.webapp.service.framework.frmauditoria;
   * @app		framework  
   */                          
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.confianza.webapp.repository.framework.frmauditoria.FrmAuditoria;
 import com.confianza.webapp.repository.framework.frmauditoria.FrmAuditoriaRepository;
 
@@ -20,45 +26,75 @@ import com.confianza.webapp.repository.framework.frmauditoria.FrmAuditoriaReposi
 public class FrmAuditoriaServiceImpl implements FrmAuditoriaService{
 	
 	@Autowired
-	private FrmAuditoriaRepository frmAuditoriaRepository;
+	private FrmAuditoriaRepository frmauditoriaRepository;
+	
+	@Autowired
+	Gson gson;
 	
 	/**
 	 * @return the frmauditoriaRepository
 	 */
 	public FrmAuditoriaRepository getFrmAuditoriaRepository() {
-		return frmAuditoriaRepository;
+		return frmauditoriaRepository;
 	}
 
 	/**
 	 * @param frmauditoriaRepository the frmauditoriaRepository to set
 	 */
 	public void setFrmAuditoriaRepository(FrmAuditoriaRepository frmauditoriaRepository) {
-		this.frmAuditoriaRepository = frmauditoriaRepository;
+		this.frmauditoriaRepository = frmauditoriaRepository;
 	}
 	
 	@Override
-	public FrmAuditoria list(Long id){
-		return frmAuditoriaRepository.list(id);
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_AUDITORIA_ALL", "FRM_AUDITORIA_READ"})
+	public String list(Long id){
+		FrmAuditoria listAll=frmauditoriaRepository.list(id);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", listAll);
+		result.put("count", 1);
+		
+		return gson.toJson(result);	
 	}
 	
 	@Override
-	public List<FrmAuditoria> listAll(){
-		return frmAuditoriaRepository.listAll();
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_AUDITORIA_ALL", "FRM_AUDITORIA_READ"})
+	public String listAll(int pageSize, int page, Long auditran){
+	
+		int limit=pageSize;
+		int init=(pageSize*page)-(pageSize);
+		
+		List<FrmAuditoria> listAll=frmauditoriaRepository.listAll(init, limit, auditran);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", listAll);
+		result.put("count", this.getCount(auditran));
+		
+		return gson.toJson(result);	
 	}	
 	
 	@Override
-	public FrmAuditoria update(FrmAuditoria frmAuditoria){
-		return frmAuditoriaRepository.update(frmAuditoria); 
+	public int getCount(Long auditran){
+				
+		return frmauditoriaRepository.getCount(auditran);
 	}
 	
 	@Override
-	public void delete(Long id){
-		frmAuditoriaRepository.delete(id);
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_AUDITORIA_ALL", "FRM_AUDITORIA_UPDATE"})
+	public String update(FrmAuditoria frmauditoria){
+		return gson.toJson(frmauditoriaRepository.update(frmauditoria));
 	}
 	
 	@Override
-	public FrmAuditoria insert(FrmAuditoria frmauditoria){
-		return frmAuditoriaRepository.insert(frmauditoria);
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_AUDITORIA_ALL", "FRM_AUDITORIA_DELETE"})
+	public void delete(FrmAuditoria frmauditoria){
+		frmauditoriaRepository.delete(frmauditoria);
+	}
+	
+	@Override
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_AUDITORIA_ALL", "FRM_AUDITORIA_CREATE"})
+	public String insert(FrmAuditoria frmauditoria){
+		return gson.toJson(frmauditoriaRepository.insert(frmauditoria));
 	}
 	
 }

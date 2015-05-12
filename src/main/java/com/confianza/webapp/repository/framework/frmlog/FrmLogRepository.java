@@ -15,11 +15,13 @@ public interface FrmLogRepository {
 	
 	public FrmLog list(Long id);
 	
-	public List<FrmLog> listAll();	
+	public FrmLog update(FrmLog frmlog);
 	
-	public FrmLog update(Long id);
-	
-	public void delete(Long id);
+	public void delete(FrmLog frmlog);
 	
 	public FrmLog insert(FrmLog frmlog);
+	
+	public List<FrmLog> listAll(int init, int limit, Long slogtran);
+
+	public int getCount(Long slogtran);
 }

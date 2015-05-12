@@ -14,20 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.confianza.webapp.repository.framework.frmmenu.FrmMenu;
 import com.confianza.webapp.repository.framework.frmmenu.FrmMenuRepository;
-import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
-import com.confianza.webapp.service.framework.frmsesion.FrmSesionService;
+import com.confianza.webapp.service.security.userDetails;
 import com.confianza.webapp.utils.JSONUtil;
 import com.google.gson.Gson;
 
@@ -41,7 +33,7 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 	private FrmMenuRepository frmMenuRepository;
 	
 	@Autowired
-	private FrmSesionService frmSesionService;
+	private userDetails userDetails;
 	
 	/**
 	 * @return the frmmenuRepository
@@ -67,66 +59,65 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 		//cargo los menus padres
 		List<Object[]> menu=this.loadMenu(null);		
 		List<Map<String, Object>> menuAll;
+				
+		if(menu!=null)		
+			menuAll = createMenuWithChildren(menu);
+		else
+			menuAll = createMenuWithoutProfiles();
 		
-		if(menu!=null){
-			
-			//cast de los menu a ser mapeados por cada campo
-			menuAll = JSONUtil.toNameList(new String[]{"menucons", "menuicon", "menutitu", "modudurl", "menuhijo"},menu
-			);
-			
-			//por cada menu se recorre para asignarle sus hijos
-			for(Map<String, Object> map:menuAll){
-				List<Map<String, Object>> menuhijos=loadChildren(Long.parseLong(map.get("menucons").toString()));
-				map.put("menuhijo", menuhijos);
-			}
+		menuAll.add(0, createUser());
+		menuAll.add(createLogout());
+		
+		userDetails.onAuthenticationSuccess();
+		
+		return gson.toJson(menuAll);
+	}
+
+	private List<Map<String, Object>> createMenuWithoutProfiles() {
+		
+		Map<String, Object> withoutProfile=new HashMap<String, Object>();
+		withoutProfile.put("menucons", "0");
+		withoutProfile.put("menuicon", "glyphicon glyphicon-log-out");
+		withoutProfile.put("menutitu", "Logout");
+		withoutProfile.put("modudurl", "<c:url value=\"j_spring_security_logout\" />");
+		withoutProfile.put("menuhijo", null);		
+		
+		List<Map<String, Object>> menuAll=new ArrayList<Map<String,Object>>();
+		menuAll.add(withoutProfile);
+		return menuAll;
+	}
+
+	private List<Map<String, Object>> createMenuWithChildren(List<Object[]> menu) {
+		
+		//cast de los menu a ser mapeados por cada campo
+		List<Map<String, Object>> menuAll = JSONUtil.toNameList(new String[]{"menucons", "menuicon", "menutitu", "modudurl", "menuhijo"},menu);
+		//por cada menu se recorre para asignarle sus hijos
+		for(Map<String, Object> map:menuAll){
+			List<Map<String, Object>> menuhijos=loadChildren(Long.parseLong(map.get("menucons").toString()));
+			map.put("menuhijo", menuhijos);
 		}
-		else{
-			Object obj[]={0,"","No tiene permisos",null,null};
-			menu=new ArrayList<Object[]>();
-			menu.add(obj);
-			//cast de los menu a ser mapeados por cada campo
-			menuAll = JSONUtil.toNameList(new String[]{"menucons", "menuicon", "menutitu", "modudurl", "menuhijo"},menu
-			);
-		}
-		
-		onAuthenticationSuccess();
-		
+		return menuAll;
+	}
+
+	private Map<String, Object> createLogout() {
 		Map<String, Object> logout=new HashMap<String, Object>();
 		logout.put("menucons", "0");
 		logout.put("menuicon", "glyphicon glyphicon-log-out");
 		logout.put("menutitu", "Logout");
 		logout.put("modudurl", "<c:url value=\"j_spring_security_logout\" />");
 		logout.put("menuhijo", null);		
-		menuAll.add(logout);
-		
-		return gson.toJson(menuAll);
-	}	
+		return logout;
+	}
 	
-	public void onAuthenticationSuccess(){       
-	    
-    	HttpSession session=this.getSession();
-    	
-    	FrmSesion frmSesion = (FrmSesion) session.getAttribute("frmSesion");
-    	
-    	if(frmSesion==null){
-	        
-	    	String sesion = session.getId();
-	    	
-	    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    	String user = authentication.getName();
-	    	
-	    	FrmSesion frmSesionNew=frmSesionService.insert(user, sesion);
-	        //asigno la session del usuario al HttpSession para luego ser tomada
-	        
-	        session.setAttribute("frmSesion", frmSesionNew);
-		}        
-		
-    }
-	
-	public static HttpSession getSession() {
-	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-	    return attr.getRequest().getSession(); // true == allow create
-	}	   
+	private Map<String, Object> createUser() {
+		Map<String, Object> logout=new HashMap<String, Object>();
+		logout.put("menucons", "0");
+		logout.put("menuicon", "glyphicon glyphicon-user");
+		logout.put("menutitu", userDetails.getUser());
+		logout.put("modudurl", "icono");
+		logout.put("menuhijo", null);		
+		return logout;
+	}
     
 	@Override
 	public FrmMenu update(Long id){
@@ -146,45 +137,20 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 	@Override
 	public List<Object[]> loadMenu(Long id) {
 
-		List<String> roles = getRoles();
+		List<String> roles = userDetails.getRoles();
 				
 		if(roles.size()>0)
 			return frmMenuRepository.loadMenu(roles, id);
 		else
 			return null;
-	}
-		
-	private List<String> getRoles() {
-		
-		List<String> roles = new ArrayList<String>();
-		List<GrantedAuthority> autorities = new ArrayList<GrantedAuthority>();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if(auth!=null) {			 
-			autorities=(List<GrantedAuthority>) auth.getAuthorities();
-			for(GrantedAuthority obj:autorities){
-				String[] auxRol= obj.toString().split("_");
-				String rol="";
-				for(int i=0;i<auxRol.length-1;i++){				
-					if(rol.isEmpty())
-						rol+=auxRol[i];
-					else
-						rol+="_"+auxRol[i];
-				}
-				roles.add(rol);	
-			}
-	    }
-		
-		return roles;
-	}
+	}			
 	
 	private List<Map<String, Object>> loadChildren(Long id) {
 		//cargo los hijos del papa
 		List<Object[]> menu=this.loadMenu(id);
 		
 		//cast de los hijos a ser mapeados por cada campo
-		List<Map<String, Object>> menuAll = JSONUtil.toNameList(
-				new String[]{"menucons", "menuicon", "menutitu", "modudurl", "menuhijo"},menu
-		);
+		List<Map<String, Object>> menuAll = JSONUtil.toNameList(new String[]{"menucons", "menuicon", "menutitu", "modudurl", "menuhijo"},menu);
 		
 		//por cada menu se recorre para asignarle sus hijos		
 		for(Map<String, Object> map:menuAll){

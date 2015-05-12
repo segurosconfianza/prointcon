@@ -25,5 +25,5 @@ public interface FrmI18nRepository {
 	
 	public int getCount();	
 
-	public List<FrmI18n> listModulo(String[] modulos);
+	public List<Object[]> listModulo(String[] modulos);
 }

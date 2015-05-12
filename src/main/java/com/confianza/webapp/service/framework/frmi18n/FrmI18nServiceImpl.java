@@ -42,7 +42,7 @@ public class FrmI18nServiceImpl implements FrmI18nService{
 	}
 	
 	@Override
-	public List<FrmI18n> listModulo(String modulo){
+	public List<Object[]> listModulo(String modulo){
 		String[] modulos= modulo.split(",");
 		return frmI18nRepository.listModulo(modulos);
 	}

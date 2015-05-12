@@ -116,8 +116,12 @@ public class FrmAuditoria {
 
 
 	static public String[] getNames(){
-		return new String[]{ "AUDICONS", "AUDITRAN", "AUDITABL", "AUDICOPK", "AUDICAMP", "AUDIVAAN", "AUDIVANU" };
+		return new String[]{ "audicons", "auditran", "auditabl", "audicopk", "audicamp", "audivaan", "audivanu" };
 	}		
+	
+	static public String getColumnNames(){
+		return " AUDICONS, AUDITRAN, AUDITABL, AUDICOPK, AUDICAMP, AUDIVAAN, AUDIVANU ";
+	}
 	
 	public String toString(){
 		return " AUDICONS: "+ this.audicons 

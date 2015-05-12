@@ -15,13 +15,13 @@ public interface SopMotivoRepository {
 	
 	public SopMotivo list(Long id);
 	
-	public List<SopMotivo> listAll(int init, int limit);	
-	
 	public SopMotivo update(SopMotivo sopmotivo);
 	
 	public void delete(SopMotivo sopmotivo);
 	
 	public SopMotivo insert(SopMotivo sopmotivo);
 	
-	public int getCount();
+	public List<Object[]> listAll(int init, int limit, Long motitran);
+
+	public int getCount(Long motitran);
 }

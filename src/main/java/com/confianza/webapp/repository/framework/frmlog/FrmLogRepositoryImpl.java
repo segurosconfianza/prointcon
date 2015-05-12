@@ -10,6 +10,7 @@ package com.confianza.webapp.repository.framework.frmlog;
   */                          
 
 import java.util.List;
+import java.util.Iterator;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -46,8 +47,8 @@ public class FrmLogRepositoryImpl implements FrmLogRepository{
 	@Transactional
 	public FrmLog list(Long id){
 		try{
-			String sql = "select slogcons ,slogtran ,slogtabl ,slogacci ,slogregi "
-					   + "from FrmLog "
+			String sql = "select "+FrmLog.getColumnNames()
+					   + "from Frm_Log "
 					   + "where slogcons = :id ";
 						
 			Query query = getSession().createSQLQuery(sql)
@@ -67,13 +68,19 @@ public class FrmLogRepositoryImpl implements FrmLogRepository{
 	 */
 	@Override
 	@Transactional
-	public List<FrmLog> listAll(){
+	public List<FrmLog> listAll(int init, int limit, Long slogtran){
 		try{
-			String sql = "select slogcons ,slogtran ,slogtabl ,slogacci ,slogregi "
-					   + "from FrmLog ";
+			String sql = "select "+FrmLog.getColumnNames()
+					   + "from Frm_Log where slogtran = :slogtran";
 						
 			Query query = getSession().createSQLQuery(sql)
-						 .addEntity(FrmLog.class);
+						 .addEntity(FrmLog.class)
+						 .setParameter("slogtran",slogtran);			 
+			
+			if(limit!=0){
+				query.setFirstResult(init);			
+				query.setMaxResults(limit);
+			}
 					     
 			return query.list();
 		}catch(Exception e){
@@ -83,6 +90,35 @@ public class FrmLogRepositoryImpl implements FrmLogRepository{
 	}	
 	
 	/**
+	 * Metodo de consulta para el conteo de los registros de la tabla FrmLog
+	 * @return int = cantidad de registros encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public int getCount(Long slogtran){
+		try{
+			String sql = "select count(*) "
+					   + "from FrmLog where slogtran = :slogtran";
+						
+			Query query = getSession().createQuery(sql).setParameter("slogtran",slogtran);
+	        
+			Iterator it = query.list().iterator();
+	        Long ret = new Long(0);
+	        
+	        if (it != null)
+		        if (it.hasNext()){
+		        	ret = (Long) it.next();
+		        }
+	        
+			return ret.intValue();
+		}catch(Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	/**
 	 * Metodo para actualizar los datos de un registro de la tabla FrmLog por id
 	 * @value id = id de la llave primaria a consultar el registro
 	 * @return FrmLog = objeto de la case FrmLog que contiene los datos encontrados dado el id
@@ -90,8 +126,7 @@ public class FrmLogRepositoryImpl implements FrmLogRepository{
 	 */
 	@Override
 	@Transactional
-	public FrmLog update(Long id){
-		FrmLog frmlog = this.list(id);
+	public FrmLog update(FrmLog frmlog){
 		getSession().update(frmlog);
 		return frmlog;
 	}
@@ -104,10 +139,8 @@ public class FrmLogRepositoryImpl implements FrmLogRepository{
 	 */
 	@Override
 	@Transactional
-	public void delete(Long id){
-		FrmLog frmlog = this.list(id);
-		//FrmLog.setEstado="B";
-		getSession().update(frmlog);
+	public void delete(FrmLog frmlog){
+		
 	}
 	
 	/**
@@ -123,7 +156,7 @@ public class FrmLogRepositoryImpl implements FrmLogRepository{
 	@Override
 	@Transactional
 	public FrmLog insert(FrmLog frmlog){
-		getSession().save(frmlog);
+		getSession().save(frmlog);	
 		return frmlog;
 	}
 }

@@ -83,7 +83,7 @@ public class FrmSesion {
 
 
 	static public String[] getNames(){
-		return new String[]{ "SESICONS", "SESIUSUA", "SESIFECR", "SESISESI" };
+		return new String[]{ "sesicons", "sesiusua", "sesifecr", "sesisesi" };
 	}		
 	
 	public String toString(){

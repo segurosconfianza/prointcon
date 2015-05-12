@@ -15,11 +15,13 @@ public interface FrmAuditoriaRepository {
 	
 	public FrmAuditoria list(Long id);
 	
-	public List<FrmAuditoria> listAll();	
+	public FrmAuditoria update(FrmAuditoria frmauditoria);
 	
-	public void delete(Long id);
+	public void delete(FrmAuditoria frmauditoria);
 	
 	public FrmAuditoria insert(FrmAuditoria frmauditoria);
+	
+	public List<FrmAuditoria> listAll(int init, int limit, Long auditran);
 
-	public FrmAuditoria update(FrmAuditoria frmauditoria);
+	public int getCount(Long auditran);
 }

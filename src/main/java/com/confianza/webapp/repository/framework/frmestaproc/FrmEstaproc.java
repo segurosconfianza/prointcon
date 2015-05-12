@@ -127,7 +127,7 @@ public class FrmEstaproc {
 
 
 	static public String[] getNames(){
-		return new String[]{ "ESPRCONS", "ESPRPROC", "ESPRPORC", "ESPRDESC", "ESPRERRO", "ESPRUSER", "ESPRFECR", "ESPRESTA" };
+		return new String[]{ "esprcons", "esprproc", "esprporc", "esprdesc", "esprerro", "espruser", "esprfecr", "espresta" };
 	}		
 	
 	public String toString(){

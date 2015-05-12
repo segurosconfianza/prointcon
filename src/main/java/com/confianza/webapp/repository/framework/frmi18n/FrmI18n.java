@@ -83,7 +83,7 @@ public class FrmI18n {
 
 
 	static public String[] getNames(){
-		return new String[]{ "ETINCONS", "ETINMODU", "ETINCAMP", "ETINETIQ" };
+		return new String[]{ "etincons", "etinmodu", "etincamp", "etinetiq" };
 	}		
 	
 	public String toString(){

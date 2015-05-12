@@ -9,10 +9,16 @@ package com.confianza.webapp.service.framework.frmlog;
   * @app		framework  
   */                          
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.confianza.webapp.repository.framework.frmlog.FrmLog;
 import com.confianza.webapp.repository.framework.frmlog.FrmLogRepository;
 
@@ -20,45 +26,74 @@ import com.confianza.webapp.repository.framework.frmlog.FrmLogRepository;
 public class FrmLogServiceImpl implements FrmLogService{
 	
 	@Autowired
-	private FrmLogRepository frmLogRepository;
+	private FrmLogRepository frmlogRepository;
+	
+	@Autowired
+	Gson gson;
 	
 	/**
 	 * @return the frmlogRepository
 	 */
 	public FrmLogRepository getFrmLogRepository() {
-		return frmLogRepository;
+		return frmlogRepository;
 	}
 
 	/**
 	 * @param frmlogRepository the frmlogRepository to set
 	 */
 	public void setFrmLogRepository(FrmLogRepository frmlogRepository) {
-		this.frmLogRepository = frmlogRepository;
+		this.frmlogRepository = frmlogRepository;
 	}
 	
 	@Override
-	public FrmLog list(Long id){
-		return frmLogRepository.list(id);
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_LOG_ALL", "FRM_LOG_READ"})
+	public String list(Long id){
+		FrmLog listAll=frmlogRepository.list(id);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", listAll);
+		result.put("count", 1);
+		return gson.toJson(result);	
 	}
 	
 	@Override
-	public List<FrmLog> listAll(){
-		return frmLogRepository.listAll();
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_LOG_ALL", "FRM_LOG_READ"})
+	public String listAll(int pageSize, int page, Long slogtran){
+	
+		int limit=pageSize;
+		int init=(pageSize*page)-(pageSize);
+		
+		List<FrmLog> listAll=frmlogRepository.listAll(init, limit, slogtran);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", listAll);
+		result.put("count", this.getCount(slogtran));
+		
+		return gson.toJson(result);	
 	}	
 	
 	@Override
-	public FrmLog update(Long id){
-		return frmLogRepository.update(id);
+	public int getCount(Long slogtran){
+				
+		return frmlogRepository.getCount(slogtran);
 	}
 	
 	@Override
-	public void delete(Long id){
-		frmLogRepository.delete(id);
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_LOG_ALL", "FRM_LOG_UPDATE"})
+	public String update(FrmLog frmlog){
+		return gson.toJson(frmlogRepository.update(frmlog));
 	}
 	
 	@Override
-	public FrmLog insert(FrmLog frmlog){
-		return frmLogRepository.insert(frmlog);
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_LOG_ALL", "FRM_LOG_DELETE"})
+	public void delete(FrmLog frmlog){
+		frmlogRepository.delete(frmlog);
+	}
+	
+	@Override
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_LOG_ALL", "FRM_LOG_CREATE"})
+	public String insert(FrmLog frmlog){
+		return gson.toJson(frmlogRepository.insert(frmlog));
 	}
 	
 }

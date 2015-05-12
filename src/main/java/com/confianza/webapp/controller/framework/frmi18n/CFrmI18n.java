@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.confianza.webapp.service.framework.frmi18n.FrmI18nService;
+import com.confianza.webapp.utils.JSONUtil;
 import com.confianza.webapp.repository.framework.frmi18n.FrmI18n;
 import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
 
@@ -55,7 +56,9 @@ public class CFrmI18n {
 	@ResponseBody
 	public String listModulo(@RequestParam("modulo") String modulo){
 		
-		return gson.toJson(this.frmI18nService.listModulo(modulo));
+		List<Map<String, Object>> listAll = JSONUtil.toNameList(new String[]{"etincons", "etinmodu", "etincamp", "etinetiq", "modunomb"},this.frmI18nService.listModulo(modulo));
+		
+		return gson.toJson(listAll);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})

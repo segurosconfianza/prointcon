@@ -94,8 +94,12 @@ public class FrmLog {
 
 
 	static public String[] getNames(){
-		return new String[]{ "SLOGCONS", "SLOGTRAN", "SLOGTABL", "SLOGACCI", "SLOGREGI" };
+		return new String[]{ "slogcons", "slogtran", "slogtabl", "slogacci", "slogregi" };
 	}		
+	
+	static public String getColumnNames(){
+		return " SLOGCONS, SLOGTRAN, SLOGTABL, SLOGACCI, SLOGREGI ";
+	}
 	
 	public String toString(){
 		return " SLOGCONS: "+ this.slogcons 

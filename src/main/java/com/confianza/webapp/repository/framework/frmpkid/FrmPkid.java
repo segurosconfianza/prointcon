@@ -72,7 +72,7 @@ public class FrmPkid {
 
 
 	static public String[] getNames(){
-		return new String[]{ "PKIDCONS", "PKIDNOMB", "PKIDVALU" };
+		return new String[]{ "pkidcons", "pkidnomb", "pkidvalu" };
 	}		
 	
 	public String toString(){

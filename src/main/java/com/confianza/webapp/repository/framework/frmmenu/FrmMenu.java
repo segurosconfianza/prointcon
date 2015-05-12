@@ -116,7 +116,7 @@ public class FrmMenu {
 
 
 	static public String[] getNames(){
-		return new String[]{ "MENUCONS", "MENUPADR", "MENUMODU", "MENUICON", "MENUTITU", "MENUORDE", "MENUESTA" };
+		return new String[]{ "menucons", "menupadr", "menumodu", "menuicon", "menutitu", "menuorde", "menuesta" };
 	}		
 	
 	public String toString(){

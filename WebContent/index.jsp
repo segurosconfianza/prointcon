@@ -48,11 +48,14 @@
 		<script  src="WebResources/framework/frmperfil/FrmPerfilApp.js"></script>
 	    <script  src="WebResources/framework/frmperfil/FrmPerfilService.js"></script>
 	    <script  src="WebResources/framework/frmperfil/FrmPerfilController.js"></script>
-	    <script  src="WebResources/framework/frmperfil/FrmPerfmoduController.js"></script>
+	    <script  src="WebResources/framework/frmperfmodu/FrmPerfmoduController.js"></script>
 	    
 	    <script  src="WebResources/framework/frmtransaccion/FrmTransaccionApp.js"></script>
 	    <script  src="WebResources/framework/frmtransaccion/FrmTransaccionService.js"></script>
 	    <script  src="WebResources/framework/frmtransaccion/FrmTransaccionController.js"></script>
+	    <script  src="WebResources/framework/frmlog/FrmLogController.js"></script>
+	    <script  src="WebResources/framework/frmauditoria/FrmAuditoriaController.js"></script>
+	    <script  src="WebResources/soporte/sopmotivo/SopMotivoController.js"></script>
 	    
 	    <script  src="WebResources/soporte/soporte/SoporteApp.js"></script>
 	    <script  src="WebResources/soporte/soporte/SoporteService.js"></script>
@@ -67,6 +70,9 @@
 		        angular.bootstrap(document);
 		    });	
 	        
+		    jQuery(document).ready(function ($) {
+		        $('#tabs').tab();
+		    });
 		</script>
 										
 	</head>		      
@@ -83,7 +89,7 @@
 			</header>
 		</div><!--encabezado-->	
 		
-		<div id="menu">
+		<div id="menu">					
 			<div>    
 			  <!-- Nested list template -->
               <script type="text/ng-template" id="items_renderer.html">
@@ -99,6 +105,10 @@
 				  <div ng-if="urlVerify(item.modudurl)==2">
                   	<a class="btn btn-danger btn-xs" data-nodrag ng-click="toggle(this)"><span class="glyphicon" ng-class="item.menuicon"></span></a>
                   	<a href="<c:url value="j_spring_security_logout" />" data-nodrag >{{item.menutitu}}</a>
+                  </div>
+				  <div ng-if="urlVerify(item.modudurl)==3">
+                  	<a class="btn btn-danger btn-xs" data-nodrag ng-click="toggle(this)"><span ng-class="item.menuicon"></span></a>
+                  	{{item.menutitu}}
                   </div>
                 </div>
                 <ol ui-tree-nodes="options" ng-model="item.menuhijo" ng-class="{hidden: !collapsed}"">

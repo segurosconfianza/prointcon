@@ -17,7 +17,6 @@ FrmMainApp.config(['$routeProvider',
   	    }).	  
   	    when('/FrmTransaccion', {
    	      templateUrl: function(params) {
-   	    	  console.log(WEB_SERVER+'FrmTransaccion/');
    	          return  WEB_SERVER+'FrmTransaccion/';
    	      },
    	      controller: 'FrmTransaccionController'

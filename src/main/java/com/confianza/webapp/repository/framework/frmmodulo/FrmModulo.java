@@ -94,7 +94,7 @@ public class FrmModulo {
 
 
 	static public String[] getNames(){
-		return new String[]{ "MODUCONS", "MODUAPLI", "MODUNOMB", "MODUNEMO", "MODUDURL" };
+		return new String[]{ "moducons", "moduapli", "modunomb", "modunemo", "modudurl" };
 	}		
 	
 	public String toString(){

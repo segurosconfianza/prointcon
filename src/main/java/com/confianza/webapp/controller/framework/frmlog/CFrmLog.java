@@ -1,77 +1,75 @@
 package com.confianza.webapp.controller.framework.frmlog;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
-import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
- 
+
 
 
 import com.confianza.webapp.service.framework.frmlog.FrmLogService;
 import com.confianza.webapp.repository.framework.frmlog.FrmLog;
-import com.confianza.webapp.repository.framework.frmtransaccion.FrmTransaccion;
 
 @Controller
 @RequestMapping("/FrmLog")
 public class CFrmLog {
 
 	@Autowired
-	private FrmLogService frmLogService;
+	private FrmLogService frmlogService;
 	
-	public CFrmLog(){
+	public CFrmLog() {
 		super();
 	}
+			
+	@RequestMapping("/")
+	public String index() {
+		return "framework/frmlog/FrmLog";
+	}
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{slogcons}.json", method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
-	public FrmLog list(Long id){
+	public String list(@PathVariable("slogcons") Long slogcons){
 		
-		return this.frmLogService.list(id);
+		return this.frmlogService.list(slogcons);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize","slogtran"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
-	public List<FrmLog> listAll(){
+	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("slogtran") Long slogtran){
 	
-		return this.frmLogService.listAll();
+		return this.frmlogService.listAll(pageSize, page, slogtran);
 	}
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
-	public FrmLog update(Long id){
-		return this.frmLogService.update(id);
+	public String update(@RequestBody FrmLog frmlog, HttpServletRequest request){
+	
+		return this.frmlogService.update(frmlog);
 	}
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
-	public void delete(Long id){
-		this.frmLogService.delete(id);
+	public String delete(@RequestBody FrmLog frmlog, HttpServletRequest request){
+	
+		//frmlog.setesta("B");
+		return this.frmlogService.update(frmlog);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
-	public FrmLog insert(@RequestBody FrmLog frmlog){
-		return this.frmLogService.insert(frmlog);
-	}
-	
-	public void insert(FrmTransaccion frmTransaccion, String tabla, String accion, String registro){
-		FrmLog frmLog = new FrmLog();
-		frmLog.setSlogacci("INSERT");
-		frmLog.setSlogregi(registro);
-		frmLog.setSlogtabl(tabla);
-		frmLog.setSlogtran(frmTransaccion.getTrancons());
-		this.frmLogService.insert(frmLog);
+	public String insert(@RequestBody FrmLog frmlog, HttpServletRequest request){
+		
+		return this.frmlogService.insert(frmlog);		
 	}
 }

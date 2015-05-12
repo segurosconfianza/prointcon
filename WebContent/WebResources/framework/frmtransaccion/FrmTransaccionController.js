@@ -1,11 +1,7 @@
 var FrmMainApp=angular.module('FrmMainApp');
 
 FrmMainApp.controller('FrmTransaccionController', ['$scope', 'FrmTransaccionService',function($scope, FrmTransaccionService) {
-    	//botones de los formularios modal
-    	$scope.buttonNew=false;
-    	$scope.buttonEdit=false;
-    	$scope.buttonDelete=false;    	
-    	
+
         $scope.filterOptions = {
             filterText: "",
             useExternalFilter: true
@@ -73,10 +69,10 @@ FrmMainApp.controller('FrmTransaccionController', ['$scope', 'FrmTransaccionServ
         }, true);
     	        
               
-        function getName(i18n,colum){
+        function getName(i18n,colum,modulo){
         	var log = [];
         	angular.forEach(i18n, function(fila, index) {
-        		if(fila.etincamp==colum)  
+        		if(fila.etincamp==colum && fila.modunomb==modulo)  
         			this.push(fila);
        		}, log);
         	
@@ -84,18 +80,19 @@ FrmMainApp.controller('FrmTransaccionController', ['$scope', 'FrmTransaccionServ
         				         
         }
         
-        FrmTransaccionService.getI18n().then(function(dataResponse) {        	                                        	
+        FrmTransaccionService.loadI18n().then(function(dataResponse) {        	                                        	
         	 
-        	columns=[ { field: "peficons", displayName: getName(dataResponse.data, "peficons"), visible: false },
-                   { field: "pefinomb", displayName: getName(dataResponse.data, "pefinomb") }, 
-                   { field: "pefidesc", displayName: getName(dataResponse.data, "pefidesc") }, 
-                   { field: "pefifecr", displayName: getName(dataResponse.data, "pefifecr"), visible: false },
-                   { field: "pefiesta", displayName: getName(dataResponse.data, "pefiesta"), visible: false }
+        	columns=[ { field: "trancons", displayName: getName(dataResponse.data, "trancons", "FRM_TRANSACCION") },
+                   { field: "transesi", displayName: getName(dataResponse.data, "transesi", "FRM_TRANSACCION") }, 
+                   { field: "tranfecr", displayName: getName(dataResponse.data, "tranfecr", "FRM_TRANSACCION") }                   
                  ];
             
             $scope.columnDefs=columns;
             
-            $scope.ventanaTitulo=getName(dataResponse.data, "-");
+            $scope.ventanaTitulo=getName(dataResponse.data, "-", "FRM_TRANSACCION");
+            
+            FrmTransaccionService.setI18n(dataResponse.data);
+            FrmTransaccionService.prepForLoadI18n();
         });
         
         $scope.whatClassIsIt= function(column){
@@ -123,9 +120,9 @@ FrmMainApp.controller('FrmTransaccionController', ['$scope', 'FrmTransaccionServ
                 enableColumnResize: true,
                 showFilter : true,
                 afterSelectionChange: function (rowItem, event) {                	
-                	FrmTransaccionService.prepForLoad(rowItem.entity.peficons, rowItem.entity.pefinomb);                    
+                	FrmTransaccionService.prepForLoad(rowItem.entity.trancons);                    
                 }
         };                              
-                     				
+                
     }            
     ])

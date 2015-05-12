@@ -39,6 +39,9 @@ FrmMainApp.controller('FrmMenuController', ['$scope', 'FrmMenuService', '$sce', 
 		            var result=url.match(/<c:/g);
 		            if(result!=null && result=="<c:")
 		            	return 2;
+		            var result=url.match(/icono/g);
+		            if(result!=null && result=="icono")
+		            	return 3;
 	        	}
             	return 0;
 	        }

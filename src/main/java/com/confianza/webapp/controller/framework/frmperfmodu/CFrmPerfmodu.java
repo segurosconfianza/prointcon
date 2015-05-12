@@ -40,7 +40,7 @@ public class CFrmPerfmodu {
 		return this.frmPerfmoduService.list(id);
 	}
 		
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize","pemopefi"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("pemopefi") Long pemopefi) throws Exception{
 		

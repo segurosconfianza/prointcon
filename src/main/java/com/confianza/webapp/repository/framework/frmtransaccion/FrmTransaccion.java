@@ -72,7 +72,7 @@ public class FrmTransaccion {
 
 
 	static public String[] getNames(){
-		return new String[]{ "TRANCONS", "TRANSESI", "TRANFECR" };
+		return new String[]{ "trancons", "transesi", "tranfecr" };
 	}		
 	
 	public String toString(){

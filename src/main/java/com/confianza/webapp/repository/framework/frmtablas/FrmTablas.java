@@ -127,7 +127,7 @@ public class FrmTablas {
 
 
 	static public String[] getNames(){
-		return new String[]{ "TABLCONS", "TABLMODU", "TABLCODI", "TABLCLAV", "TABLVAST", "TABLVAIN", "TABLFECR", "TABLEXTR" };
+		return new String[]{ "tablcons", "tablmodu", "tablcodi", "tablclav", "tablvast", "tablvain", "tablfecr", "tablextr" };
 	}		
 	
 	public String toString(){

@@ -102,7 +102,7 @@ public class FrmPerfil {
 
 
 	static public String[] getNames(){
-		return new String[]{ "PEFICONS", "PEFINOMB", "PEFIDESC", "PEFIFECR", "PEFIESTA" };
+		return new String[]{ "peficons", "peficons", "pefidesc", "pefifecr", "pefiesta" };
 	}		
 	
 	public String toString(){

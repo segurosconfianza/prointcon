@@ -94,7 +94,7 @@ public class FrmAplicaciones {
 
 
 	static public String[] getNames(){
-		return new String[]{ "APLICONS", "APLINOMB", "APLIDESC", "APLIESTA", "APLIFECR" };
+		return new String[]{ "aplicons", "aplinomb", "aplidesc", "apliesta", "aplifecr" };
 	}		
 	
 	public String toString(){

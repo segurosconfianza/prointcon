@@ -69,16 +69,15 @@ public class FrmI18nRepositoryImpl implements FrmI18nRepository{
 	 */
 	@Override
 	@Transactional
-	public List<FrmI18n> listModulo(String[] modulos){
+	public List<Object[]> listModulo(String[] modulos){
 		try{
-			String sql = "select etincons ,etinmodu ,etincamp ,etinetiq "
+			String sql = "select etincons ,etinmodu ,etincamp ,etinetiq, modunomb "
 					   + "from Frm_I18n "
-					   + "join Frm_Modulo on (moducons=etinmodu and modunomb in (:modulo)) "
+					   + "join Frm_Modulo on (moducons=etinmodu and modunomb in (:modulos)) "
 					   + "order by etincons";
 						
-			Query query = getSession().createSQLQuery(sql)
-						 .addEntity(FrmI18n.class)					
-					     .setParameterList("modulo", modulos);
+			Query query = getSession().createSQLQuery(sql)						 		
+					     .setParameterList("modulos", modulos);			
 			return query.list();
 		}catch(Exception e){
 			e.printStackTrace();

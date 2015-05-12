@@ -27,6 +27,6 @@ public interface FrmI18nService{
 	
 	public int getCount();
 
-	public List<FrmI18n> listModulo(String modulo);
+	public List<Object[]> listModulo(String modulo);
 	
 }

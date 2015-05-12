@@ -83,7 +83,7 @@ public class FrmRoleperm {
 
 
 	static public String[] getNames(){
-		return new String[]{ "ROPECONS", "ROPENOMB", "ROPEDESC", "ROPETIPO" };
+		return new String[]{ "ropecons", "ropenomb", "ropedesc", "ropetipo" };
 	}		
 	
 	public String toString(){

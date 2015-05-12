@@ -70,7 +70,7 @@ public class FrmPerfmoduRepositoryImpl implements FrmPerfmoduRepository{
 	@Transactional
 	public List<Object[]> listAll(int init, int limit, Long pemopefi){
 		try{
-			String sql = "select pemocons ,pemopefi ,pemomoro, morocons, moromodu, mororope, moducons, moduapli, modunomb, modunemo, modudurl, ropecons, ropenomb, ropedesc, ropetipo, aplicons, aplinomb, aplidesc, apliesta, aplifecr, tablvast "
+			String sql = "select pemocons, pemopefi ,pemomoro, morocons, moromodu, mororope, moducons, moduapli, modunomb, modunemo, modudurl, ropecons, ropenomb, ropedesc, ropetipo, aplicons, aplinomb, aplidesc, apliesta, aplifecr, tablvast "
 					   + "from Frm_Perfmodu "
 					   + "join Frm_modurope     on (morocons=pemomoro) "
 					   + "join Frm_Modulo       on (moducons=moromodu) "

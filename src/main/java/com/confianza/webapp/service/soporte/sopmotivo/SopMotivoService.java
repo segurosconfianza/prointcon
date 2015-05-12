@@ -20,16 +20,16 @@ public interface SopMotivoService{
 	
 	public String list(Long id);
 	
-	public String listAll(int pageSize, int page);	
-	
 	public String insert(SopMotivo sopmotivo);
 	
 	public String update(SopMotivo sopmotivo);
 	
 	public void delete(SopMotivo sopmotivo);	
 	
-	public int getCount();
-
 	public SopMotivo insertMotivo(String motidesc, Long motitran, ArrayList<MultipartFile> file);
+
+	public String listAll(int pageSize, int page, Long motitran);
+
+	public int getCount(Long motitran);
 	
 }

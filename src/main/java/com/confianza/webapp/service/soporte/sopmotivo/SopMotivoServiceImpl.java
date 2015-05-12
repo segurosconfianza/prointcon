@@ -21,10 +21,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.confianza.webapp.repository.framework.frmarchivo.FrmArchivo;
+import com.confianza.webapp.repository.soporte.sopadjunto.SopAdjunto;
 import com.confianza.webapp.repository.soporte.sopmotivo.SopMotivo;
 import com.confianza.webapp.repository.soporte.sopmotivo.SopMotivoRepository;
 import com.confianza.webapp.service.framework.frmarchivo.FrmArchivoService;
 import com.confianza.webapp.service.soporte.sopadjunto.SopAdjuntoService;
+import com.confianza.webapp.utils.JSONUtil;
 import com.google.gson.Gson;
 
 @Service
@@ -57,53 +59,59 @@ public class SopMotivoServiceImpl implements SopMotivoService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_SOPMOTIVO__ALL", "APP_SOPMOTIVO__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOP_MOTIVO_ALL", "SOP_MOTIVO_READ"})
 	public String list(Long id){
 		SopMotivo listAll=sopMotivoRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
-		result.put("count", this.getCount());
+		result.put("count", 1);
 		
 		return gson.toJson(result);	
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_SOPMOTIVO__ALL", "APP_SOPMOTIVO__READ"})
-	public String listAll(int pageSize, int page){
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOP_MOTIVO_ALL", "SOP_MOTIVO_READ"})
+	public String listAll(int pageSize, int page, Long motitran){
 	
 		int limit=pageSize*page;
-		int init=limit-pageSize;
+		int init=(pageSize*page)-(pageSize);
 		
-		List<SopMotivo> listAll=sopMotivoRepository.listAll(init, limit);
+		List<Object[]> listAll=sopMotivoRepository.listAll(init, limit, motitran);
+		
+		String maestroDetalle[] = new String[SopMotivo.getNames().length+SopAdjunto.getNames().length];
+		System.arraycopy(SopMotivo.getNames(), 0, maestroDetalle, 0, SopMotivo.getNames().length);
+		System.arraycopy(SopAdjunto.getNames(), 0, maestroDetalle, SopMotivo.getNames().length, SopAdjunto.getNames().length);
+		
+		List<Map<String, Object>> resAll = JSONUtil.toNameList(maestroDetalle,listAll);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("data", listAll);
-		result.put("count", this.getCount());
+		result.put("data", resAll);
+		result.put("count", this.getCount(motitran));
 		
 		return gson.toJson(result);	
 	}	
 	
 	@Override
-	public int getCount(){
+	public int getCount(Long motitran){
 				
-		return sopMotivoRepository.getCount();
+		return sopMotivoRepository.getCount(motitran);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_SOPMOTIVO__ALL", "APP_SOPMOTIVO__UPDATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOP_MOTIVO_ALL", "SOP_MOTIVO_UPDATE"})
 	public String update(SopMotivo sopmotivo){
 		return gson.toJson(sopMotivoRepository.update(sopmotivo));
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_SOPMOTIVO__ALL", "APP_SOPMOTIVO__DELETE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOP_MOTIVO_ALL", "SOP_MOTIVO_DELETE"})
 	public void delete(SopMotivo sopmotivo){
 		sopMotivoRepository.delete(sopmotivo);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_SOPMOTIVO__ALL", "APP_SOPMOTIVO__CREATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOP_MOTIVO_ALL", "SOP_MOTIVO_CREATE"})
 	public String insert(SopMotivo sopmotivo){
 		return gson.toJson(sopMotivoRepository.insert(sopmotivo));
 	}
@@ -114,6 +122,8 @@ public class SopMotivoServiceImpl implements SopMotivoService{
 		sopMotivo.setMotidesc(motidesc);
 		sopMotivo.setMotitran(motitran);
 		
+		sopMotivo=sopMotivoRepository.insert(sopMotivo);
+		
 		List<FrmArchivo> listAll;
 		try {
 			listAll = this.frmArchivoService.ingresarArchivos(file);
@@ -123,7 +133,7 @@ public class SopMotivoServiceImpl implements SopMotivoService{
 			e.printStackTrace();
 		}
 		
-		return sopMotivoRepository.insert(sopMotivo);
+		return sopMotivo;
 	}
 	
 }
