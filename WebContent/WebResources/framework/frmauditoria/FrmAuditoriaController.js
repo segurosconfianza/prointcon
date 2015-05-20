@@ -149,7 +149,7 @@ FrmMainApp.controller('FrmAuditoriaController', ['$scope', '$modal', 'FrmTransac
             	$scope.audicons=rowItem.entity.audicons;
 	        	$scope.auditran=rowItem.entity.auditran;
 	        	$scope.auditabl=rowItem.entity.auditabl;
-	        	$scope.audocopk=rowItem.entity.audocopk;               
+	        	$scope.audicopk=rowItem.entity.audicopk;               
 	        	$scope.audicamp=rowItem.entity.audicamp;
 	        	$scope.audivaan=rowItem.entity.audivaan;
 	        	$scope.audivanu=rowItem.entity.audivanu;

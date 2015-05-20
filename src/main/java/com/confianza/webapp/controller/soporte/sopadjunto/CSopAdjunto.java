@@ -1,6 +1,13 @@
 package com.confianza.webapp.controller.soporte.sopadjunto;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
+import com.confianza.webapp.service.framework.frmarchivo.FrmArchivoService;
 import com.confianza.webapp.service.soporte.sopadjunto.SopAdjuntoService;
+import com.confianza.webapp.repository.framework.frmarchivo.FrmArchivo;
 import com.confianza.webapp.repository.soporte.sopadjunto.SopAdjunto;
 
 @Controller
@@ -23,6 +31,9 @@ public class CSopAdjunto {
 
 	@Autowired
 	private SopAdjuntoService sopAdjuntoService;		
+	
+	@Autowired
+	private FrmArchivoService frmArchivoService;
 	
 	public CSopAdjunto() {
 		super();
@@ -70,5 +81,14 @@ public class CSopAdjunto {
 	public String insert(@RequestBody SopAdjunto sopadjunto, HttpServletRequest request){
 		
 		return this.sopAdjuntoService.insert(sopadjunto);		
+	}
+		
+	@RequestMapping(value = "/downloadFile", params = {"adjuarch","adjunomb"},  method = RequestMethod.GET)
+	@ResponseStatus( HttpStatus.CREATED )
+	@ResponseBody
+	public void downloadFile(@RequestParam("adjuarch") Long adjuarch, @RequestParam("adjunomb") String adjunomb, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	
+		frmArchivoService.getfrmArchivo(adjuarch, adjunomb, request, response);
+		
 	}
 }

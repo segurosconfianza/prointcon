@@ -3,6 +3,7 @@ var FrmMainApp=angular.module('FrmMainApp');
 FrmMainApp.controller('SopMotivoController', ['$scope', '$modal', 'FrmTransaccionService',function($scope, $modal,FrmTransaccionService) {
 	
 	$scope.showModal = false;
+	$scope.urlDownload=WEB_SERVER+'SopAdjunto/downloadFile?';
 	
 	$scope.$on('handleBroadcastSoporte', function() {
 		
@@ -166,6 +167,6 @@ FrmMainApp.controller('SopMotivoController', ['$scope', '$modal', 'FrmTransaccio
     $scope.fixGridRendering = function() {
     	$(window).resize();
     };
-
+  
     }            
     ])

@@ -211,9 +211,8 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	public String updateRecord(String conscons, String params, String paramsData, ArrayList<MultipartFile> file){
 		
 		Type type = new TypeToken<Map<String, Object>>(){}.getType();
-		
-		Map<String, Object> parameters=gson.fromJson(charsetString.convertISO88591ToUTF8(params), type);   						
-		Map<String, Object> parametersData=gson.fromJson(charsetString.convertISO88591ToUTF8(paramsData), type);
+		Map<String, Object> parameters=gson.fromJson(params, type);//charsetString.convertUTF8ToISO88591(params)   						
+		Map<String, Object> parametersData=gson.fromJson(paramsData, type);
 		
 		//carga la consulta dinamica					
 		FrmConsulta frmConsulta=this.listProcedureChild(conscons);

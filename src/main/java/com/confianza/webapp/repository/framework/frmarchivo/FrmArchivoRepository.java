@@ -26,5 +26,5 @@ public interface FrmArchivoRepository {
 	
 	public int getCount();
 
-	public List<FrmArchivo> listAllMime(ArrayList<String> mime);
+	public List<FrmArchivo> listAllMd5(ArrayList<String> mime);
 }

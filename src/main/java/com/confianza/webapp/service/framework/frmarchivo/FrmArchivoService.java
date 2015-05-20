@@ -12,6 +12,9 @@ package com.confianza.webapp.service.framework.frmarchivo;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.confianza.webapp.repository.framework.frmarchivo.FrmArchivo;
@@ -34,5 +37,7 @@ public interface FrmArchivoService{
 	public List<FrmArchivo> ingresarArchivos(ArrayList<MultipartFile> file) throws Exception;
 
 	public String ingresarArchivoSoporte(String nombreArchivo, String valor) throws Exception;
+
+	public void getfrmArchivo(Long id, String adjunomb, HttpServletRequest request, HttpServletResponse response);
 
 }

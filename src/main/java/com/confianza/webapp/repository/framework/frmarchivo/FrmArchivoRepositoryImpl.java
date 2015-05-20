@@ -49,7 +49,7 @@ public class FrmArchivoRepositoryImpl implements FrmArchivoRepository{
 	public FrmArchivo list(Long id){
 		try{
 			String sql = "select "+FrmArchivo.getColumnNames()
-					   + "from FrmArchivo "
+					   + "from Frm_Archivo "
 					   + "where archcodi = :id ";
 						
 			Query query = getSession().createSQLQuery(sql)
@@ -72,7 +72,7 @@ public class FrmArchivoRepositoryImpl implements FrmArchivoRepository{
 	public List<FrmArchivo> listAll(int init, int limit){
 		try{
 			String sql = "select "+FrmArchivo.getColumnNames()
-					   + "from FrmArchivo ";
+					   + "from Frm_Archivo ";
 						
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(FrmArchivo.class);
@@ -169,11 +169,11 @@ public class FrmArchivoRepositoryImpl implements FrmArchivoRepository{
 	 */
 	@Override
 	@Transactional
-	public List<FrmArchivo> listAllMime(ArrayList<String> mime){
+	public List<FrmArchivo> listAllMd5(ArrayList<String> mime){
 		try{
 			String sql = "select "+FrmArchivo.getColumnNames()
 					   + "from Frm_Archivo "
-					   + "where archmime in (:lista)";
+					   + "where archmd5 in (:lista)";
 						
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(FrmArchivo.class);

@@ -27,10 +27,10 @@ public class FileImpl {
 		this.files = files;
 	}
 
-	public ArrayList<String> getMime(){
+	public ArrayList<String> getMd5(){
 		ArrayList<String> listAll=new ArrayList<String>();
 		for(CFile obj:files){
-			listAll.add(obj.getType());
+			listAll.add(obj.getMd5());
 		}
 		return listAll;
 	}

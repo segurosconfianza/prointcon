@@ -80,7 +80,6 @@ public class FrmAuditoriaServiceImpl implements FrmAuditoriaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_AUDITORIA_ALL", "FRM_AUDITORIA_UPDATE"})
 	public String update(FrmAuditoria frmauditoria){
 		return gson.toJson(frmauditoriaRepository.update(frmauditoria));
 	}
@@ -91,8 +90,7 @@ public class FrmAuditoriaServiceImpl implements FrmAuditoriaService{
 		frmauditoriaRepository.delete(frmauditoria);
 	}
 	
-	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_AUDITORIA_ALL", "FRM_AUDITORIA_CREATE"})
+	@Override	
 	public String insert(FrmAuditoria frmauditoria){
 		return gson.toJson(frmauditoriaRepository.insert(frmauditoria));
 	}

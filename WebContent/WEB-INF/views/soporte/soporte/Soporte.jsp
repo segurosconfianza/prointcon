@@ -95,7 +95,7 @@
 	  	      </div>
         </script> 
         <script type="text/ng-template" id="data_renderer.jsp">
-			<td width="20%"><b ng-bind-html="column |to_trusted"></b>: </td><td width="80%" ng-bind-html="rowData[column] | nl2br">&nbsp;</td>	
+			<td width="20%"><b ng-bind-html="getLabel(column) |to_trusted"></b>: </td><td width="80%" ng-bind-html="rowData[column] | nl2br">&nbsp;</td>	
         </script>
          
         <div align="left">

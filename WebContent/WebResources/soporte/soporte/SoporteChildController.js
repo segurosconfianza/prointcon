@@ -94,7 +94,9 @@ FrmMainApp.controller('SoporteChildController', ['$scope', 'SoporteChildService'
 	        		$scope.Camp=dataResponse.data.camp;
 	        		
 	        		$scope.Result=true;
-	        		$scope.BotonLoader=false;	 	        			        		
+	        		$scope.BotonLoader=false;
+	        		
+	        		console.log("data: "+$scope.Data);
 	        	}
 				$scope.Boton = true;
 				
@@ -103,9 +105,19 @@ FrmMainApp.controller('SoporteChildController', ['$scope', 'SoporteChildService'
 			alert("Datos vacios o incorrectos: Favor diligencie todos los campos");
 			$scope.BotonLoader=false;
 			$scope.Boton = true;
-		}							
+		}
+		
 	}
 	
+	$scope.getLabel = function(campo) {
+		
+		for(i=0; i<$scope.columns.length;i++){
+			if($scope.columns[i].paranomb==campo ){
+				return $scope.columns[i].paralabe;
+			}
+		}
+		return "";
+	  }
 	
  }            
 ])
