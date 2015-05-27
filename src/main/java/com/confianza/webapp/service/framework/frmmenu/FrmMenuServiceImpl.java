@@ -57,11 +57,13 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 	@Override
 	public String listAll(){		
 		//cargo los menus padres
-		List<Object[]> menu=this.loadMenu(null);		
+		List<String> roles = userDetails.getRoles();
+		
+		List<Object[]> menu=this.loadMenu(null,roles);		
 		List<Map<String, Object>> menuAll;
 				
 		if(menu!=null)		
-			menuAll = createMenuWithChildren(menu);
+			menuAll = createMenuWithChildren(menu, roles);
 		else
 			menuAll = createMenuWithoutProfiles();
 		
@@ -87,13 +89,13 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 		return menuAll;
 	}
 
-	private List<Map<String, Object>> createMenuWithChildren(List<Object[]> menu) {
+	private List<Map<String, Object>> createMenuWithChildren(List<Object[]> menu, List<String> roles) {
 		
 		//cast de los menu a ser mapeados por cada campo
 		List<Map<String, Object>> menuAll = JSONUtil.toNameList(new String[]{"menucons", "menuicon", "menutitu", "modudurl", "menuhijo"},menu);
 		//por cada menu se recorre para asignarle sus hijos
 		for(Map<String, Object> map:menuAll){
-			List<Map<String, Object>> menuhijos=loadChildren(Long.parseLong(map.get("menucons").toString()));
+			List<Map<String, Object>> menuhijos=loadChildren(Long.parseLong(map.get("menucons").toString()), roles);
 			map.put("menuhijo", menuhijos);
 		}
 		return menuAll;
@@ -118,6 +120,16 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 		logout.put("menuhijo", null);		
 		return logout;
 	}
+	
+	private Map<String, Object> createIntermediario() {
+		Map<String, Object> logout=new HashMap<String, Object>();
+		logout.put("menucons", "0");
+		logout.put("menuicon", "glyphicon glyphicon-user");
+		logout.put("menutitu", "Intermediario");
+		logout.put("modudurl", "icono");
+		logout.put("menuhijo", null);		
+		return logout;
+	}
     
 	@Override
 	public FrmMenu update(Long id){
@@ -135,29 +147,47 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 	}
 	
 	@Override
-	public List<Object[]> loadMenu(Long id) {
+	public List<Object[]> loadMenu(Long id, List<String> roles) {
 
-		List<String> roles = userDetails.getRoles();
-				
 		if(roles.size()>0)
 			return frmMenuRepository.loadMenu(roles, id);
 		else
 			return null;
 	}			
 	
-	private List<Map<String, Object>> loadChildren(Long id) {
+	private List<Map<String, Object>> loadChildren(Long id, List<String> roles) {
 		//cargo los hijos del papa
-		List<Object[]> menu=this.loadMenu(id);
+		List<Object[]> menu=this.loadMenu(id, roles);
 		
 		//cast de los hijos a ser mapeados por cada campo
 		List<Map<String, Object>> menuAll = JSONUtil.toNameList(new String[]{"menucons", "menuicon", "menutitu", "modudurl", "menuhijo"},menu);
 		
 		//por cada menu se recorre para asignarle sus hijos		
 		for(Map<String, Object> map:menuAll){
-			List<Map<String, Object>> menuhijos=loadChildren(Long.parseLong(map.get("menucons").toString()));
+			List<Map<String, Object>> menuhijos=loadChildren(Long.parseLong(map.get("menucons").toString()), roles);
 			map.put("menuhijo", menuhijos);
 		}
 		
 		return menuAll;
+	}
+	
+	@Override
+	public String listAllIntermediario(){		
+		//cargo los menus padres
+		List<String> roles =new ArrayList<String>();
+		roles.add("INTERMEDIARIO_ALL");
+		
+		List<Object[]> menu=this.loadMenu(null,roles);		
+		List<Map<String, Object>> menuAll;
+				
+		if(menu!=null)		
+			menuAll = createMenuWithChildren(menu, roles);
+		else
+			menuAll = createMenuWithoutProfiles();
+		
+		menuAll.add(0, createIntermediario());
+		menuAll.add(createLogout());
+		
+		return gson.toJson(menuAll);
 	}
 }

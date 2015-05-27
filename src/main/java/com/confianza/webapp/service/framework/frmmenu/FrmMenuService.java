@@ -25,6 +25,8 @@ public interface FrmMenuService{
 	
 	public String insert(FrmMenu frmmenu);
 
-	public List<Object[]> loadMenu(Long id);
+	public List<Object[]> loadMenu(Long id, List<String> roles);
+
+	public String listAllIntermediario();
 	
 }
