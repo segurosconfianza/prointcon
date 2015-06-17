@@ -21,13 +21,18 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 import com.confianza.webapp.repository.formatos.fmtformato.FmtFormato;
 import com.confianza.webapp.repository.formatos.fmtformato.FmtFormatoRepository;
+import com.confianza.webapp.repository.formatos.fmtversform.FmtVersform;
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsulta;
+import com.confianza.webapp.service.formatos.fmtversform.FmtVersformService;
 
 @Service
 public class FmtFormatoServiceImpl implements FmtFormatoService{
 	
 	@Autowired
 	private FmtFormatoRepository fmtformatoRepository;
+	
+	@Autowired
+	private FmtVersformService fmtversformService;
 	
 	@Autowired
 	Gson gson;
@@ -99,16 +104,29 @@ public class FmtFormatoServiceImpl implements FmtFormatoService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_FORMATO_ALL", "SOPORTE_READ", "INTERMEDIARIO_ALL"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_FORMATO_ALL", "FMT_FORMATO_READ", "INTERMEDIARIO_ALL"})
 	public String loadData(String formcons){
 			        
 		//carga la consulta dinamica
 		FmtFormato fmtFormato=fmtformatoRepository.list(new Long(formcons));
-							
+					
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("titulo", fmtFormato.getFormnomb());
 		result.put("descri", fmtFormato.getFormdesc());
+		result.put("version", this.fmtversformService.lastVersion(new Long(formcons)));
 		return gson.toJson(result);
 	}
 	
+	@Override	
+	public String loadDataIntermediario(String formcons){
+			        
+		//carga la consulta dinamica
+		FmtFormato fmtFormato=fmtformatoRepository.list(new Long(formcons));
+					
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("titulo", fmtFormato.getFormnomb());
+		result.put("descri", fmtFormato.getFormdesc());
+		result.put("version", this.fmtversformService.lastVersionEntity(new Long(formcons)));
+		return gson.toJson(result);
+	}
 }

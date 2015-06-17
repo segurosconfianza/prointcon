@@ -95,4 +95,18 @@ public class FmtAuditoriaServiceImpl implements FmtAuditoriaService{
 		return gson.toJson(fmtauditoriaRepository.insert(fmtauditoria));
 	}
 	
+	@Override
+	public String listAll(int pageSize, int page, long forecons){
+	
+		int limit=pageSize;
+		int init=(pageSize*page)-(pageSize);
+		
+		List<FmtAuditoria> listAll=fmtauditoriaRepository.listAll(init, limit, forecons);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", listAll);
+		result.put("count", this.getCount());
+		
+		return gson.toJson(result);	
+	}	
 }

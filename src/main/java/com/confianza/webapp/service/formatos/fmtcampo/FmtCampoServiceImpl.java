@@ -107,4 +107,12 @@ public class FmtCampoServiceImpl implements FmtCampoService{
 		return gson.toJson(result);
 	}
 	
+	@Override
+	public List<FmtCampo> listEntityCamposCosu(Long id){
+	
+		List<FmtCampo> listAll=fmtcampoRepository.listCamposCosu(id);
+				
+		return listAll;
+	}
+	
 }

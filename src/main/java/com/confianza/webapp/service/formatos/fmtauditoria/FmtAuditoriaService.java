@@ -10,6 +10,7 @@ package com.confianza.webapp.service.formatos.fmtauditoria;
   */                          
 
 import java.util.List;
+
 import com.confianza.webapp.repository.formatos.fmtauditoria.FmtAuditoria;
 
 public interface FmtAuditoriaService{
@@ -25,5 +26,7 @@ public interface FmtAuditoriaService{
 	public void delete(FmtAuditoria fmtauditoria);	
 	
 	public int getCount();
+
+	public String listAll(int pageSize, int page, long forecons);
 	
 }

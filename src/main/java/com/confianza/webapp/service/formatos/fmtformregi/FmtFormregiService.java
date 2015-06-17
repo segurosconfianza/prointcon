@@ -9,8 +9,13 @@ package com.confianza.webapp.service.formatos.fmtformregi;
   * @app		formatos  
   */                          
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.confianza.webapp.repository.formatos.fmtformregi.FmtFormregi;
+import com.confianza.webapp.utils.Filter;
 
 public interface FmtFormregiService{
 	
@@ -24,6 +29,13 @@ public interface FmtFormregiService{
 	
 	public void delete(FmtFormregi fmtformregi);	
 	
-	public int getCount();
-	
+	public String insertRecordIntermediario(Long vefocons, String user, String paramsData, ArrayList<MultipartFile> file);
+
+	public String updateRecordIntermediario(Long vefocons, Long forecons, String user, String paramsData, ArrayList<MultipartFile> file);
+
+	public FmtFormregi listEntity(Long id);
+
+	public String loadFormRegiIntermediario(Long vefocons, String user, int pageSize, int page, String order, String stringFilters);
+
+	public int getCount(List<Filter> filters);
 }

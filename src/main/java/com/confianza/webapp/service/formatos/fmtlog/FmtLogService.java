@@ -10,6 +10,7 @@ package com.confianza.webapp.service.formatos.fmtlog;
   */                          
 
 import java.util.List;
+
 import com.confianza.webapp.repository.formatos.fmtlog.FmtLog;
 
 public interface FmtLogService{
@@ -25,5 +26,7 @@ public interface FmtLogService{
 	public void delete(FmtLog fmtlog);	
 	
 	public int getCount();
+
+	public String insertIntermediario(FmtLog fmtlog);
 	
 }

@@ -19,35 +19,6 @@ import com.confianza.webapp.service.framework.frmsesion.FrmSesionService;
 @Service
 public class userDetails {	
 	
-	@Autowired
-	private FrmSesionService frmSesionService;		
-	
-	public void onAuthenticationSuccess(){       
-	    
-    	HttpSession session=this.getSession();
-    	
-    	FrmSesion frmSesion = (FrmSesion) session.getAttribute("frmSesion");
-    	
-    	if(frmSesion==null){
-	        
-	    	String sesion = session.getId();
-	    	
-	    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    	String user = authentication.getName();
-	    	
-	    	FrmSesion frmSesionNew=frmSesionService.insert(user, sesion);
-	        //asigno la session del usuario al HttpSession para luego ser tomada
-	        
-	        session.setAttribute("frmSesion", frmSesionNew);
-		}        
-		
-    }
-	
-	public static HttpSession getSession() {
-	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-	    return attr.getRequest().getSession(); // true == allow create
-	}
-	
 	public List<String> getRoles() {
 		
 		List<String> roles = new ArrayList<String>();

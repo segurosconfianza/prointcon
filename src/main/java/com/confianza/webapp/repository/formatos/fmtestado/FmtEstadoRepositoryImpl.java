@@ -158,4 +158,33 @@ public class FmtEstadoRepositoryImpl implements FmtEstadoRepository{
 		getSession().save(fmtestado);	
 		return fmtestado;
 	}
+	
+	/**
+	 * Metodo de consulta para los registros de la tabla FmtEstado
+	 * @return FmtEstado = coleccion de objetos de la case FmtEstado que contiene los datos encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public List<FmtEstado> listAll(int init, int limit, long forecons){
+		try{
+			String sql = "select "+FmtEstado.getColumnNames()
+					   + "from FMT_ESTADO "
+					   + "where ESTAFORE = :forecons";
+						
+			Query query = getSession().createSQLQuery(sql)
+						 .addEntity(FmtEstado.class)
+						 .setParameter("forecons", forecons);
+						 
+			if(limit!=0){
+				query.setFirstResult(init);			
+				query.setMaxResults(limit);
+			}
+					     
+			return query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

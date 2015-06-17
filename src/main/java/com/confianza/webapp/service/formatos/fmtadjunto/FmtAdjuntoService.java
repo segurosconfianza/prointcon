@@ -10,7 +10,12 @@ package com.confianza.webapp.service.formatos.fmtadjunto;
   */                          
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.confianza.webapp.repository.formatos.fmtadjunto.FmtAdjunto;
+import com.confianza.webapp.repository.framework.frmarchivo.FrmArchivo;
 
 public interface FmtAdjuntoService{
 	
@@ -25,5 +30,13 @@ public interface FmtAdjuntoService{
 	public void delete(FmtAdjunto fmtadjunto);	
 	
 	public int getCount();
+
+	public boolean insertAdjuntos(Long forecons, String user, List<FrmArchivo> listAll);
+
+	public void listAdjunto(long forecons, HttpServletRequest request, HttpServletResponse response);
+
+	public List<FmtAdjunto> listAdjuntoActivos(long forecons);
+
+	public String updateIntermediario(FmtAdjunto fmtadjunto);
 	
 }

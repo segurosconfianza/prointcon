@@ -24,4 +24,6 @@ public interface FmtEstadoRepository {
 	public FmtEstado insert(FmtEstado fmtestado);
 	
 	public int getCount();
+
+	public List<FmtEstado> listAll(int init, int limit, long forecons);
 }

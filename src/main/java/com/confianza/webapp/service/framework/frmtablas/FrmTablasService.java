@@ -28,5 +28,7 @@ public interface FrmTablasService{
 	public FrmTablas listByTablcodi(String string);
 
 	public String listByTablcodis(String tablcodi);
+
+	public List<FrmTablas> listByCodi(String tablcodi);
 	
 }

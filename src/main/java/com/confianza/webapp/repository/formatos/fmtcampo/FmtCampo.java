@@ -48,8 +48,8 @@ public class FmtCampo {
 	@Column(name = "CAMPNOMB")
 	protected String campnomb; 
 	 
-	@Column(name = "CAMPORDEN")
-	protected Long camporden; 
+	@Column(name = "CAMPORDE")
+	protected Long camporde; 
 	 
 	@Column(name = "CAMPTIPO")
 	protected String camptipo; 
@@ -61,7 +61,10 @@ public class FmtCampo {
 	protected Long campvali; 
 	 
 	@Column(name = "CAMPESTA")
-	protected String campesta; 
+	protected String campesta;
+	
+	@Column(name = "CAMPLABE")
+	protected String camplabe; 
 
 	public FmtCampo(){
 	
@@ -108,11 +111,11 @@ public class FmtCampo {
 	}
 
 	public Long getCamporden(){
-		return camporden;
+		return camporde;
 	}
 	
 	public void setCamporden(Long camporden){
-		this.camporden = camporden;
+		this.camporde = camporden;
 	}
 
 	public String getCamptipo(){
@@ -147,13 +150,20 @@ public class FmtCampo {
 		this.campesta = campesta;
 	}
 
+	public String getCamplabe(){
+		return camplabe;
+	}
+	
+	public void setCamplabe(String camplabe){
+		this.camplabe = camplabe;
+	}	
 
 	static public String[] getNames(){
-		return new String[]{ "campcons", "campvefo", "campauto", "campcomb", "campnomb", "camporden", "camptipo", "camprequ", "campvali", "campesta" };
+		return new String[]{ "campcons", "campvefo", "campauto", "campcomb", "campnomb", "camporde", "camptipo", "camprequ", "campvali", "campesta", "camplabe" };
 	}		
 	
 	static public String getColumnNames(){
-		return " CAMPCONS, CAMPVEFO, CAMPAUTO, CAMPCOMB, CAMPNOMB, CAMPORDEN, CAMPTIPO, CAMPREQU, CAMPVALI, CAMPESTA ";
+		return " CAMPCONS, CAMPVEFO, CAMPAUTO, CAMPCOMB, CAMPNOMB, CAMPORDE, CAMPTIPO, CAMPREQU, CAMPVALI, CAMPESTA, CAMPLABE ";
 	}
 	
 	public String toString(){
@@ -162,10 +172,11 @@ public class FmtCampo {
 			+" CAMPAUTO: "+ this.campauto 
 			+" CAMPCOMB: "+ this.campcomb 
 			+" CAMPNOMB: "+ this.campnomb 
-			+" CAMPORDEN: "+ this.camporden 
+			+" CAMPORDE: "+ this.camporde 
 			+" CAMPTIPO: "+ this.camptipo 
 			+" CAMPREQU: "+ this.camprequ 
 			+" CAMPVALI: "+ this.campvali 
-			+" CAMPESTA: "+ this.campesta ;
+			+" CAMPESTA: "+ this.campesta
+			+" CAMPLABE: "+ this.camplabe ;
 	}
 }

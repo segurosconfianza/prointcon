@@ -160,4 +160,34 @@ public class FmtAuditoriaRepositoryImpl implements FmtAuditoriaRepository{
 		getSession().save(fmtauditoria);	
 		return fmtauditoria;
 	}
+	
+	/**
+	 * Metodo de consulta para los registros de la tabla FmtAuditoria
+	 * @return FmtAuditoria = coleccion de objetos de la case FmtAuditoria que contiene los datos encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public List<FmtAuditoria> listAll(int init, int limit, long forecons){
+		try{
+			String sql = "select "+FmtAuditoria.getColumnNames()
+					   + "from FMT_AUDITORIA "
+					   + "join FMT_FORMREGI ON (FORECONS = AUDICOPK AND audicamp='FmtFormregi' AND FORECONS = :forecons) "
+					   + "join FMT_VALOCAMP ON (VACACONS = AUDICOPK AND audicamp='FmtValocamp' AND VACAFORE = :forecons) ";
+						
+			Query query = getSession().createSQLQuery(sql)
+						 .addEntity(FmtAuditoria.class)
+						 .setParameter("forecons", forecons);
+						 
+			if(limit!=0){
+				query.setFirstResult(init);			
+				query.setMaxResults(limit);
+			}
+					     
+			return query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}	
 }

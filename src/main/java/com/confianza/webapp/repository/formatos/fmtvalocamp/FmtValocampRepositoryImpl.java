@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.confianza.webapp.repository.formatos.fmtformregi.FmtFormregi;
+
 @Repository
 public class FmtValocampRepositoryImpl implements FmtValocampRepository{
 	
@@ -156,5 +158,61 @@ public class FmtValocampRepositoryImpl implements FmtValocampRepository{
 	public FmtValocamp insert(FmtValocamp fmtvalocamp){
 		getSession().save(fmtvalocamp);	
 		return fmtvalocamp;
+	}
+	
+	/**
+	 * Metodo de consulta para los registros de la tabla FmtValocamp
+	 * @return FmtValocamp = coleccion de objetos de la case FmtValocamp que contiene los datos encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public List<FmtValocamp> listAll(int init, int limit, Long vefocons, String user){ 
+		try{
+			String sql = "select "+FmtValocamp.getColumnNames()
+					   + "from FMT_VALOCAMP "
+					   + "join FMT_CAMPO ON (CAMPCONS = VACACAMP AND CAMPVEFO = :vefocons) "
+					   + "join FMT_FORMREGI ON (FORECONS = VACAFORE AND FOREVEFO = :vefocons AND FOREUSER = :user) "
+					   + "order by vacafore,camporde ";
+						
+			Query query = getSession().createSQLQuery(sql)
+					     .addEntity(FmtValocamp.class)
+						 .setParameter("vefocons", vefocons)
+						 .setParameter("user", user);
+						 
+			if(limit!=0){
+				query.setFirstResult(init);			
+				query.setMaxResults(limit);
+			}
+					     
+			return query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * Metodo de consulta para los registros de la tabla FmtValocamp
+	 * @return FmtValocamp = coleccion de objetos de la case FmtValocamp que contiene los datos encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public List<FmtValocamp> listAll(Long vacafore){ 
+		try{
+			String sql = "select "+FmtValocamp.getColumnNames()
+					   + "from FMT_VALOCAMP "
+					   + "where  vacafore = :vacafore";
+						
+			Query query = getSession().createSQLQuery(sql)
+					     .addEntity(FmtValocamp.class)
+						 .setParameter("vacafore", vacafore);						 			
+					     
+			return query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

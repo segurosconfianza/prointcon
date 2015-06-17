@@ -1,6 +1,7 @@
 package com.confianza.webapp.controller.formatos.fmtadjunto;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 
+
+
 import com.confianza.webapp.service.formatos.fmtadjunto.FmtAdjuntoService;
+import com.confianza.webapp.service.framework.frmarchivo.FrmArchivoService;
 import com.confianza.webapp.repository.formatos.fmtadjunto.FmtAdjunto;
 
 @Controller
@@ -23,6 +27,9 @@ public class CFmtAdjunto {
 
 	@Autowired
 	private FmtAdjuntoService fmtadjuntoService;
+	
+	@Autowired
+	private FrmArchivoService frmArchivoService;
 	
 	public CFmtAdjunto() {
 		super();
@@ -70,5 +77,14 @@ public class CFmtAdjunto {
 	public String insert(@RequestBody FmtAdjunto fmtadjunto, HttpServletRequest request){
 		
 		return this.fmtadjuntoService.insert(fmtadjunto);		
+	}
+	
+	@RequestMapping(value = "/downloadFile", params = {"adjuarch","adjunomb"},  method = RequestMethod.GET)
+	@ResponseStatus( HttpStatus.CREATED )
+	@ResponseBody
+	public void downloadFile(@RequestParam("adjuarch") Long adjuarch, @RequestParam("adjunomb") String adjunomb, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	
+		frmArchivoService.getfrmArchivo(adjuarch, adjunomb, request, response);
+		
 	}
 }

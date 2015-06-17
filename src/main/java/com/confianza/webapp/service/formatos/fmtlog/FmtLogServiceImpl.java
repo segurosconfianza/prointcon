@@ -95,4 +95,8 @@ public class FmtLogServiceImpl implements FmtLogService{
 		return gson.toJson(fmtlogRepository.insert(fmtlog));
 	}
 	
+	@Override
+	public String insertIntermediario(FmtLog fmtlog){
+		return gson.toJson(fmtlogRepository.insert(fmtlog));  
+	}
 }

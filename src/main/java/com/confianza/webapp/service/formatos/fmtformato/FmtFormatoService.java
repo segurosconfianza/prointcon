@@ -28,5 +28,7 @@ public interface FmtFormatoService{
 	public int getCount();
 
 	public String loadData(String formcons);
+
+	public String loadDataIntermediario(String formcons);
 	
 }

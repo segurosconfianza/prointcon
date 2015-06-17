@@ -95,4 +95,18 @@ public class FmtEstadoServiceImpl implements FmtEstadoService{
 		return gson.toJson(fmtestadoRepository.insert(fmtestado));
 	}
 	
+	@Override
+	public String listAll(int pageSize, int page, long forecons){
+	
+		int limit=pageSize;
+		int init=(pageSize*page)-(pageSize);
+		
+		List<FmtEstado> listAll=fmtestadoRepository.listAll(init, limit, forecons);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", listAll);
+		result.put("count", this.getCount());
+		
+		return gson.toJson(result);	
+	}	
 }

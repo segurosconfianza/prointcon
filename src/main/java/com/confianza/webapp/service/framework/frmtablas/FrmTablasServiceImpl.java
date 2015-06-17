@@ -83,4 +83,9 @@ public class FrmTablasServiceImpl implements FrmTablasService{
 		return gson.toJson(combo);
 	}
 	
+	@Override
+	public List<FrmTablas> listByCodi(String tablcodi) {
+		
+		return frmTablasRepository.listsByCodi(tablcodi);
+	}
 }

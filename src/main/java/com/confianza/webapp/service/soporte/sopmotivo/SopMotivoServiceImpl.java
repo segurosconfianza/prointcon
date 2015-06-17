@@ -126,7 +126,7 @@ public class SopMotivoServiceImpl implements SopMotivoService{
 		
 		List<FrmArchivo> listAll;
 		try {
-			listAll = this.frmArchivoService.ingresarArchivos(file);
+			listAll = this.frmArchivoService.ingresarArchivos(file,"archruta");
 			this.sopAdjuntoService.insertAdjuntos(sopMotivo.getMoticons(), listAll);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

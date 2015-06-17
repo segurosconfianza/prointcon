@@ -40,7 +40,7 @@ public class FmtFormregi {
 	protected Long forevefo; 
 	 
 	@Column(name = "FOREFECH")
-	protected oracle.sql.TIMESTAMP forefech; 
+	protected Date forefech; 
 	 
 	@Column(name = "FOREUSER")
 	protected String foreuser; 
@@ -68,11 +68,11 @@ public class FmtFormregi {
 		this.forevefo = forevefo;
 	}
 
-	public oracle.sql.TIMESTAMP getForefech(){
+	public Date getForefech(){
 		return forefech;
 	}
 	
-	public void setForefech(oracle.sql.TIMESTAMP forefech){
+	public void setForefech(Date forefech){
 		this.forefech = forefech;
 	}
 
@@ -98,7 +98,7 @@ public class FmtFormregi {
 	}		
 	
 	static public String getColumnNames(){
-		return " FORECONS, FOREVEFO, FOREFECH, FOREUSER, FOREESTA ";
+		return " forecons, forevefo, forefech, foreuser, foreesta ";
 	}
 	
 	public String toString(){

@@ -28,5 +28,7 @@ public interface FmtVersformService{
 	public int getCount();
 
 	public String lastVersion(Long id);
+
+	public FmtVersform lastVersionEntity(Long id);
 	
 }

@@ -105,4 +105,11 @@ public class FmtVersformServiceImpl implements FmtVersformService{
 		return gson.toJson(result);	
 	}
 	
+	@Override	
+	public FmtVersform lastVersionEntity(Long id){
+		FmtVersform fmtVersform=fmtversformRepository.lastVersion(id);
+		
+		return fmtVersform;	
+	}
+	
 }

@@ -24,4 +24,8 @@ public interface FmtAdjuntoRepository {
 	public FmtAdjunto insert(FmtAdjunto fmtadjunto);
 	
 	public int getCount();
+
+	public FmtAdjunto listAdjunto(long forecons);
+
+	List<FmtAdjunto> listAdjuntoActivos(long forecons);
 }

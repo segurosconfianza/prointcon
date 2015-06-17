@@ -49,7 +49,7 @@ public class FmtAdjunto {
 	protected String adjuuser; 
 	 
 	@Column(name = "ADJUFECH")
-	protected oracle.sql.TIMESTAMP adjufech; 
+	protected Date adjufech; 
 	 
 	@Column(name = "ADJUESTA")
 	protected String adjuesta; 
@@ -98,11 +98,11 @@ public class FmtAdjunto {
 		this.adjuuser = adjuuser;
 	}
 
-	public oracle.sql.TIMESTAMP getAdjufech(){
+	public Date getAdjufech(){
 		return adjufech;
 	}
 	
-	public void setAdjufech(oracle.sql.TIMESTAMP adjufech){
+	public void setAdjufech(Date adjufech){
 		this.adjufech = adjufech;
 	}
 

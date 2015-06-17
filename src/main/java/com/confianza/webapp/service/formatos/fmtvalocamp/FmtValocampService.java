@@ -10,6 +10,9 @@ package com.confianza.webapp.service.formatos.fmtvalocamp;
   */                          
 
 import java.util.List;
+import java.util.Map;
+
+import com.confianza.webapp.repository.formatos.fmtcampo.FmtCampo;
 import com.confianza.webapp.repository.formatos.fmtvalocamp.FmtValocamp;
 
 public interface FmtValocampService{
@@ -25,5 +28,13 @@ public interface FmtValocampService{
 	public void delete(FmtValocamp fmtvalocamp);	
 	
 	public int getCount();
+
+	public boolean insertValuesIntermediario(Long vefocons, Long forecons, Map<String, Object> parametersData);
+
+	public List<FmtValocamp> listAll(int init, int limit, Long vacafore, String user);
+
+	public boolean updateValuesIntermediario(Long vefocons, Long vacafore, Map<String, Object> parametersData, String user);
+
+	public FmtValocamp updateFmtValocamp(Map<String, Object> parametersData, FmtCampo campo, FmtValocamp fmtValocamp, String user);
 	
 }

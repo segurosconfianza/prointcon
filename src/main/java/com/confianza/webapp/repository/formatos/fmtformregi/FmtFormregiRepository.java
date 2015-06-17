@@ -9,7 +9,10 @@ package com.confianza.webapp.repository.formatos.fmtformregi;
   * @app		formatos  
   */                          
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.confianza.webapp.utils.Filter;
 
 public interface FmtFormregiRepository {
 	
@@ -23,5 +26,7 @@ public interface FmtFormregiRepository {
 	
 	public FmtFormregi insert(FmtFormregi fmtformregi);
 	
-	public int getCount();
+	public List<FmtFormregi> listAll(int init, int limit, Long vefocons, String user, String order, List<Filter> filters);
+
+	public int getCount(List<Filter> filters);
 }

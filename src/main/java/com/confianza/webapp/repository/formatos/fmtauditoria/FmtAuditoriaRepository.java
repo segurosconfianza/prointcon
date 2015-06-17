@@ -24,4 +24,6 @@ public interface FmtAuditoriaRepository {
 	public FmtAuditoria insert(FmtAuditoria fmtauditoria);
 	
 	public int getCount();
+
+	public List<FmtAuditoria> listAll(int init, int limit, long forecons);
 }

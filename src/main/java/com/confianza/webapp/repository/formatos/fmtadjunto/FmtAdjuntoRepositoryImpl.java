@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.confianza.webapp.repository.framework.frmarchivo.FrmArchivo;
+
 @Repository
 public class FmtAdjuntoRepositoryImpl implements FmtAdjuntoRepository{
 	
@@ -159,5 +161,54 @@ public class FmtAdjuntoRepositoryImpl implements FmtAdjuntoRepository{
 	public FmtAdjunto insert(FmtAdjunto fmtadjunto){
 		getSession().save(fmtadjunto);	
 		return fmtadjunto;
+	}
+	
+	/**
+	 * Metodo de consulta para los registros de la tabla FmtAdjunto
+	 * @return FmtAdjunto = coleccion de objetos de la case FmtAdjunto que contiene los datos encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public FmtAdjunto listAdjunto(long forecons){
+		try{
+			String sql = "select "+FmtAdjunto.getColumnNames()
+					   + "from FMT_ADJUNTO "
+					   + "join FRM_ARCHIVO ON (ARCHCODI = ADJUARCH) "
+					   + "where ADJUFORE = :forecons and ADJUESTA='A' ";
+						
+			Query query = getSession().createSQLQuery(sql)
+						 .addEntity(FmtAdjunto.class)
+						 .setParameter("forecons", forecons);
+						 
+			return (FmtAdjunto) query.uniqueResult();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * Metodo de consulta para los registros de la tabla FmtAdjunto
+	 * @return FmtAdjunto = coleccion de objetos de la case FmtAdjunto que contiene los datos encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public List<FmtAdjunto> listAdjuntoActivos(long forecons){
+		try{
+			String sql = "select "+FmtAdjunto.getColumnNames()
+					   + "from FMT_ADJUNTO "					   
+					   + "where ADJUFORE = :forecons and ADJUESTA='A' ";
+						
+			Query query = getSession().createSQLQuery(sql)
+						 .addEntity(FmtAdjunto.class)
+						 .setParameter("forecons", forecons);
+						 
+			return query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

@@ -10,6 +10,7 @@ package com.confianza.webapp.service.formatos.fmtestado;
   */                          
 
 import java.util.List;
+
 import com.confianza.webapp.repository.formatos.fmtestado.FmtEstado;
 
 public interface FmtEstadoService{
@@ -25,5 +26,7 @@ public interface FmtEstadoService{
 	public void delete(FmtEstado fmtestado);	
 	
 	public int getCount();
+
+	public String listAll(int pageSize, int page, long forecons);
 	
 }

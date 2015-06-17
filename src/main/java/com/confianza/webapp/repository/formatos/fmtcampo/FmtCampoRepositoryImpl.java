@@ -175,8 +175,8 @@ public class FmtCampoRepositoryImpl implements FmtCampoRepository{
 	public List<FmtCampo> listCamposCosu(Long id){
 		try{
 			String sql = "select "+FmtCampo.getColumnNames()
-					   + "from Frm_Campo "
-					   + "where paracosu = :id order by paracons";
+					   + "from Fmt_Campo "
+					   + "where campvefo = :id order by camporde";
 						
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(FmtCampo.class)					

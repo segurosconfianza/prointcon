@@ -28,5 +28,7 @@ public interface FmtCampoService{
 	public int getCount();
 
 	public String listCamposCosu(Long id);
+
+	public List<FmtCampo> listEntityCamposCosu(Long id);
 	
 }
