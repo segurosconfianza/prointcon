@@ -10,17 +10,24 @@ package com.confianza.webapp.service.framework.frmi18n;
   */                          
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.confianza.webapp.repository.framework.frmi18n.FrmI18n;
 import com.confianza.webapp.repository.framework.frmi18n.FrmI18nRepository;
+import com.confianza.webapp.utils.JSONUtil;
+import com.google.gson.Gson;
 
 @Service
 public class FrmI18nServiceImpl implements FrmI18nService{
 	
 	@Autowired
 	private FrmI18nRepository frmI18nRepository;
+	
+	@Autowired
+	Gson gson;
 	
 	/**
 	 * @return the frmi18nRepository
@@ -42,9 +49,11 @@ public class FrmI18nServiceImpl implements FrmI18nService{
 	}
 	
 	@Override
-	public List<Object[]> listModulo(String modulo){
+	public String listModulo(String modulo){
 		String[] modulos= modulo.split(",");
-		return frmI18nRepository.listModulo(modulos);
+		
+		List<Map<String, Object>> listAll = JSONUtil.toNameList(new String[]{"etincons", "etinmodu", "etincamp", "etinetiq", "modunomb"},frmI18nRepository.listModulo(modulos));
+		return gson.toJson(listAll);
 	}
 	
 	@Override

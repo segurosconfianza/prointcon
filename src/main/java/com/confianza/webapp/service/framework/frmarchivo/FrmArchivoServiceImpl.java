@@ -39,7 +39,7 @@ import com.confianza.webapp.utils.FileImpl;
 import com.google.gson.Gson;
 
 @Service
-public class FrmArchivoServiceImpl implements FrmArchivoService{
+public class FrmArchivoServiceImpl implements FrmArchivoService{ 
 	
 	@Autowired
 	private FrmArchivoRepository frmArchivoRepository;
@@ -117,7 +117,7 @@ public class FrmArchivoServiceImpl implements FrmArchivoService{
 	}
 	
 	@Override
-	public List<FrmArchivo> ingresarArchivos(ArrayList<MultipartFile> file) throws Exception{
+	public List<FrmArchivo> ingresarArchivos(ArrayList<MultipartFile> file, String ruta) throws Exception{ 
 		
 		FileImpl fileImpl=new FileImpl(file);
 		ArrayList<CFile> files=fileImpl.getFiles();		
@@ -128,8 +128,8 @@ public class FrmArchivoServiceImpl implements FrmArchivoService{
 		if(listAllMd5!=null)
 			listAll=listAllMd5;
 		
-		String ruta=frmTablasService.listByTablcodi("archruta").getTablvast();
-		File dir = new File(ruta+(new Date().getYear()+1900)+"\\"+(new Date().getMonth()+1));
+		String rutaCompleta=frmTablasService.listByTablcodi(ruta).getTablvast();
+		File dir = new File(rutaCompleta+(new Date().getYear()+1900)+"\\"+(new Date().getMonth()+1));
 		if (!dir.exists())
             dir.mkdirs();
 		
@@ -194,7 +194,6 @@ public class FrmArchivoServiceImpl implements FrmArchivoService{
 	public void getfrmArchivo(Long id, String adjunomb, HttpServletRequest request, HttpServletResponse response){
 		try {
 			  FrmArchivo frmArchivo=frmArchivoRepository.list(id);
-			  
 			  // get absolute path of the application
 			  ServletContext context = request.getSession().getServletContext();
 		 
@@ -251,4 +250,5 @@ public class FrmArchivoServiceImpl implements FrmArchivoService{
 		}
 		return mimeType;
 	}
+	
 }

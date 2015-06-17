@@ -128,7 +128,11 @@ public class FrmTablas {
 
 	static public String[] getNames(){
 		return new String[]{ "tablcons", "tablmodu", "tablcodi", "tablclav", "tablvast", "tablvain", "tablfecr", "tablextr" };
-	}		
+	}
+	
+	static public String getColumnNames(){
+		return "tablcons, tablmodu, tablcodi, tablclav, tablvast, tablvain, tablfecr, tablextr ";
+	}
 	
 	public String toString(){
 		return " TABLCONS: "+ this.tablcons 

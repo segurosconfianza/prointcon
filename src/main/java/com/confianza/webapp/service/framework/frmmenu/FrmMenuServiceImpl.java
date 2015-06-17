@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.confianza.webapp.repository.framework.frmmenu.FrmMenu;
 import com.confianza.webapp.repository.framework.frmmenu.FrmMenuRepository;
+import com.confianza.webapp.service.security.RolService;
 import com.confianza.webapp.service.security.userDetails;
 import com.confianza.webapp.utils.JSONUtil;
 import com.google.gson.Gson;
@@ -30,10 +31,13 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 	Gson gson;
 	
 	@Autowired
+	userDetails userDetails;
+	
+	@Autowired
 	private FrmMenuRepository frmMenuRepository;
 	
 	@Autowired
-	private userDetails userDetails;
+	private RolService rolService;
 	
 	/**
 	 * @return the frmmenuRepository
@@ -69,8 +73,6 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 		
 		menuAll.add(0, createUser());
 		menuAll.add(createLogout());
-		
-		userDetails.onAuthenticationSuccess();
 		
 		return gson.toJson(menuAll);
 	}
@@ -174,14 +176,21 @@ public class FrmMenuServiceImpl implements FrmMenuService{
 	@Override
 	public String listAllIntermediario(){		
 		//cargo los menus padres
-		List<String> roles =new ArrayList<String>();
-		roles.add("INTERMEDIARIO_ALL");
 		
-		List<Object[]> menu=this.loadMenu(null,roles);		
+		List<String> perfil =new ArrayList<String>();
+		perfil.add("INTERMEDIARIO");
+		
+		List<Object[]> roles=rolService.loadRoles(perfil);
+		List<String> perfilRoles =new ArrayList<String>();
+		
+		for(Object[] obj:roles)
+			perfilRoles.add(obj[0].toString());
+		
+		List<Object[]> menu=this.loadMenu(null,perfilRoles);		
 		List<Map<String, Object>> menuAll;
 				
 		if(menu!=null)		
-			menuAll = createMenuWithChildren(menu, roles);
+			menuAll = createMenuWithChildren(menu, perfilRoles);
 		else
 			menuAll = createMenuWithoutProfiles();
 		

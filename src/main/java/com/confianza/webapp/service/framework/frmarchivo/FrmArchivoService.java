@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.confianza.webapp.repository.framework.frmarchivo.FrmArchivo;
 import com.confianza.webapp.utils.CFile;
 
-public interface FrmArchivoService{
+public interface FrmArchivoService{ 
 	
 	public String list(Long id);
 	
@@ -34,10 +34,10 @@ public interface FrmArchivoService{
 	
 	public int getCount();
 
-	public List<FrmArchivo> ingresarArchivos(ArrayList<MultipartFile> file) throws Exception;
-
 	public String ingresarArchivoSoporte(String nombreArchivo, String valor) throws Exception;
 
 	public void getfrmArchivo(Long id, String adjunomb, HttpServletRequest request, HttpServletResponse response);
+
+	public List<FrmArchivo> ingresarArchivos(ArrayList<MultipartFile> file, String ruta) throws Exception;
 
 }

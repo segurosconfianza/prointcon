@@ -56,9 +56,7 @@ public class CFrmI18n {
 	@ResponseBody
 	public String listModulo(@RequestParam("modulo") String modulo){
 		
-		List<Map<String, Object>> listAll = JSONUtil.toNameList(new String[]{"etincons", "etinmodu", "etincamp", "etinetiq", "modunomb"},this.frmI18nService.listModulo(modulo));
-		
-		return gson.toJson(listAll);
+		return this.frmI18nService.listModulo(modulo);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
