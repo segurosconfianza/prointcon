@@ -24,7 +24,7 @@ import com.confianza.webapp.repository.pila.pilmotivo.PilMotivoRepository;
 public class PilMotivoServiceImpl implements PilMotivoService{
 	
 	@Autowired
-	private PilMotivoRepository pilmotivoRepository;
+	private PilMotivoRepository pilMotivoRepository;
 	
 	@Autowired
 	Gson gson;
@@ -33,20 +33,20 @@ public class PilMotivoServiceImpl implements PilMotivoService{
 	 * @return the pilmotivoRepository
 	 */
 	public PilMotivoRepository getPilMotivoRepository() {
-		return pilmotivoRepository;
+		return pilMotivoRepository;
 	}
 
 	/**
 	 * @param pilmotivoRepository the pilmotivoRepository to set
 	 */
 	public void setPilMotivoRepository(PilMotivoRepository pilmotivoRepository) {
-		this.pilmotivoRepository = pilmotivoRepository;
+		this.pilMotivoRepository = pilmotivoRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIVO__ALL", "APP_PILMOTIVO__READ"})
 	public String list(Long id){
-		PilMotivo listAll=pilmotivoRepository.list(id);
+		PilMotivo listAll=pilMotivoRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -62,7 +62,7 @@ public class PilMotivoServiceImpl implements PilMotivoService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<PilMotivo> listAll=pilmotivoRepository.listAll(init, limit);
+		List<PilMotivo> listAll=pilMotivoRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -74,25 +74,25 @@ public class PilMotivoServiceImpl implements PilMotivoService{
 	@Override
 	public int getCount(){
 				
-		return pilmotivoRepository.getCount();
+		return pilMotivoRepository.getCount();
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIVO__ALL", "APP_PILMOTIVO__UPDATE"})
 	public String update(PilMotivo pilmotivo){
-		return gson.toJson(pilmotivoRepository.update(pilmotivo));
+		return gson.toJson(pilMotivoRepository.update(pilmotivo));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIVO__ALL", "APP_PILMOTIVO__DELETE"})
 	public void delete(PilMotivo pilmotivo){
-		pilmotivoRepository.delete(pilmotivo);
+		pilMotivoRepository.delete(pilmotivo);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIVO__ALL", "APP_PILMOTIVO__CREATE"})
 	public String insert(PilMotivo pilmotivo){
-		return gson.toJson(pilmotivoRepository.insert(pilmotivo));
+		return gson.toJson(pilMotivoRepository.insert(pilmotivo));
 	}
 	
 }

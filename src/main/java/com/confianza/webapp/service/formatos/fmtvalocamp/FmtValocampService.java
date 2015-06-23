@@ -31,7 +31,7 @@ public interface FmtValocampService{
 
 	public boolean insertValuesIntermediario(Long vefocons, Long forecons, Map<String, Object> parametersData);
 
-	public List<FmtValocamp> listAll(int init, int limit, Long vacafore, String user);
+	public List<FmtValocamp> listAll(int init, int limit, Long vacafore, List<Long> codigosFormRegi);
 
 	public boolean updateValuesIntermediario(Long vefocons, Long vacafore, Map<String, Object> parametersData, String user);
 

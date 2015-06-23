@@ -24,7 +24,7 @@ import com.confianza.webapp.repository.pila.pillog.PilLogRepository;
 public class PilLogServiceImpl implements PilLogService{
 	
 	@Autowired
-	private PilLogRepository pillogRepository;
+	private PilLogRepository pilLogRepository;
 	
 	@Autowired
 	Gson gson;
@@ -33,20 +33,20 @@ public class PilLogServiceImpl implements PilLogService{
 	 * @return the pillogRepository
 	 */
 	public PilLogRepository getPilLogRepository() {
-		return pillogRepository;
+		return pilLogRepository;
 	}
 
 	/**
 	 * @param pillogRepository the pillogRepository to set
 	 */
 	public void setPilLogRepository(PilLogRepository pillogRepository) {
-		this.pillogRepository = pillogRepository;
+		this.pilLogRepository = pillogRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILLOG__ALL", "APP_PILLOG__READ"})
 	public String list(Long id){
-		PilLog listAll=pillogRepository.list(id);
+		PilLog listAll=pilLogRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -62,7 +62,7 @@ public class PilLogServiceImpl implements PilLogService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<PilLog> listAll=pillogRepository.listAll(init, limit);
+		List<PilLog> listAll=pilLogRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -74,25 +74,25 @@ public class PilLogServiceImpl implements PilLogService{
 	@Override
 	public int getCount(){
 				
-		return pillogRepository.getCount();
+		return pilLogRepository.getCount();
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILLOG__ALL", "APP_PILLOG__UPDATE"})
 	public String update(PilLog pillog){
-		return gson.toJson(pillogRepository.update(pillog));
+		return gson.toJson(pilLogRepository.update(pillog));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILLOG__ALL", "APP_PILLOG__DELETE"})
 	public void delete(PilLog pillog){
-		pillogRepository.delete(pillog);
+		pilLogRepository.delete(pillog);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILLOG__ALL", "APP_PILLOG__CREATE"})
 	public String insert(PilLog pillog){
-		return gson.toJson(pillogRepository.insert(pillog));
+		return gson.toJson(pilLogRepository.insert(pillog));
 	}
 	
 }

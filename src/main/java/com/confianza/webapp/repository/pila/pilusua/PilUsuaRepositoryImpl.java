@@ -9,6 +9,10 @@ package com.confianza.webapp.repository.pila.pilusua;
   * @app		pila  
   */                          
 
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Iterator;
 
@@ -19,11 +23,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.confianza.webapp.repository.formatos.fmtformregi.FmtFormregi;
+import com.confianza.webapp.utils.Filter;
+import com.confianza.webapp.utils.SqlFunctions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 @Repository
 public class PilUsuaRepositoryImpl implements PilUsuaRepository{
 	
 	@Autowired
 	private SessionFactory sessionFactory;  	
+	
+	@Autowired
+	private SqlFunctions sqlFunctions;
 	
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
@@ -68,14 +81,18 @@ public class PilUsuaRepositoryImpl implements PilUsuaRepository{
 	 */
 	@Override
 	@Transactional
-	public List<PilUsua> listAll(int init, int limit){
+	public List<PilUsua> listAll(int init, int limit, String order, List<Filter> filters){
 		try{
 			String sql = "select "+PilUsua.getColumnNames()
 					   + "from PIL_USUA ";
-						
+				
+			sql = sqlFunctions.completeSQL(order, filters, sql, PilUsua.getColumnNames());
+			
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(PilUsua.class);
-						 
+					
+			query=sqlFunctions.setParameters(filters, query);
+			
 			if(limit!=0){
 				query.setFirstResult(init);			
 				query.setMaxResults(limit);
@@ -95,13 +112,17 @@ public class PilUsuaRepositoryImpl implements PilUsuaRepository{
 	 */
 	@Override
 	@Transactional
-	public int getCount(){
+	public int getCount(List<Filter> filters){
 		try{
 			String sql = "select count(*) "
 					   + "from PilUsua ";
-						
+					
+			sql = sqlFunctions.completeSQL(null, filters, sql, PilUsua.getColumnNames());
+			
 			Query query = getSession().createQuery(sql);
-	        
+			
+			query=sqlFunctions.setParameters(filters, query);
+			
 			Iterator it = query.list().iterator();
 	        Long ret = new Long(0);
 	        
@@ -191,5 +212,6 @@ public class PilUsuaRepositoryImpl implements PilUsuaRepository{
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}	
+	
 }

@@ -78,7 +78,7 @@ public class FrmTablasServiceImpl implements FrmTablasService{
 		
 		List<Object[]> listAll=frmTablasRepository.listsByTablcodi(tablcodi);
 		//cast de los menu a ser mapeados por cada campo
-		List<Map<String, Object>> combo = JSONUtil.toNameList( new String[]{"value", "label"},listAll );
+		List<Map<String, Object>> combo = JSONUtil.toNameList( new String[]{"value", "label", "icon"},listAll );
 				
 		return gson.toJson(combo);
 	}

@@ -164,7 +164,7 @@ public class FrmTablasRepositoryImpl implements FrmTablasRepository{
 	@Transactional
 	public List<Object[]> listsByTablcodi(String tablcodi){
 		try{
-			String sql = "select tablclav ,tablvast "
+			String sql = "select tablclav ,tablvast, tablextr "
 					   + "from Frm_Tablas "
 					   + "where tablcodi = :id ";
 						

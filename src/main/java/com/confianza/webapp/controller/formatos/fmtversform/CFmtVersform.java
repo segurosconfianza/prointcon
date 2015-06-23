@@ -23,7 +23,7 @@ import com.confianza.webapp.repository.formatos.fmtversform.FmtVersform;
 public class CFmtVersform {
 
 	@Autowired
-	private FmtVersformService fmtversformService;
+	private FmtVersformService fmtVersformService;
 	
 	public CFmtVersform() {
 		super();
@@ -38,14 +38,14 @@ public class CFmtVersform {
 	@ResponseBody
 	public String list(@PathVariable("vefocons") Long vefocons){
 		
-		return this.fmtversformService.list(vefocons);
+		return this.fmtVersformService.list(vefocons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.fmtversformService.listAll(pageSize, page);
+		return this.fmtVersformService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -53,7 +53,7 @@ public class CFmtVersform {
 	@ResponseBody
 	public String update(@RequestBody FmtVersform fmtversform, HttpServletRequest request){
 	
-		return this.fmtversformService.update(fmtversform);
+		return this.fmtVersformService.update(fmtversform);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -62,7 +62,7 @@ public class CFmtVersform {
 	public String delete(@RequestBody FmtVersform fmtversform, HttpServletRequest request){
 	
 		//fmtversform.setesta("B");
-		return this.fmtversformService.update(fmtversform);
+		return this.fmtVersformService.update(fmtversform);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -70,13 +70,13 @@ public class CFmtVersform {
 	@ResponseBody
 	public String insert(@RequestBody FmtVersform fmtversform, HttpServletRequest request){
 		
-		return this.fmtversformService.insert(fmtversform);		
+		return this.fmtVersformService.insert(fmtversform);		
 	}
 	
 	@RequestMapping(value = "/lastVersion.json", method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String lastVersion(@PathVariable("vefoform") Long vefoform){
 		
-		return this.fmtversformService.lastVersion(vefoform);
+		return this.fmtVersformService.lastVersion(vefoform);
 	}
 }

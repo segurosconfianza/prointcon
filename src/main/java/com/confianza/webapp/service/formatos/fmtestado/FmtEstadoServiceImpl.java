@@ -24,7 +24,7 @@ import com.confianza.webapp.repository.formatos.fmtestado.FmtEstadoRepository;
 public class FmtEstadoServiceImpl implements FmtEstadoService{
 	
 	@Autowired
-	private FmtEstadoRepository fmtestadoRepository;
+	private FmtEstadoRepository fmtEstadoRepository;
 	
 	@Autowired
 	Gson gson;
@@ -33,20 +33,20 @@ public class FmtEstadoServiceImpl implements FmtEstadoService{
 	 * @return the fmtestadoRepository
 	 */
 	public FmtEstadoRepository getFmtEstadoRepository() {
-		return fmtestadoRepository;
+		return fmtEstadoRepository;
 	}
 
 	/**
 	 * @param fmtestadoRepository the fmtestadoRepository to set
 	 */
 	public void setFmtEstadoRepository(FmtEstadoRepository fmtestadoRepository) {
-		this.fmtestadoRepository = fmtestadoRepository;
+		this.fmtEstadoRepository = fmtestadoRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_ESTADO_ALL", "FMT_ESTADO_READ"})
 	public String list(Long id){
-		FmtEstado listAll=fmtestadoRepository.list(id);
+		FmtEstado listAll=fmtEstadoRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -62,7 +62,7 @@ public class FmtEstadoServiceImpl implements FmtEstadoService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<FmtEstado> listAll=fmtestadoRepository.listAll(init, limit);
+		List<FmtEstado> listAll=fmtEstadoRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -74,25 +74,25 @@ public class FmtEstadoServiceImpl implements FmtEstadoService{
 	@Override
 	public int getCount(){
 				
-		return fmtestadoRepository.getCount();
+		return fmtEstadoRepository.getCount();
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_ESTADO_ALL", "FMT_ESTADO_UPDATE"})
 	public String update(FmtEstado fmtestado){
-		return gson.toJson(fmtestadoRepository.update(fmtestado));
+		return gson.toJson(fmtEstadoRepository.update(fmtestado));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_ESTADO_ALL", "FMT_ESTADO_DELETE"})
 	public void delete(FmtEstado fmtestado){
-		fmtestadoRepository.delete(fmtestado);
+		fmtEstadoRepository.delete(fmtestado);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_ESTADO_ALL", "FMT_ESTADO_CREATE"})
 	public String insert(FmtEstado fmtestado){
-		return gson.toJson(fmtestadoRepository.insert(fmtestado));
+		return gson.toJson(fmtEstadoRepository.insert(fmtestado));
 	}
 	
 	@Override
@@ -101,7 +101,7 @@ public class FmtEstadoServiceImpl implements FmtEstadoService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<FmtEstado> listAll=fmtestadoRepository.listAll(init, limit, forecons);
+		List<FmtEstado> listAll=fmtEstadoRepository.listAll(init, limit, forecons);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);

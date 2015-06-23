@@ -10,7 +10,7 @@
 			<a href="#"><span class="badge"><span class="glyphicon glyphicon-info-sign"> </span></span></a>	
 		</div>
 		<h3>{{ventanaTitulo}}</h3>
-    	<div class="gridStyle" data-ng-grid="gridOptions"></div>
+    	<custom-grid cols="columnDefs" selected-items="selectedItems" custom-options="gridOptions" evento="gridEvento" data-ng-if="directiveGrid"></custom-grid>
     	<!-- ventana modal -->
     	<!-- Modal New -->
 		<div class="modal fade" id="myModalNew" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

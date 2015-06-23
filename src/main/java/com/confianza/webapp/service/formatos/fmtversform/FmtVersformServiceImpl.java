@@ -24,7 +24,7 @@ import com.confianza.webapp.repository.formatos.fmtversform.FmtVersformRepositor
 public class FmtVersformServiceImpl implements FmtVersformService{
 	
 	@Autowired
-	private FmtVersformRepository fmtversformRepository;
+	private FmtVersformRepository fmtVersformRepository;
 	
 	@Autowired
 	Gson gson;
@@ -33,20 +33,20 @@ public class FmtVersformServiceImpl implements FmtVersformService{
 	 * @return the fmtversformRepository
 	 */
 	public FmtVersformRepository getFmtVersformRepository() {
-		return fmtversformRepository;
+		return fmtVersformRepository;
 	}
 
 	/**
 	 * @param fmtversformRepository the fmtversformRepository to set
 	 */
 	public void setFmtVersformRepository(FmtVersformRepository fmtversformRepository) {
-		this.fmtversformRepository = fmtversformRepository;
+		this.fmtVersformRepository = fmtversformRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_VERSFORM_ALL", "FMT_VERSFORM_READ"})
 	public String list(Long id){
-		FmtVersform listAll=fmtversformRepository.list(id);
+		FmtVersform listAll=fmtVersformRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -62,7 +62,7 @@ public class FmtVersformServiceImpl implements FmtVersformService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<FmtVersform> listAll=fmtversformRepository.listAll(init, limit);
+		List<FmtVersform> listAll=fmtVersformRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -74,30 +74,30 @@ public class FmtVersformServiceImpl implements FmtVersformService{
 	@Override
 	public int getCount(){
 				
-		return fmtversformRepository.getCount();
+		return fmtVersformRepository.getCount();
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_VERSFORM_ALL", "FMT_VERSFORM_UPDATE"})
 	public String update(FmtVersform fmtversform){
-		return gson.toJson(fmtversformRepository.update(fmtversform));
+		return gson.toJson(fmtVersformRepository.update(fmtversform));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_VERSFORM_ALL", "FMT_VERSFORM_DELETE"})
 	public void delete(FmtVersform fmtversform){
-		fmtversformRepository.delete(fmtversform);
+		fmtVersformRepository.delete(fmtversform);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_VERSFORM_ALL", "FMT_VERSFORM_CREATE"})
 	public String insert(FmtVersform fmtversform){
-		return gson.toJson(fmtversformRepository.insert(fmtversform));
+		return gson.toJson(fmtVersformRepository.insert(fmtversform));
 	}
 	
 	@Override	
 	public String lastVersion(Long id){
-		FmtVersform listAll=fmtversformRepository.lastVersion(id);
+		FmtVersform listAll=fmtVersformRepository.lastVersion(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -107,7 +107,7 @@ public class FmtVersformServiceImpl implements FmtVersformService{
 	
 	@Override	
 	public FmtVersform lastVersionEntity(Long id){
-		FmtVersform fmtVersform=fmtversformRepository.lastVersion(id);
+		FmtVersform fmtVersform=fmtVersformRepository.lastVersion(id);
 		
 		return fmtVersform;	
 	}

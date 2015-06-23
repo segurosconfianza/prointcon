@@ -40,7 +40,7 @@ public class FmtEstado {
 	protected Long estafore; 
 	 
 	@Column(name = "ESTAFECH")
-	protected oracle.sql.TIMESTAMP estafech; 
+	protected Date estafech; 
 	 
 	@Column(name = "ESTAUSER")
 	protected String estauser; 
@@ -68,11 +68,11 @@ public class FmtEstado {
 		this.estafore = estafore;
 	}
 
-	public oracle.sql.TIMESTAMP getEstafech(){
+	public Date getEstafech(){
 		return estafech;
 	}
 	
-	public void setEstafech(oracle.sql.TIMESTAMP estafech){
+	public void setEstafech(Date estafech){
 		this.estafech = estafech;
 	}
 

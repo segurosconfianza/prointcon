@@ -24,7 +24,7 @@ import com.confianza.webapp.repository.pila.pilauditoria.PilAuditoriaRepository;
 public class PilAuditoriaServiceImpl implements PilAuditoriaService{
 	
 	@Autowired
-	private PilAuditoriaRepository pilauditoriaRepository;
+	private PilAuditoriaRepository pilAuditoriaRepository;
 	
 	@Autowired
 	Gson gson;
@@ -33,20 +33,20 @@ public class PilAuditoriaServiceImpl implements PilAuditoriaService{
 	 * @return the pilauditoriaRepository
 	 */
 	public PilAuditoriaRepository getPilAuditoriaRepository() {
-		return pilauditoriaRepository;
+		return pilAuditoriaRepository;
 	}
 
 	/**
 	 * @param pilauditoriaRepository the pilauditoriaRepository to set
 	 */
 	public void setPilAuditoriaRepository(PilAuditoriaRepository pilauditoriaRepository) {
-		this.pilauditoriaRepository = pilauditoriaRepository;
+		this.pilAuditoriaRepository = pilauditoriaRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__READ"})
 	public String list(Long id){
-		PilAuditoria listAll=pilauditoriaRepository.list(id);
+		PilAuditoria listAll=pilAuditoriaRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -62,7 +62,7 @@ public class PilAuditoriaServiceImpl implements PilAuditoriaService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<PilAuditoria> listAll=pilauditoriaRepository.listAll(init, limit);
+		List<PilAuditoria> listAll=pilAuditoriaRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -74,25 +74,25 @@ public class PilAuditoriaServiceImpl implements PilAuditoriaService{
 	@Override
 	public int getCount(){
 				
-		return pilauditoriaRepository.getCount();
+		return pilAuditoriaRepository.getCount();
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__UPDATE"})
 	public String update(PilAuditoria pilauditoria){
-		return gson.toJson(pilauditoriaRepository.update(pilauditoria));
+		return gson.toJson(pilAuditoriaRepository.update(pilauditoria));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__DELETE"})
 	public void delete(PilAuditoria pilauditoria){
-		pilauditoriaRepository.delete(pilauditoria);
+		pilAuditoriaRepository.delete(pilauditoria);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__CREATE"})
 	public String insert(PilAuditoria pilauditoria){
-		return gson.toJson(pilauditoriaRepository.insert(pilauditoria));
+		return gson.toJson(pilAuditoriaRepository.insert(pilauditoria));
 	}
 	
 }

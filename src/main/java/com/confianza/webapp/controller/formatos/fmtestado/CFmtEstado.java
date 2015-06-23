@@ -23,7 +23,7 @@ import com.confianza.webapp.repository.formatos.fmtestado.FmtEstado;
 public class CFmtEstado {
 
 	@Autowired
-	private FmtEstadoService fmtestadoService;
+	private FmtEstadoService fmtEstadoService;
 	
 	public CFmtEstado() {
 		super();
@@ -38,14 +38,14 @@ public class CFmtEstado {
 	@ResponseBody
 	public String list(@PathVariable("estacons") Long estacons){
 		
-		return this.fmtestadoService.list(estacons);
+		return this.fmtEstadoService.list(estacons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.fmtestadoService.listAll(pageSize, page);
+		return this.fmtEstadoService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -53,7 +53,7 @@ public class CFmtEstado {
 	@ResponseBody
 	public String update(@RequestBody FmtEstado fmtestado, HttpServletRequest request){
 	
-		return this.fmtestadoService.update(fmtestado);
+		return this.fmtEstadoService.update(fmtestado);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -62,7 +62,7 @@ public class CFmtEstado {
 	public String delete(@RequestBody FmtEstado fmtestado, HttpServletRequest request){
 	
 		//fmtestado.setesta("B");
-		return this.fmtestadoService.update(fmtestado);
+		return this.fmtEstadoService.update(fmtestado);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -70,6 +70,6 @@ public class CFmtEstado {
 	@ResponseBody
 	public String insert(@RequestBody FmtEstado fmtestado, HttpServletRequest request){
 		
-		return this.fmtestadoService.insert(fmtestado);		
+		return this.fmtEstadoService.insert(fmtestado);		
 	}
 }

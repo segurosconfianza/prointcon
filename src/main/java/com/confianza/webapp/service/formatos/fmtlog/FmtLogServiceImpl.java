@@ -24,7 +24,7 @@ import com.confianza.webapp.repository.formatos.fmtlog.FmtLogRepository;
 public class FmtLogServiceImpl implements FmtLogService{
 	
 	@Autowired
-	private FmtLogRepository fmtlogRepository;
+	private FmtLogRepository fmtLogRepository;
 	
 	@Autowired
 	Gson gson;
@@ -33,20 +33,20 @@ public class FmtLogServiceImpl implements FmtLogService{
 	 * @return the fmtlogRepository
 	 */
 	public FmtLogRepository getFmtLogRepository() {
-		return fmtlogRepository;
+		return fmtLogRepository;
 	}
 
 	/**
 	 * @param fmtlogRepository the fmtlogRepository to set
 	 */
 	public void setFmtLogRepository(FmtLogRepository fmtlogRepository) {
-		this.fmtlogRepository = fmtlogRepository;
+		this.fmtLogRepository = fmtlogRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_LOG_ALL", "FMT_LOG_READ"})
 	public String list(Long id){
-		FmtLog listAll=fmtlogRepository.list(id);
+		FmtLog listAll=fmtLogRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -62,7 +62,7 @@ public class FmtLogServiceImpl implements FmtLogService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<FmtLog> listAll=fmtlogRepository.listAll(init, limit);
+		List<FmtLog> listAll=fmtLogRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -74,29 +74,29 @@ public class FmtLogServiceImpl implements FmtLogService{
 	@Override
 	public int getCount(){
 				
-		return fmtlogRepository.getCount();
+		return fmtLogRepository.getCount();
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_LOG_ALL", "FMT_LOG_UPDATE"})
 	public String update(FmtLog fmtlog){
-		return gson.toJson(fmtlogRepository.update(fmtlog));
+		return gson.toJson(fmtLogRepository.update(fmtlog));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_LOG_ALL", "FMT_LOG_DELETE"})
 	public void delete(FmtLog fmtlog){
-		fmtlogRepository.delete(fmtlog);
+		fmtLogRepository.delete(fmtlog);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_LOG_ALL", "FMT_LOG_CREATE"})
 	public String insert(FmtLog fmtlog){
-		return gson.toJson(fmtlogRepository.insert(fmtlog));
+		return gson.toJson(fmtLogRepository.insert(fmtlog));
 	}
 	
 	@Override
 	public String insertIntermediario(FmtLog fmtlog){
-		return gson.toJson(fmtlogRepository.insert(fmtlog));  
+		return gson.toJson(fmtLogRepository.insert(fmtlog));  
 	}
 }

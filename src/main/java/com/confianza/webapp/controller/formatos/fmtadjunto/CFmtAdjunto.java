@@ -26,7 +26,7 @@ import com.confianza.webapp.repository.formatos.fmtadjunto.FmtAdjunto;
 public class CFmtAdjunto {
 
 	@Autowired
-	private FmtAdjuntoService fmtadjuntoService;
+	private FmtAdjuntoService fmtAdjuntoService;
 	
 	@Autowired
 	private FrmArchivoService frmArchivoService;
@@ -44,14 +44,14 @@ public class CFmtAdjunto {
 	@ResponseBody
 	public String list(@PathVariable("adjucons") Long adjucons){
 		
-		return this.fmtadjuntoService.list(adjucons);
+		return this.fmtAdjuntoService.list(adjucons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.fmtadjuntoService.listAll(pageSize, page);
+		return this.fmtAdjuntoService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -59,7 +59,7 @@ public class CFmtAdjunto {
 	@ResponseBody
 	public String update(@RequestBody FmtAdjunto fmtadjunto, HttpServletRequest request){
 	
-		return this.fmtadjuntoService.update(fmtadjunto);
+		return this.fmtAdjuntoService.update(fmtadjunto);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -68,7 +68,7 @@ public class CFmtAdjunto {
 	public String delete(@RequestBody FmtAdjunto fmtadjunto, HttpServletRequest request){
 	
 		//fmtadjunto.setesta("B");
-		return this.fmtadjuntoService.update(fmtadjunto);
+		return this.fmtAdjuntoService.update(fmtadjunto);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -76,7 +76,7 @@ public class CFmtAdjunto {
 	@ResponseBody
 	public String insert(@RequestBody FmtAdjunto fmtadjunto, HttpServletRequest request){
 		
-		return this.fmtadjuntoService.insert(fmtadjunto);		
+		return this.fmtAdjuntoService.insert(fmtadjunto);		
 	}
 	
 	@RequestMapping(value = "/downloadFile", params = {"adjuarch","adjunomb"},  method = RequestMethod.GET)
@@ -86,5 +86,13 @@ public class CFmtAdjunto {
 	
 		frmArchivoService.getfrmArchivo(adjuarch, adjunomb, request, response);
 		
+	}
+	
+	@RequestMapping(value = "/listAdjunto.json", params = {"forecons"},  method = RequestMethod.GET, produces={"application/json"})
+	@ResponseStatus( HttpStatus.CREATED )
+	@ResponseBody
+	public void listAdjuntoFmtAdjunto(@RequestParam("forecons") long forecons, HttpServletRequest request, HttpServletResponse response) {
+	
+		this.fmtAdjuntoService.listAdjunto(forecons, request, response);
 	}
 }

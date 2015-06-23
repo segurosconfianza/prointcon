@@ -22,7 +22,7 @@ import com.confianza.webapp.repository.pila.pillog.PilLog;
 public class CPilLog {
 
 	@Autowired
-	private PilLogService pillogService;
+	private PilLogService pilLogService;
 	
 	public CPilLog() {
 		super();
@@ -37,14 +37,14 @@ public class CPilLog {
 	@ResponseBody
 	public String list(@PathVariable("slogcons") Long slogcons){
 		
-		return this.pillogService.list(slogcons);
+		return this.pilLogService.list(slogcons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.pillogService.listAll(pageSize, page);
+		return this.pilLogService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -52,7 +52,7 @@ public class CPilLog {
 	@ResponseBody
 	public String update(@RequestBody PilLog pillog, HttpServletRequest request){
 	
-		return this.pillogService.update(pillog);
+		return this.pilLogService.update(pillog);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -61,7 +61,7 @@ public class CPilLog {
 	public String delete(@RequestBody PilLog pillog, HttpServletRequest request){
 	
 		//pillog.setesta("B");
-		return this.pillogService.update(pillog);
+		return this.pilLogService.update(pillog);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -69,6 +69,6 @@ public class CPilLog {
 	@ResponseBody
 	public String insert(@RequestBody PilLog pillog, HttpServletRequest request){
 		
-		return this.pillogService.insert(pillog);		
+		return this.pilLogService.insert(pillog);		
 	}
 }

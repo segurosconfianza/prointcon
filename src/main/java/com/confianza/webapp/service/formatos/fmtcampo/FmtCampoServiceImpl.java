@@ -26,7 +26,7 @@ import com.confianza.webapp.repository.formatos.fmtcampo.FmtCampoRepository;
 public class FmtCampoServiceImpl implements FmtCampoService{
 	
 	@Autowired
-	private FmtCampoRepository fmtcampoRepository;
+	private FmtCampoRepository fmtCampoRepository;
 	
 	@Autowired
 	Gson gson;
@@ -35,20 +35,20 @@ public class FmtCampoServiceImpl implements FmtCampoService{
 	 * @return the fmtcampoRepository
 	 */
 	public FmtCampoRepository getFmtCampoRepository() {
-		return fmtcampoRepository;
+		return fmtCampoRepository;
 	}
 
 	/**
 	 * @param fmtcampoRepository the fmtcampoRepository to set
 	 */
 	public void setFmtCampoRepository(FmtCampoRepository fmtcampoRepository) {
-		this.fmtcampoRepository = fmtcampoRepository;
+		this.fmtCampoRepository = fmtcampoRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_CAMPO_ALL", "FMT_CAMPO_READ"})
 	public String list(Long id){
-		FmtCampo listAll=fmtcampoRepository.list(id);
+		FmtCampo listAll=fmtCampoRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -64,7 +64,7 @@ public class FmtCampoServiceImpl implements FmtCampoService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<FmtCampo> listAll=fmtcampoRepository.listAll(init, limit);
+		List<FmtCampo> listAll=fmtCampoRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -76,32 +76,32 @@ public class FmtCampoServiceImpl implements FmtCampoService{
 	@Override
 	public int getCount(){
 				
-		return fmtcampoRepository.getCount();
+		return fmtCampoRepository.getCount();
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_CAMPO_ALL", "FMT_CAMPO_UPDATE"})
 	public String update(FmtCampo fmtcampo){
-		return gson.toJson(fmtcampoRepository.update(fmtcampo));
+		return gson.toJson(fmtCampoRepository.update(fmtcampo));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_CAMPO_ALL", "FMT_CAMPO_DELETE"})
 	public void delete(FmtCampo fmtcampo){
-		fmtcampoRepository.delete(fmtcampo);
+		fmtCampoRepository.delete(fmtcampo);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_CAMPO_ALL", "FMT_CAMPO_CREATE"})
 	public String insert(FmtCampo fmtcampo){
-		return gson.toJson(fmtcampoRepository.insert(fmtcampo));
+		return gson.toJson(fmtCampoRepository.insert(fmtcampo));
 	}
 	
 	@Override
 	public String listCamposCosu(Long id){
 	
 		Map<String, Object> result = new HashMap<String, Object>();
-		List<FmtCampo> listAll=fmtcampoRepository.listCamposCosu(id);
+		List<FmtCampo> listAll=fmtCampoRepository.listCamposCosu(id);
 		
 		result.put("data", listAll);
 		return gson.toJson(result);
@@ -110,7 +110,7 @@ public class FmtCampoServiceImpl implements FmtCampoService{
 	@Override
 	public List<FmtCampo> listEntityCamposCosu(Long id){
 	
-		List<FmtCampo> listAll=fmtcampoRepository.listCamposCosu(id);
+		List<FmtCampo> listAll=fmtCampoRepository.listCamposCosu(id);
 				
 		return listAll;
 	}

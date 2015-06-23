@@ -28,10 +28,10 @@ import com.confianza.webapp.repository.formatos.fmtvalocamp.FmtValocampRepositor
 public class FmtValocampServiceImpl implements FmtValocampService{
 	
 	@Autowired
-	private FmtValocampRepository fmtvalocampRepository;
+	private FmtValocampRepository fmtValocampRepository;
 	
 	@Autowired
-	private FmtCampoRepository fmtcampoRepository;
+	private FmtCampoRepository fmtCampoRepository;
 	
 	private enum typesData { S, CS, CI, D, I, L, T, O, B, F, TA, TL};
 	
@@ -42,20 +42,20 @@ public class FmtValocampServiceImpl implements FmtValocampService{
 	 * @return the fmtvalocampRepository
 	 */
 	public FmtValocampRepository getFmtValocampRepository() {
-		return fmtvalocampRepository;
+		return fmtValocampRepository;
 	}
 
 	/**
 	 * @param fmtvalocampRepository the fmtvalocampRepository to set
 	 */
 	public void setFmtValocampRepository(FmtValocampRepository fmtvalocampRepository) {
-		this.fmtvalocampRepository = fmtvalocampRepository;
+		this.fmtValocampRepository = fmtvalocampRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_VALOCAMP_ALL", "FMT_VALOCAMP_READ"})
 	public String list(Long id){
-		FmtValocamp listAll=fmtvalocampRepository.list(id);
+		FmtValocamp listAll=fmtValocampRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -71,7 +71,7 @@ public class FmtValocampServiceImpl implements FmtValocampService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<FmtValocamp> listAll=fmtvalocampRepository.listAll(init, limit);
+		List<FmtValocamp> listAll=fmtValocampRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -83,32 +83,32 @@ public class FmtValocampServiceImpl implements FmtValocampService{
 	@Override
 	public int getCount(){
 				
-		return fmtvalocampRepository.getCount();
+		return fmtValocampRepository.getCount();
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_VALOCAMP_ALL", "FMT_VALOCAMP_UPDATE"})
 	public String update(FmtValocamp fmtvalocamp){
-		return gson.toJson(fmtvalocampRepository.update(fmtvalocamp));
+		return gson.toJson(fmtValocampRepository.update(fmtvalocamp));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_VALOCAMP_ALL", "FMT_VALOCAMP_DELETE"})
 	public void delete(FmtValocamp fmtvalocamp){
-		fmtvalocampRepository.delete(fmtvalocamp);
+		fmtValocampRepository.delete(fmtvalocamp);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_VALOCAMP_ALL", "FMT_VALOCAMP_CREATE"})
 	public String insert(FmtValocamp fmtvalocamp){
-		return gson.toJson(fmtvalocampRepository.insert(fmtvalocamp));
+		return gson.toJson(fmtValocampRepository.insert(fmtvalocamp));
 	}
 	
 	@Override  
 	public boolean insertValuesIntermediario(Long vefocons, Long forecons, Map<String, Object> parametersData){
 		
 		try{
-			List<FmtCampo> listAllCampos=fmtcampoRepository.listCamposCosu(vefocons);	
+			List<FmtCampo> listAllCampos=fmtCampoRepository.listCamposCosu(vefocons);	
 			
 			for(FmtCampo campo:listAllCampos){
 				FmtValocamp fmtvalocamp=new FmtValocamp();
@@ -116,7 +116,7 @@ public class FmtValocampServiceImpl implements FmtValocampService{
 				fmtvalocamp.setVacafore(forecons);
 				fmtvalocamp.setVacavalo(this.getValue(campo.getCamptipo(), parametersData.get(campo.getCampnomb()).toString()));
 				System.out.println(fmtvalocamp);
-				fmtvalocampRepository.insert(fmtvalocamp);
+				fmtValocampRepository.insert(fmtvalocamp);
 				
 				
 			}	
@@ -128,15 +128,16 @@ public class FmtValocampServiceImpl implements FmtValocampService{
 	}
 	
 	@Override
-	public List<FmtValocamp> listAll(int init, int limit, Long vacafore, String user){
+	public List<FmtValocamp> listAll(int init, int limit, Long vacafore, List<Long> codigosFormRegi){
 	
-		return fmtvalocampRepository.listAll(init, limit, vacafore, user);
+		return fmtValocampRepository.listAll(init, limit, vacafore, codigosFormRegi);
 	}
 	
 	private String getValue(String tipo, String value){
 		typesData typeData=typesData.valueOf(tipo);
 		double aux;
 		String result="";
+		
 		switch(typeData){
 				case S: result = value;
 						break;
@@ -177,8 +178,8 @@ public class FmtValocampServiceImpl implements FmtValocampService{
 	public boolean updateValuesIntermediario(Long vefocons, Long vacafore, Map<String, Object> parametersData, String user){
 		
 		try{
-			List<FmtCampo> listAllCampos=fmtcampoRepository.listCamposCosu(vefocons);	
-			List<FmtValocamp> listAllValocamp=fmtvalocampRepository.listAll(vacafore);
+			List<FmtCampo> listAllCampos=fmtCampoRepository.listCamposCosu(vefocons);	
+			List<FmtValocamp> listAllValocamp=fmtValocampRepository.listAll(vacafore);
 			
 			for(FmtCampo campo:listAllCampos){
 				for(FmtValocamp fmtValocamp:listAllValocamp){
@@ -200,6 +201,6 @@ public class FmtValocampServiceImpl implements FmtValocampService{
 	@Override  
 	public  FmtValocamp updateFmtValocamp(Map<String, Object> parametersData, FmtCampo campo, FmtValocamp fmtValocamp, String user) {
 		fmtValocamp.setVacavalo(this.getValue(campo.getCamptipo(), parametersData.get(campo.getCampnomb()).toString()));
-		return fmtvalocampRepository.update(fmtValocamp);
+		return fmtValocampRepository.update(fmtValocamp);
 	}
 }

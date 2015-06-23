@@ -9,6 +9,7 @@ package com.confianza.webapp.repository.formatos.fmtformregi;
   * @app		formatos  
   */                          
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.confianza.webapp.utils.Filter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 @Repository
 public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
@@ -34,6 +37,9 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	
 	@Autowired
 	private FmtFormregiInterceptor FmtFormregiInterceptor;		
+	
+	@Autowired  
+	Gson gson;
 	
 	public Session getSession() {
 		
@@ -140,11 +146,50 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	 */
 	@Override
 	@Transactional(readOnly=true)
-	public List<FmtFormregi> listAll(int init, int limit, Long vefocons, String user, String order, List<Filter> filters){
+	public List<FmtFormregi> listAll(int init, int limit, Long vefocons, String order, List<Filter> filters){
 		try{
-			String sql = "select "+FmtFormregi.getColumnNames()
+			String sql = "select "+FmtFormregi.getColumnNames().replace("forecons", " distinct(forecons) forecons")
 					   + "from FMT_FORMREGI "
-					   + "join FRM_TABLAS ON (TABLCODI='foreesta' AND TABLCLAV=FOREESTA)  ";
+					   + "join FRM_TABLAS   ON (TABLCODI='foreesta' AND TABLCLAV=FOREESTA) "
+					   + "left join FMT_VALOCAMP ON (VACAFORE=FORECONS) "
+					   + "left join FMT_CAMPO    ON (CAMPCONS=VACACAMP) "
+					   + "join PIL_USUA     ON (USUAUSUA=FOREUSER) ";
+						
+			sql = completeSQL(order, filters, sql);
+			System.out.println("sql: "+sql);
+			
+			Query query = getSession().createSQLQuery(sql)
+						 .addEntity(FmtFormregi.class);
+			
+			query=setParameters(filters, query);
+			
+			if(limit!=0){
+				query.setFirstResult(init);			
+				query.setMaxResults(limit);
+			}
+					     
+			return query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Metodo de consulta para los registros de la tabla FmtFormregi para los analistas
+	 * @return FmtFormregi = coleccion de objetos de la case FmtFormregi que contiene los datos encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional(readOnly=true)
+	public List<FmtFormregi> listAllAdmin(int init, int limit, Long vefocons, String order, List<Filter> filters){
+		try{
+			String sql = "select "+FmtFormregi.getColumnNames().replace("forecons", " distinct(forecons) forecons")
+					   + "from FMT_FORMREGI "
+					   + "join FRM_TABLAS   ON (TABLCODI='foreesta' AND TABLCLAV=FOREESTA) "
+					   + "left join FMT_VALOCAMP ON (VACAFORE=FORECONS) "
+					   + "left join FMT_CAMPO    ON (CAMPCONS=VACACAMP) "
+					   + "join PIL_USUA     ON (USUAUSUA=FOREUSER) ";
 						
 			sql = completeSQL(order, filters, sql);
 			
@@ -164,13 +209,24 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 			return null;
 		}
 	}
-
+	
 	private Query setParameters(List<Filter> filters, Query query) {
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 		
 		for(Filter filter:filters){
-			if((FmtFormregi.getColumnNames()+", tablvast").matches("(.*)"+filter.getCampo()+"(.*)"))
-				if(filter.getTipodato().equals("Date")){
+			    if(filter.getTipo().equals("IN")){
+			    	if(filter.getTipodato().equals("Number")){
+				    	Type listOfTestObject = new TypeToken<List<Long>>(){}.getType();
+						List<Long> listin = gson.fromJson("["+filter.getVal1()+"]", listOfTestObject);
+				    	query.setParameterList(filter.getCampo(), listin);
+			    	}
+			    	else if(filter.getTipodato().equals("Stirng")){
+				    	Type listOfTestObject = new TypeToken<List<String>>(){}.getType();
+						List<String> listin = gson.fromJson("["+filter.getVal1()+"]", listOfTestObject);
+				    	query.setParameterList(filter.getCampo(), listin);
+			    	}
+			    }
+			    else if(filter.getTipodato().equals("Date")){
 					Date parsed=null;
 					try {
 						parsed = format.parse(filter.getVal1());
@@ -189,15 +245,12 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 				}
 				else if(filter.getTipodato().equals("Number")){
 					query.setDouble(filter.getCampo(), new Double(filter.getVal1()));
-					System.out.println(filter.getCampo()+" "+new Double(filter.getVal1()));
 					if(filter.getVal2()!=null)	{
 						query.setDouble(filter.getCampo()+"2", new Double(filter.getVal2()));
-						System.out.println(filter.getCampo()+"2 "+new Double(filter.getVal2()));
 					}
 				}
 				else{
 					query.setParameter(filter.getCampo(), filter.getVal1());
-					System.out.println("String: "+filter.getCampo()+" "+filter.getVal1());
 				}
 		}
 		
@@ -210,16 +263,41 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 		
 		sql+= where;
 		
-		if(order!=null && (FmtFormregi.getColumnNames()+", tablvast").matches("(.*)"+order.split(" orber by ")[0]+"(.*)") )
-			sql+=order;
-		
-		System.out.println(sql);
+		if(order!=null){
+			String campoorde=order.replace("order by", "").replace("desc", "").replace("asc", "").replace(" ", "");
+			
+			if((FmtFormregi.getColumnNames()).matches("(.*)"+campoorde+"(.*)")) 
+				sql+=" "+order;
+			else if("tablvast".matches("(.*)"+campoorde+"(.*)")){
+				sql+=order;
+				//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
+				sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, tablvast, ");
+			}
+			else if("usuanomb".matches("(.*)"+campoorde+"(.*)")){
+				sql+=order;
+				//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
+				sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuanomb, ");
+			}			
+			else if("usuasucu".matches("(.*)"+campoorde+"(.*)")){
+				sql+=order;
+				//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
+				sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuasucu, ");
+			}
+			else{
+				if(where.isEmpty())
+					sql+=" WHERE campnomb='"+campoorde+"' ";
+				else
+					sql+=" AND campnomb='"+campoorde+"' ";				
+				sql+=" order by vacavalo ";
+				sql=sql.replace("distinct(forecons) forecons,", "distinct(forecons) forecons, vacavalo, ");
+			}
+		}
 		return sql;
 	}
 
 	private String generateWhere(List<Filter> filters, String where) {
 		for(Filter filter:filters){
-			if((FmtFormregi.getColumnNames()+", tablvast").matches("(.*)"+filter.getCampo()+"(.*)"))
+			if((FmtFormregi.getColumnNames()+", tablvast, usuanomb").matches("(.*)"+filter.getCampo()+"(.*)") || filter.getCampo().equals("usuasucu")){
 				if(where.isEmpty()){
 					where+=" WHERE ";
 					where+= generateCondition(filter);
@@ -228,6 +306,17 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 					where+=" AND ";
 					where+= generateCondition(filter);
 				}
+			}
+			else{
+				if(where.isEmpty()){
+					where+=" WHERE ";
+					where+= "campnomb='"+filter.getCampo()+"' AND "+generateConditionValocamp(filter);
+				}
+				else{
+					where+=" AND ";
+					where+= "campnomb='"+filter.getCampo()+"' AND "+generateConditionValocamp(filter);
+				}
+			}
 		}
 		return where;
 	}
@@ -235,8 +324,17 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	private String generateCondition(Filter filter) {
 		if(filter.getTipo().equals("BETWEEN"))
 			return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
+		if(filter.getTipo().equals("IN"))
+			return filter.getCampo()+" IN(:"+filter.getCampo()+")";
 		else
 			return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo();
+	}
+	
+	private String generateConditionValocamp(Filter filter) {
+		if(filter.getTipo().equals("BETWEEN"))
+			return " vacavalo "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
+		else
+			return " vacavalo "+filter.getTipo()+" :"+filter.getCampo();
 	}
 	
 	/**
@@ -248,9 +346,48 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	@Transactional(readOnly=true)
 	public int getCount(List<Filter> filters){ 
 		try{
-			String sql = "select count(*) "
+			String sql = "select count(distinct(forecons)) "
 					   + "from Fmt_Formregi "
-					   + "join Frm_Tablas ON (TABLCODI='foreesta' AND TABLCLAV=FOREESTA) ";
+					   + "join FRM_TABLAS   ON (TABLCODI='foreesta' AND TABLCLAV=FOREESTA) "
+					   + "join FMT_VALOCAMP ON (VACAFORE=FORECONS) "
+					   + "join FMT_CAMPO    ON (CAMPCONS=VACACAMP) ";
+			
+			sql = completeSQL(null, filters, sql);
+			
+			Query query = getSession().createSQLQuery(sql);
+			
+			query=setParameters(filters, query);
+			
+			Iterator it = query.list().iterator();
+	        Long ret = new Long(0);
+	        
+	        if (it != null)
+		        if (it.hasNext()){
+		        	ret = new Long(it.next().toString());
+		        }
+	        
+			return ret.intValue();
+		}catch(Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	/**
+	 * Metodo de consulta para el conteo de los registros de la tabla FmtFormregi
+	 * @return int = cantidad de registros encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional(readOnly=true)
+	public int getCountAdmin(List<Filter> filters){  
+		try{
+			String sql = "select count(distinct(forecons)) "
+					   + "from Fmt_Formregi "
+					   + "join FRM_TABLAS   ON (TABLCODI='foreesta' AND TABLCLAV=FOREESTA) "
+					   + "join FMT_VALOCAMP ON (VACAFORE=FORECONS) "
+					   + "join FMT_CAMPO    ON (CAMPCONS=VACACAMP) "
+					   + "join PIL_USUA     ON (USUAUSUA=FOREUSER) ";
 			
 			sql = completeSQL(null, filters, sql);
 			

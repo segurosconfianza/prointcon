@@ -26,7 +26,11 @@ public interface FmtFormregiRepository {
 	
 	public FmtFormregi insert(FmtFormregi fmtformregi);
 	
-	public List<FmtFormregi> listAll(int init, int limit, Long vefocons, String user, String order, List<Filter> filters);
+	public List<FmtFormregi> listAll(int init, int limit, Long vefocons, String order, List<Filter> filters);
 
 	public int getCount(List<Filter> filters);
+
+	public List<FmtFormregi> listAllAdmin(int init, int limit, Long vefocons, String order, List<Filter> filters);
+
+	public int getCountAdmin(List<Filter> filters);
 }

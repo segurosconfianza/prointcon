@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 
+
 import com.confianza.webapp.service.formatos.fmtcampo.FmtCampoService;
 import com.confianza.webapp.repository.formatos.fmtcampo.FmtCampo;
 
@@ -23,7 +24,7 @@ import com.confianza.webapp.repository.formatos.fmtcampo.FmtCampo;
 public class CFmtCampo {
 
 	@Autowired
-	private FmtCampoService fmtcampoService;
+	private FmtCampoService fmtCampoService;
 	
 	public CFmtCampo() {
 		super();
@@ -38,14 +39,14 @@ public class CFmtCampo {
 	@ResponseBody
 	public String list(@PathVariable("campcons") Long campcons){
 		
-		return this.fmtcampoService.list(campcons);
+		return this.fmtCampoService.list(campcons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.fmtcampoService.listAll(pageSize, page);
+		return this.fmtCampoService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -53,7 +54,7 @@ public class CFmtCampo {
 	@ResponseBody
 	public String update(@RequestBody FmtCampo fmtcampo, HttpServletRequest request){
 	
-		return this.fmtcampoService.update(fmtcampo);
+		return this.fmtCampoService.update(fmtcampo);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -62,7 +63,7 @@ public class CFmtCampo {
 	public String delete(@RequestBody FmtCampo fmtcampo, HttpServletRequest request){
 	
 		//fmtcampo.setesta("B");
-		return this.fmtcampoService.update(fmtcampo);
+		return this.fmtCampoService.update(fmtcampo);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -70,13 +71,13 @@ public class CFmtCampo {
 	@ResponseBody
 	public String insert(@RequestBody FmtCampo fmtcampo, HttpServletRequest request){
 		
-		return this.fmtcampoService.insert(fmtcampo);		
-	}
+		return this.fmtCampoService.insert(fmtcampo);		
+	}		
 	
-	@RequestMapping(value = "/params.json", params = {"paracons"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@RequestMapping(value = "/campos.json", params = {"campvefo"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
-	public String listCamposCosu(@RequestParam("paracons") Long paracons){
+	public String listCamposCosu(@RequestParam("campvefo") Long campvefo){
 		
-		return this.fmtcampoService.listCamposCosu(paracons);
+		return this.fmtCampoService.listCamposCosu(campvefo);
 	}
 }

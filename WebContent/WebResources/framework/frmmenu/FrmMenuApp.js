@@ -27,6 +27,12 @@ FrmMainApp.config(['$routeProvider',
   	      },
   	      controller: 'PilUsuaController'
   	    }).
+  	  when('/Planilla/:PlanillaId', {
+  	      templateUrl: function(params) {
+  	          return  WEB_SERVER+'FmtFormato/Planilla/';
+  	      },
+  	      controller: 'PlanillaController'
+  	    }).	  
    	    otherwise({
    	      
    	    });

@@ -22,7 +22,7 @@ import com.confianza.webapp.repository.formatos.fmtvalocamp.FmtValocamp;
 public class CFmtValocamp {
 
 	@Autowired
-	private FmtValocampService fmtvalocampService;
+	private FmtValocampService fmtValocampService;
 	
 	public CFmtValocamp() {
 		super();
@@ -37,14 +37,14 @@ public class CFmtValocamp {
 	@ResponseBody
 	public String list(@PathVariable("vacacons") Long vacacons){
 		
-		return this.fmtvalocampService.list(vacacons);
+		return this.fmtValocampService.list(vacacons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.fmtvalocampService.listAll(pageSize, page);
+		return this.fmtValocampService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -52,7 +52,7 @@ public class CFmtValocamp {
 	@ResponseBody
 	public String update(@RequestBody FmtValocamp fmtvalocamp, HttpServletRequest request){
 	
-		return this.fmtvalocampService.update(fmtvalocamp);
+		return this.fmtValocampService.update(fmtvalocamp);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -61,7 +61,7 @@ public class CFmtValocamp {
 	public String delete(@RequestBody FmtValocamp fmtvalocamp, HttpServletRequest request){
 	
 		//fmtvalocamp.setesta("B");
-		return this.fmtvalocampService.update(fmtvalocamp);
+		return this.fmtValocampService.update(fmtvalocamp);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -69,6 +69,6 @@ public class CFmtValocamp {
 	@ResponseBody
 	public String insert(@RequestBody FmtValocamp fmtvalocamp, HttpServletRequest request){
 		
-		return this.fmtvalocampService.insert(fmtvalocamp);		
+		return this.fmtValocampService.insert(fmtvalocamp);		
 	}
 }

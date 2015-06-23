@@ -24,4 +24,6 @@ public interface PilUsusucuRepository {
 	public PilUsusucu insert(PilUsusucu pilususucu);
 	
 	public int getCount();
+
+	public List<PilUsusucu> listSucur(String user);
 }

@@ -17,7 +17,7 @@ public interface FmtValocampRepository {
 
 	public List<FmtValocamp> listAll(int init, int limit);
 
-	public List<FmtValocamp> listAll(int init, int limit, Long vefocons, String user);
+	public List<FmtValocamp> listAll(int init, int limit, Long vefocons, List<Long> codigosFormRegi);
 
 	public FmtValocamp update(FmtValocamp fmtvalocamp);
 

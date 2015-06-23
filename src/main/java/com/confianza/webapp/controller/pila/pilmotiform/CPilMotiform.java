@@ -22,7 +22,7 @@ import com.confianza.webapp.repository.pila.pilmotiform.PilMotiform;
 public class CPilMotiform {
 
 	@Autowired
-	private PilMotiformService pilmotiformService;
+	private PilMotiformService pilMotiformService;
 	
 	public CPilMotiform() {
 		super();
@@ -37,14 +37,14 @@ public class CPilMotiform {
 	@ResponseBody
 	public String list(@PathVariable("mofocons") Long mofocons){
 		
-		return this.pilmotiformService.list(mofocons);
+		return this.pilMotiformService.list(mofocons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.pilmotiformService.listAll(pageSize, page);
+		return this.pilMotiformService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -52,7 +52,7 @@ public class CPilMotiform {
 	@ResponseBody
 	public String update(@RequestBody PilMotiform pilmotiform, HttpServletRequest request){
 	
-		return this.pilmotiformService.update(pilmotiform);
+		return this.pilMotiformService.update(pilmotiform);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -61,7 +61,7 @@ public class CPilMotiform {
 	public String delete(@RequestBody PilMotiform pilmotiform, HttpServletRequest request){
 	
 		//pilmotiform.setesta("B");
-		return this.pilmotiformService.update(pilmotiform);
+		return this.pilMotiformService.update(pilmotiform);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -69,6 +69,6 @@ public class CPilMotiform {
 	@ResponseBody
 	public String insert(@RequestBody PilMotiform pilmotiform, HttpServletRequest request){
 		
-		return this.pilmotiformService.insert(pilmotiform);		
+		return this.pilMotiformService.insert(pilmotiform);		
 	}
 }

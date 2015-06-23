@@ -10,6 +10,7 @@ package com.confianza.webapp.service.pila.pilususucu;
   */                          
 
 import java.util.List;
+
 import com.confianza.webapp.repository.pila.pilususucu.PilUsusucu;
 
 public interface PilUsusucuService{
@@ -25,5 +26,7 @@ public interface PilUsusucuService{
 	public void delete(PilUsusucu pilususucu);	
 	
 	public int getCount();
+
+	public String listSucur();
 	
 }

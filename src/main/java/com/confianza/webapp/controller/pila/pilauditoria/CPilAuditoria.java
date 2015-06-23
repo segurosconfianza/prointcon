@@ -22,7 +22,7 @@ import com.confianza.webapp.repository.pila.pilauditoria.PilAuditoria;
 public class CPilAuditoria {
 
 	@Autowired
-	private PilAuditoriaService pilauditoriaService;
+	private PilAuditoriaService pilAuditoriaService;
 	
 	public CPilAuditoria() {
 		super();
@@ -37,14 +37,14 @@ public class CPilAuditoria {
 	@ResponseBody
 	public String list(@PathVariable("audicons") Long audicons){
 		
-		return this.pilauditoriaService.list(audicons);
+		return this.pilAuditoriaService.list(audicons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.pilauditoriaService.listAll(pageSize, page);
+		return this.pilAuditoriaService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -52,7 +52,7 @@ public class CPilAuditoria {
 	@ResponseBody
 	public String update(@RequestBody PilAuditoria pilauditoria, HttpServletRequest request){
 	
-		return this.pilauditoriaService.update(pilauditoria);
+		return this.pilAuditoriaService.update(pilauditoria);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -61,7 +61,7 @@ public class CPilAuditoria {
 	public String delete(@RequestBody PilAuditoria pilauditoria, HttpServletRequest request){
 	
 		//pilauditoria.setesta("B");
-		return this.pilauditoriaService.update(pilauditoria);
+		return this.pilAuditoriaService.update(pilauditoria);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -69,6 +69,6 @@ public class CPilAuditoria {
 	@ResponseBody
 	public String insert(@RequestBody PilAuditoria pilauditoria, HttpServletRequest request){
 		
-		return this.pilauditoriaService.insert(pilauditoria);		
+		return this.pilAuditoriaService.insert(pilauditoria);		
 	}
 }
