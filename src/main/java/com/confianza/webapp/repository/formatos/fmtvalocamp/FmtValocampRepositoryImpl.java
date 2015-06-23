@@ -167,18 +167,18 @@ public class FmtValocampRepositoryImpl implements FmtValocampRepository{
 	 */
 	@Override
 	@Transactional
-	public List<FmtValocamp> listAll(int init, int limit, Long vefocons, String user){ 
+	public List<FmtValocamp> listAll(int init, int limit, Long vefocons, List<Long> codigosFormRegi){ 
 		try{
 			String sql = "select "+FmtValocamp.getColumnNames()
 					   + "from FMT_VALOCAMP "
 					   + "join FMT_CAMPO ON (CAMPCONS = VACACAMP AND CAMPVEFO = :vefocons) "
-					   + "join FMT_FORMREGI ON (FORECONS = VACAFORE AND FOREVEFO = :vefocons AND FOREUSER = :user) "
+					   + "join FMT_FORMREGI ON (FORECONS = VACAFORE AND FOREVEFO = :vefocons AND FORECONS IN (:lista)) "
 					   + "order by vacafore,camporde ";
 						
 			Query query = getSession().createSQLQuery(sql)
 					     .addEntity(FmtValocamp.class)
 						 .setParameter("vefocons", vefocons)
-						 .setParameter("user", user);
+						 .setParameterList("lista", codigosFormRegi);
 						 
 			if(limit!=0){
 				query.setFirstResult(init);			

@@ -35,7 +35,11 @@ public interface FmtFormregiService{
 
 	public FmtFormregi listEntity(Long id);
 
-	public String loadFormRegiIntermediario(Long vefocons, String user, int pageSize, int page, String order, String stringFilters);
+	public String loadFormRegiIntermediario(Long vefocons, int pageSize, int page, String order, String stringFilters);
 
 	public int getCount(List<Filter> filters);
+
+	public String loadFormRegiAdmin(Long vefocons, int pageSize, int page, String order, String stringFilters);
+
+	public int getCountAdmin(List<Filter> filters);
 }

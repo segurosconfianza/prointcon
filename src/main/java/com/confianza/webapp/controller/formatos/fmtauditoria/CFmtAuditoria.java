@@ -22,7 +22,7 @@ import com.confianza.webapp.repository.formatos.fmtauditoria.FmtAuditoria;
 public class CFmtAuditoria {
 
 	@Autowired
-	private FmtAuditoriaService fmtauditoriaService;
+	private FmtAuditoriaService fmtAuditoriaService;
 	
 	public CFmtAuditoria() {
 		super();
@@ -37,14 +37,14 @@ public class CFmtAuditoria {
 	@ResponseBody
 	public String list(@PathVariable("audicons") Long audicons){
 		
-		return this.fmtauditoriaService.list(audicons);
+		return this.fmtAuditoriaService.list(audicons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.fmtauditoriaService.listAll(pageSize, page);
+		return this.fmtAuditoriaService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -52,7 +52,7 @@ public class CFmtAuditoria {
 	@ResponseBody
 	public String update(@RequestBody FmtAuditoria fmtauditoria, HttpServletRequest request){
 	
-		return this.fmtauditoriaService.update(fmtauditoria);
+		return this.fmtAuditoriaService.update(fmtauditoria);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -61,7 +61,7 @@ public class CFmtAuditoria {
 	public String delete(@RequestBody FmtAuditoria fmtauditoria, HttpServletRequest request){
 	
 		//fmtauditoria.setesta("B");
-		return this.fmtauditoriaService.update(fmtauditoria);
+		return this.fmtAuditoriaService.update(fmtauditoria);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -69,6 +69,6 @@ public class CFmtAuditoria {
 	@ResponseBody
 	public String insert(@RequestBody FmtAuditoria fmtauditoria, HttpServletRequest request){
 		
-		return this.fmtauditoriaService.insert(fmtauditoria);		
+		return this.fmtAuditoriaService.insert(fmtauditoria);		
 	}
 }

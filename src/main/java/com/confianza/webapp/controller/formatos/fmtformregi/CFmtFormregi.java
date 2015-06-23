@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 
+
 import com.confianza.webapp.service.formatos.fmtformregi.FmtFormregiService;
 import com.confianza.webapp.repository.formatos.fmtformregi.FmtFormregi;
 
@@ -22,7 +23,7 @@ import com.confianza.webapp.repository.formatos.fmtformregi.FmtFormregi;
 public class CFmtFormregi {
 
 	@Autowired
-	private FmtFormregiService fmtformregiService;
+	private FmtFormregiService fmtFormregiService;
 	
 	public CFmtFormregi() {
 		super();
@@ -37,14 +38,14 @@ public class CFmtFormregi {
 	@ResponseBody
 	public String list(@PathVariable("forecons") Long forecons){
 		
-		return this.fmtformregiService.list(forecons);
+		return this.fmtFormregiService.list(forecons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.fmtformregiService.listAll(pageSize, page);
+		return this.fmtFormregiService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -52,7 +53,7 @@ public class CFmtFormregi {
 	@ResponseBody
 	public String update(@RequestBody FmtFormregi fmtformregi, HttpServletRequest request){
 	
-		return this.fmtformregiService.update(fmtformregi);
+		return this.fmtFormregiService.update(fmtformregi);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -61,7 +62,7 @@ public class CFmtFormregi {
 	public String delete(@RequestBody FmtFormregi fmtformregi, HttpServletRequest request){
 	
 		//fmtformregi.setesta("B");
-		return this.fmtformregiService.update(fmtformregi);
+		return this.fmtFormregiService.update(fmtformregi);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -69,6 +70,13 @@ public class CFmtFormregi {
 	@ResponseBody
 	public String insert(@RequestBody FmtFormregi fmtformregi, HttpServletRequest request){
 		
-		return this.fmtformregiService.insert(fmtformregi);		
+		return this.fmtFormregiService.insert(fmtformregi);		
+	}
+	
+	@RequestMapping(value = "/loadFormatosAdmin.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseBody
+	public String loadFormatos(@RequestParam("vefocons") Long vefocons, @RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam("filter") String filters) throws Throwable{
+		
+		return this.fmtFormregiService.loadFormRegiAdmin(vefocons, pageSize, page, order, filters);
 	}
 }

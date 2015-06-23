@@ -29,7 +29,7 @@ import com.confianza.webapp.service.formatos.fmtversform.FmtVersformService;
 public class FmtFormatoServiceImpl implements FmtFormatoService{
 	
 	@Autowired
-	private FmtFormatoRepository fmtformatoRepository;
+	private FmtFormatoRepository fmtFormatoRepository;
 	
 	@Autowired
 	private FmtVersformService fmtversformService;
@@ -41,20 +41,20 @@ public class FmtFormatoServiceImpl implements FmtFormatoService{
 	 * @return the fmtformatoRepository
 	 */
 	public FmtFormatoRepository getFmtFormatoRepository() {
-		return fmtformatoRepository;
+		return fmtFormatoRepository;
 	}
 
 	/**
 	 * @param fmtformatoRepository the fmtformatoRepository to set
 	 */
 	public void setFmtFormatoRepository(FmtFormatoRepository fmtformatoRepository) {
-		this.fmtformatoRepository = fmtformatoRepository;
+		this.fmtFormatoRepository = fmtformatoRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_FORMATO_ALL", "FMT_FORMATO_READ"})
 	public String list(Long id){
-		FmtFormato listAll=fmtformatoRepository.list(id);
+		FmtFormato listAll=fmtFormatoRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -70,7 +70,7 @@ public class FmtFormatoServiceImpl implements FmtFormatoService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<FmtFormato> listAll=fmtformatoRepository.listAll(init, limit);
+		List<FmtFormato> listAll=fmtFormatoRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -82,25 +82,25 @@ public class FmtFormatoServiceImpl implements FmtFormatoService{
 	@Override
 	public int getCount(){
 				
-		return fmtformatoRepository.getCount();
+		return fmtFormatoRepository.getCount();
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_FORMATO_ALL", "FMT_FORMATO_UPDATE"})
 	public String update(FmtFormato fmtformato){
-		return gson.toJson(fmtformatoRepository.update(fmtformato));
+		return gson.toJson(fmtFormatoRepository.update(fmtformato));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_FORMATO_ALL", "FMT_FORMATO_DELETE"})
 	public void delete(FmtFormato fmtformato){
-		fmtformatoRepository.delete(fmtformato);
+		fmtFormatoRepository.delete(fmtformato);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_FORMATO_ALL", "FMT_FORMATO_CREATE"})
 	public String insert(FmtFormato fmtformato){
-		return gson.toJson(fmtformatoRepository.insert(fmtformato));
+		return gson.toJson(fmtFormatoRepository.insert(fmtformato));
 	}
 	
 	@Override
@@ -108,12 +108,12 @@ public class FmtFormatoServiceImpl implements FmtFormatoService{
 	public String loadData(String formcons){
 			        
 		//carga la consulta dinamica
-		FmtFormato fmtFormato=fmtformatoRepository.list(new Long(formcons));
+		FmtFormato fmtFormato=fmtFormatoRepository.list(new Long(formcons));
 					
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("titulo", fmtFormato.getFormnomb());
 		result.put("descri", fmtFormato.getFormdesc());
-		result.put("version", this.fmtversformService.lastVersion(new Long(formcons)));
+		result.put("version", this.fmtversformService.lastVersionEntity(new Long(formcons)));
 		return gson.toJson(result);
 	}
 	
@@ -121,7 +121,7 @@ public class FmtFormatoServiceImpl implements FmtFormatoService{
 	public String loadDataIntermediario(String formcons){
 			        
 		//carga la consulta dinamica
-		FmtFormato fmtFormato=fmtformatoRepository.list(new Long(formcons));
+		FmtFormato fmtFormato=fmtFormatoRepository.list(new Long(formcons));
 					
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("titulo", fmtFormato.getFormnomb());

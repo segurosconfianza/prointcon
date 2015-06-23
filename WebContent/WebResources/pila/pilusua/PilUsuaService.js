@@ -3,11 +3,11 @@ var FrmMainApp=angular.module('FrmMainApp');
 FrmMainApp.service('PilUsuaService', function($http) {	    	
     	this.id=0;
     	
-    	this.getData = function(pageSize, page) {    		    		
+    	this.getData = function(pageSize, page, order, filter) {    		    		
     		return $http({
     	        method: 'GET',
     	        url:  WEB_SERVER+'PilUsua/listAll.json',
-    	        params: {page: page, pageSize: pageSize }
+    	        params: {pageSize: pageSize, page: page, order: order, filter: filter }
     	     });
     	 }
     	

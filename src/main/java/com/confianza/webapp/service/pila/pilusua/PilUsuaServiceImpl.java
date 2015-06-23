@@ -9,6 +9,7 @@ package com.confianza.webapp.service.pila.pilusua;
   * @app		pila  
   */                          
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,14 +21,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.confianza.webapp.repository.pila.pilusua.PilUsua;
 import com.confianza.webapp.repository.pila.pilusua.PilUsuaRepository;
+import com.confianza.webapp.utils.Filter;
 
 @Service
 public class PilUsuaServiceImpl implements PilUsuaService{
 	
 	@Autowired
-	private PilUsuaRepository pilusuaRepository;
+	private PilUsuaRepository pilUsuaRepository;
 	
 	@Autowired
 	Gson gson;
@@ -36,72 +39,74 @@ public class PilUsuaServiceImpl implements PilUsuaService{
 	 * @return the pilusuaRepository
 	 */
 	public PilUsuaRepository getPilUsuaRepository() {
-		return pilusuaRepository;
+		return pilUsuaRepository;
 	}
 
 	/**
 	 * @param pilusuaRepository the pilusuaRepository to set
 	 */
 	public void setPilUsuaRepository(PilUsuaRepository pilusuaRepository) {
-		this.pilusuaRepository = pilusuaRepository;
+		this.pilUsuaRepository = pilusuaRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_USUA_ALL", "PIL_USUA_READ"})
 	public String list(Long id){
-		PilUsua listAll=pilusuaRepository.list(id);
+		PilUsua listAll=pilUsuaRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
-		result.put("count", this.getCount());
+		//result.put("count", this.getCount());
 		
 		return gson.toJson(result);	
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_USUA_ALL", "PIL_USUA_READ"})
-	public String listAll(int pageSize, int page){
+	public String listAll(int pageSize, int page, String order, String stringFilters){
 	
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
+		Type listOfTestObject = new TypeToken<List<Filter>>(){}.getType();
+		List<Filter> filters = gson.fromJson("["+stringFilters+"]", listOfTestObject);
 		
-		List<PilUsua> listAll=pilusuaRepository.listAll(init, limit);
+		List<PilUsua> listAll=pilUsuaRepository.listAll(init, limit, order, filters);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
-		result.put("count", this.getCount());
+		result.put("count", this.getCount(filters));
 		
 		return gson.toJson(result);	
 	}	
 	
 	@Override
-	public int getCount(){
+	public int getCount(List<Filter> filters){
 				
-		return pilusuaRepository.getCount();
+		return pilUsuaRepository.getCount(filters);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_USUA_ALL", "PIL_USUA_UPDATE"})
 	public String update(PilUsua pilusua){
-		return gson.toJson(pilusuaRepository.update(pilusua));
+		return gson.toJson(pilUsuaRepository.update(pilusua));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_USUA_ALL", "PIL_USUA_DELETE"})
 	public void delete(PilUsua pilusua){
-		pilusuaRepository.delete(pilusua);
+		pilUsuaRepository.delete(pilusua);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_USUA_ALL", "PIL_USUA_CREATE"})
 	public String insert(PilUsua pilusua){
-		return gson.toJson(pilusuaRepository.insert(pilusua));
+		return gson.toJson(pilUsuaRepository.insert(pilusua));
 	}
 	
 	@Override
 	public String validateUsua(String user, String password){
 		
-		PilUsua usuario=pilusuaRepository.validateUsua(user,password);
+		PilUsua usuario=pilUsuaRepository.validateUsua(user,password);
 		if(usuario!=null)
 			return gson.toJson("true");
 		else

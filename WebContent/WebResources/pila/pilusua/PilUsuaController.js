@@ -1,75 +1,10 @@
 var FrmMainApp=angular.module('FrmMainApp');
 
-FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function($scope, PilUsuaService) {
+FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function($scope, Service) {
     	//botones de los formularios modal
     	$scope.buttonNew=false;
     	$scope.buttonEdit=false;
-    	$scope.buttonDelete=false;    	
-    	
-        $scope.filterOptions = {
-            filterText: "",
-            useExternalFilter: true
-        };
-        
-        $scope.totalServerItems = 0;
-        
-        $scope.pagingOptions = {
-            pageSizes: [5, 10, 20, 50],
-            pageSize: 50,
-            currentPage: 1
-        };  
-        
-        $scope.setPagingData = function(data, page, pageSize){	            
-            $scope.myData = data;
-            $scope.totalServerItems = data.length;
-            if (!$scope.$$phase) {
-                $scope.$apply();
-            }
-        };
-        
-        $scope.getPagedDataAsync = function (pageSize, page, searchText) {
-            setTimeout(function () {
-                var data;
-                if (searchText) {
-                    var ft = searchText.toLowerCase();
-                    
-                    PilUsuaService.getData(pageSize, page).then(function(dataResponse) {  
-                    	
-                    	if(dataResponse.data.error!=undefined)
-                    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
-                    	else{                    	
-	        	            data = dataResponse.data.data.filter(function(item) {
-	                            return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
-	                        });
-	                        $scope.setPagingData(data,page,pageSize);
-	                        $scope.totalServerItems = dataResponse.data.count;
-                    	}
-        	        });   
-                } else {
-                	PilUsuaService.getData(pageSize, page).then(function(dataResponse) {
-                		if(dataResponse.data.error!=undefined)
-                			alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
-                    	else{ 
-                    		$scope.setPagingData(dataResponse.data.data,page,pageSize);
-                    		$scope.totalServerItems = dataResponse.data.count;
-                    	}
-        	        });    
-                }
-            }, 100);
-        };    	       
-    	
-        $scope.$watch('pagingOptions', function (newVal, oldVal) {
-            if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
-              $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-            }
-        }, true);
-        
-        $scope.$watch('filterOptions', function (newVal, oldVal) {
-            if (newVal !== oldVal) {
-              $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-            }
-        }, true);
-    	        
+    	$scope.buttonDelete=false;    	    	                          
               
         function getName(i18n,colum){
         	var log = [];
@@ -96,39 +31,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
         		return log[0].displayName;
         	else 
         		return "";
-        }
-        
-        $scope.gridOptions = {
-                data: 'myData',
-                enablePaging: true,
-                showFooter: true,
-                totalServerItems:'totalServerItems',
-                pagingOptions: $scope.pagingOptions,
-                filterOptions: $scope.filterOptions,
-                multiSelect: false,
-                columnDefs:'columnDefs',
-                selectedItems: [],                
-                showColumnMenu: true,
-                enableColumnResize: true,
-                showFilter : true,
-                afterSelectionChange: function (rowItem, event) {                	
-                	$scope.usuacons= rowItem.entity.usuacons,
-                	 $scope.usuaunit= rowItem.entity.usuaunit,
-                	 $scope.usuadive= rowItem.entity.usuadive,
-                	 $scope.usuatiin= rowItem.entity.usuatiin,
-                	 $scope.usuarazo= rowItem.entity.usuarazo,
-                	 $scope.usuanomb= rowItem.entity.usuanomb,
-                	 $scope.usuaapel= rowItem.entity.usuaapel,
-                	 $scope.usuaemai= rowItem.entity.usuaemai,
-                	 $scope.usuatele= rowItem.entity.usuatele,
-                	 $scope.usuapeco= rowItem.entity.usuapeco,
-                	 $scope.usuausua= rowItem.entity.usuausua,
-                	 $scope.usuapass= rowItem.entity.usuapass,
-                	 $scope.usuatipo= rowItem.entity.usuatipo,
-                	 $scope.usuasucu= rowItem.entity.usuasucu,
-                	 $scope.usuaesta= rowItem.entity.usuaesta                    
-                }
-        };
+        }                
                
        $scope.createRecordForm= function(){
     	    $scope.buttonNew=true;
@@ -149,7 +52,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 			 $scope.usuapass = "" ,
 			 $scope.usuatipo = 2 ,
 			 $scope.usuasucu = "" ,
-			 $scope.usuaesta = A         	
+			 $scope.usuaesta = 'A'         	
         }                
         
 		$scope.loadDatatoForm= function(){			
@@ -176,7 +79,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 		
 		$scope.insertRecord= function(){						
 			
-			PilUsuaService.insertRecord($scope.usuacons,$scope.usuaunit,$scope.usuadive,$scope.usuatiin,$scope.usuarazo,$scope.usuanomb,$scope.usuaapel,$scope.usuaemai,$scope.usuatele,$scope.usuapeco,$scope.usuausua,$scope.usuapass,$scope.usuatipo,$scope.usuasucu,$scope.usuaesta).then(function(dataResponse) {        	            
+			Service.insertRecord($scope.usuacons,$scope.usuaunit,$scope.usuadive,$scope.usuatiin,$scope.usuarazo,$scope.usuanomb,$scope.usuaapel,$scope.usuaemai,$scope.usuatele,$scope.usuapeco,$scope.usuausua,$scope.usuapass,$scope.usuatipo,$scope.usuasucu,$scope.usuaesta).then(function(dataResponse) {        	            
 				row=dataResponse.data;
 				
 				$scope.usuacons = row.usuacons ,
@@ -202,7 +105,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 		
 		$scope.updateRecord= function(){
 			
-			PilUsuaService.updateRecord($scope.usuacons,$scope.usuaunit,$scope.usuadive,$scope.usuatiin,$scope.usuarazo,$scope.usuanomb,$scope.usuaapel,$scope.usuaemai,$scope.usuatele,$scope.usuapeco,$scope.usuausua,$scope.usuapass,$scope.usuatipo,$scope.usuasucu,$scope.usuaesta).then(function(dataResponse) {        	            
+			Service.updateRecord($scope.usuacons,$scope.usuaunit,$scope.usuadive,$scope.usuatiin,$scope.usuarazo,$scope.usuanomb,$scope.usuaapel,$scope.usuaemai,$scope.usuatele,$scope.usuapeco,$scope.usuausua,$scope.usuapass,$scope.usuatipo,$scope.usuasucu,$scope.usuaesta).then(function(dataResponse) {        	            
 				row=dataResponse.data;
 				
 				$scope.usuacons = row.usuacons ,
@@ -229,7 +132,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 		
 		$scope.deleteRecord= function(){
 						
-			PilUsuaService.deleteRecord($scope.usuacons,$scope.usuaunit,$scope.usuadive,$scope.usuatiin,$scope.usuarazo,$scope.usuanomb,$scope.usuaapel,$scope.usuaemai,$scope.usuatele,$scope.usuapeco,$scope.usuausua,$scope.usuapass,$scope.usuatipo,$scope.usuasucu,$scope.usuaesta).then(function(dataResponse) {        	            
+			Service.deleteRecord($scope.usuacons,$scope.usuaunit,$scope.usuadive,$scope.usuatiin,$scope.usuarazo,$scope.usuanomb,$scope.usuaapel,$scope.usuaemai,$scope.usuatele,$scope.usuapeco,$scope.usuausua,$scope.usuapass,$scope.usuatipo,$scope.usuasucu,$scope.usuaesta).then(function(dataResponse) {        	            
 				row=dataResponse.data;
 				
 				$scope.usuacons = row.usuacons ,
@@ -257,33 +160,57 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 		//funcion del inicializar componentes
 		$scope.init = function() {
 			
-			PilUsuaService.getI18n().then(function(dataResponse) {        	                                        	
+			Service.getI18n().then(function(dataResponse) {        	                                        	
 	        	 
-	        	columns=[ 	{ field: "usuacons", displayName: getName(dataResponse.data, "usuacons"), visible: false } ,
-							{ field: "usuaunit", displayName: getName(dataResponse.data, "usuaunit"), visible: true } ,
-							{ field: "usuadive", displayName: getName(dataResponse.data, "usuadive"), visible: true } ,
-							{ field: "usuatiin", displayName: getName(dataResponse.data, "usuatiin"), visible: true } ,
-							{ field: "usuarazo", displayName: getName(dataResponse.data, "usuarazo"), visible: true } ,
-							{ field: "usuanomb", displayName: getName(dataResponse.data, "usuanomb"), visible: true } ,
-							{ field: "usuaapel", displayName: getName(dataResponse.data, "usuaapel"), visible: true } ,
-							{ field: "usuaemai", displayName: getName(dataResponse.data, "usuaemai"), visible: false } ,
-							{ field: "usuatele", displayName: getName(dataResponse.data, "usuatele"), visible: false } ,
-							{ field: "usuapeco", displayName: getName(dataResponse.data, "usuapeco"), visible: true } ,
-							{ field: "usuausua", displayName: getName(dataResponse.data, "usuausua"), visible: true } ,
-							{ field: "usuapass", displayName: getName(dataResponse.data, "usuapass"), visible: false } ,
-							{ field: "usuatipo", displayName: getName(dataResponse.data, "usuatipo"), visible: false } ,
-							{ field: "usuasucu", displayName: getName(dataResponse.data, "usuasucu"), visible: true } ,
-							{ field: "usuaesta", displayName: getName(dataResponse.data, "usuaesta"), visible: false }  
+	        	columns=[ 	{ field: "usuacons", displayName: getName(dataResponse.data, "usuacons"), visible: false, headerCellTemplate: filterBetweenNumber } ,
+							{ field: "usuaunit", displayName: getName(dataResponse.data, "usuaunit"), visible: true, headerCellTemplate: filterText } ,
+							{ field: "usuadive", displayName: getName(dataResponse.data, "usuadive"), visible: true, headerCellTemplate: filterText } ,
+							{ field: "usuatiin", displayName: getName(dataResponse.data, "usuatiin"), visible: true, headerCellTemplate: filterText } ,
+							{ field: "usuarazo", displayName: getName(dataResponse.data, "usuarazo"), visible: true, headerCellTemplate: filterText } ,
+							{ field: "usuanomb", displayName: getName(dataResponse.data, "usuanomb"), visible: true, headerCellTemplate: filterText } ,
+							{ field: "usuaapel", displayName: getName(dataResponse.data, "usuaapel"), visible: true, headerCellTemplate: filterText } ,
+							{ field: "usuaemai", displayName: getName(dataResponse.data, "usuaemai"), visible: false, headerCellTemplate: filterText } ,
+							{ field: "usuatele", displayName: getName(dataResponse.data, "usuatele"), visible: false, headerCellTemplate: filterText } ,
+							{ field: "usuapeco", displayName: getName(dataResponse.data, "usuapeco"), visible: true, headerCellTemplate: filterText } ,
+							{ field: "usuausua", displayName: getName(dataResponse.data, "usuausua"), visible: true, headerCellTemplate: filterText } ,
+							{ field: "usuapass", displayName: getName(dataResponse.data, "usuapass"), visible: false, headerCellTemplate: filterText } ,
+							{ field: "usuatipo", displayName: getName(dataResponse.data, "usuatipo"), visible: false, headerCellTemplate: filterText } ,
+							{ field: "usuasucu", displayName: getName(dataResponse.data, "usuasucu"), visible: true, headerCellTemplate: filterText } ,
+							{ field: "usuaesta", displayName: getName(dataResponse.data, "usuaesta"), visible: false, headerCellTemplate: filterText }  
 	                 ];
 	            
 	            $scope.columnDefs=columns;
 	            
 	            $scope.ventanaTitulo=getName(dataResponse.data, "-");
-	        });
-	        
-			$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
+	            
+	            $scope.gridOptions = {  
+	                	sortInfo:{ fields: ['usuacons'], directions: ['desc']},
+	                	selectedItems: [],
+	                    afterSelectionChange: function (rowItem, event) {
+	                    	 $scope.usuacons= rowItem.entity.usuacons,
+		                   	 $scope.usuaunit= rowItem.entity.usuaunit,
+		                   	 $scope.usuadive= rowItem.entity.usuadive,
+		                   	 $scope.usuatiin= rowItem.entity.usuatiin,
+		                   	 $scope.usuarazo= rowItem.entity.usuarazo,
+		                   	 $scope.usuanomb= rowItem.entity.usuanomb,
+		                   	 $scope.usuaapel= rowItem.entity.usuaapel,
+		                   	 $scope.usuaemai= rowItem.entity.usuaemai,
+		                   	 $scope.usuatele= rowItem.entity.usuatele,
+		                   	 $scope.usuapeco= rowItem.entity.usuapeco,
+		                   	 $scope.usuausua= rowItem.entity.usuausua,
+		                   	 $scope.usuapass= rowItem.entity.usuapass,
+		                   	 $scope.usuatipo= rowItem.entity.usuatipo,
+		                   	 $scope.usuasucu= rowItem.entity.usuasucu,
+		                   	 $scope.usuaesta= rowItem.entity.usuaesta       
+	                    }
+	                };
+	            
+	            $scope.basicSearchQuery=[{campo: 'usuatipo', tipo: "=", val1: 1, tipodato: "Number"} ];
+	            
+	            $scope.directiveGrid=true;
+	        });	        			
 			
-			PilUsuaService.getCombo("usuatiin").then(function(dataResponse) {  
+			Service.getCombo("usuatiin").then(function(dataResponse) {  
 				
 				if(dataResponse.data.error!=undefined)
 		    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
@@ -293,7 +220,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 				}
 	        }); 
 			
-			PilUsuaService.getCombo("usuaesta").then(function(dataResponse) {  
+			Service.getCombo("usuaesta").then(function(dataResponse) {  
 				if(dataResponse.data.error!=undefined)
 		    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 		    	else{				
@@ -302,7 +229,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 				}
 	        });
 
-			PilUsuaService.getSucursales(5).then(function(dataResponse) {    					    					
+			Service.getSucursales(5).then(function(dataResponse) {    					    					
 				if(dataResponse.data.error!=undefined)
 		    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 		    	else{    			   
@@ -310,6 +237,27 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 		    		$scope.usuaesta = $scope.optionsSucursales[1];
 		    	}
 			});
+		}
+		
+		$scope.$on('gridEvento', function(event, pageSize, currentPage, order, searchQuery) {   
+			console.log('gridEvento');
+			$scope.pageSize=pageSize;
+			$scope.currentPage=currentPage;
+			$scope.order=order;
+			$scope.searchQuery=searchQuery;
+			
+	    	if($scope.directiveGrid)
+	    		$scope.loadMyGrid();
+	    });
+		
+		$scope.loadMyGrid= function(){	
+			
+			Service.getData($scope.pageSize, $scope.currentPage, $scope.order, $scope.searchQuery.concat($scope.basicSearchQuery)).then(function(dataResponse) {
+	    		if(dataResponse.data.error!=undefined)
+	    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	        	else 
+	        		$scope.$broadcast('loadDataGrid',dataResponse.data.data, dataResponse.data.count, $scope.pageSize, $scope.currentPage);
+	        });
 		}
 				
     }            

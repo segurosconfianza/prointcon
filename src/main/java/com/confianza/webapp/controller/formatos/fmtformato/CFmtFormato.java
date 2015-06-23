@@ -23,7 +23,7 @@ import com.confianza.webapp.repository.formatos.fmtformato.FmtFormato;
 public class CFmtFormato {
 
 	@Autowired
-	private FmtFormatoService fmtformatoService;
+	private FmtFormatoService fmtFormatoService;
 	
 	public CFmtFormato() {
 		super();
@@ -34,18 +34,23 @@ public class CFmtFormato {
 		return "formatos/fmtformato/FmtFormato";
 	}
 	
+	@RequestMapping("/Planilla/")
+	public String indexPlanilla() {
+		return "pila/planilla/Planilla";
+	}
+	
 	@RequestMapping(value = "/{formcons}.json", method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String list(@PathVariable("formcons") Long formcons){
 		
-		return this.fmtformatoService.list(formcons);
+		return this.fmtFormatoService.list(formcons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.fmtformatoService.listAll(pageSize, page);
+		return this.fmtFormatoService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -53,7 +58,7 @@ public class CFmtFormato {
 	@ResponseBody
 	public String update(@RequestBody FmtFormato fmtformato, HttpServletRequest request){
 	
-		return this.fmtformatoService.update(fmtformato);
+		return this.fmtFormatoService.update(fmtformato);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -62,7 +67,7 @@ public class CFmtFormato {
 	public String delete(@RequestBody FmtFormato fmtformato, HttpServletRequest request){
 	
 		//fmtformato.setesta("B");
-		return this.fmtformatoService.update(fmtformato);
+		return this.fmtFormatoService.update(fmtformato);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -70,13 +75,13 @@ public class CFmtFormato {
 	@ResponseBody
 	public String insert(@RequestBody FmtFormato fmtformato, HttpServletRequest request){
 		
-		return this.fmtformatoService.insert(fmtformato);		
+		return this.fmtFormatoService.insert(fmtformato);		
 	}
 	
 	@RequestMapping(value = "/loadData.json", params = {"formcons"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String loadData(@RequestParam("formcons") String formcons) throws Throwable{
 			
-		return this.fmtformatoService.loadData(formcons);
+		return this.fmtFormatoService.loadData(formcons);
 	}
 }

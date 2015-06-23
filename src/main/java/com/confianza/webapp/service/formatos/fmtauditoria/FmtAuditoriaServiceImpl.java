@@ -24,7 +24,7 @@ import com.confianza.webapp.repository.formatos.fmtauditoria.FmtAuditoriaReposit
 public class FmtAuditoriaServiceImpl implements FmtAuditoriaService{
 	
 	@Autowired
-	private FmtAuditoriaRepository fmtauditoriaRepository;
+	private FmtAuditoriaRepository fmtAuditoriaRepository;
 	
 	@Autowired
 	Gson gson;
@@ -33,20 +33,20 @@ public class FmtAuditoriaServiceImpl implements FmtAuditoriaService{
 	 * @return the fmtauditoriaRepository
 	 */
 	public FmtAuditoriaRepository getFmtAuditoriaRepository() {
-		return fmtauditoriaRepository;
+		return fmtAuditoriaRepository;
 	}
 
 	/**
 	 * @param fmtauditoriaRepository the fmtauditoriaRepository to set
 	 */
 	public void setFmtAuditoriaRepository(FmtAuditoriaRepository fmtauditoriaRepository) {
-		this.fmtauditoriaRepository = fmtauditoriaRepository;
+		this.fmtAuditoriaRepository = fmtauditoriaRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_AUDITORIA_ALL", "FMT_AUDITORIA_READ"})
 	public String list(Long id){
-		FmtAuditoria listAll=fmtauditoriaRepository.list(id);
+		FmtAuditoria listAll=fmtAuditoriaRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -62,7 +62,7 @@ public class FmtAuditoriaServiceImpl implements FmtAuditoriaService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<FmtAuditoria> listAll=fmtauditoriaRepository.listAll(init, limit);
+		List<FmtAuditoria> listAll=fmtAuditoriaRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -74,25 +74,25 @@ public class FmtAuditoriaServiceImpl implements FmtAuditoriaService{
 	@Override
 	public int getCount(){
 				
-		return fmtauditoriaRepository.getCount();
+		return fmtAuditoriaRepository.getCount();
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_AUDITORIA_ALL", "FMT_AUDITORIA_UPDATE"})
 	public String update(FmtAuditoria fmtauditoria){
-		return gson.toJson(fmtauditoriaRepository.update(fmtauditoria));
+		return gson.toJson(fmtAuditoriaRepository.update(fmtauditoria));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_AUDITORIA_ALL", "FMT_AUDITORIA_DELETE"})
 	public void delete(FmtAuditoria fmtauditoria){
-		fmtauditoriaRepository.delete(fmtauditoria);
+		fmtAuditoriaRepository.delete(fmtauditoria);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_AUDITORIA_ALL", "FMT_AUDITORIA_CREATE"})
 	public String insert(FmtAuditoria fmtauditoria){
-		return gson.toJson(fmtauditoriaRepository.insert(fmtauditoria));
+		return gson.toJson(fmtAuditoriaRepository.insert(fmtauditoria));
 	}
 	
 	@Override
@@ -101,7 +101,7 @@ public class FmtAuditoriaServiceImpl implements FmtAuditoriaService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<FmtAuditoria> listAll=fmtauditoriaRepository.listAll(init, limit, forecons);
+		List<FmtAuditoria> listAll=fmtAuditoriaRepository.listAll(init, limit, forecons);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);

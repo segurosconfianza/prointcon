@@ -11,11 +11,13 @@ package com.confianza.webapp.repository.pila.pilusua;
 
 import java.util.List;
 
+import com.confianza.webapp.utils.Filter;
+
 public interface PilUsuaRepository {
 	
 	public PilUsua list(Long id);
 	
-	public List<PilUsua> listAll(int init, int limit);	
+	public List<PilUsua> listAll(int init, int limit, String order, List<Filter> filters);	
 	
 	public PilUsua update(PilUsua pilusua);
 	
@@ -23,7 +25,7 @@ public interface PilUsuaRepository {
 	
 	public PilUsua insert(PilUsua pilusua);
 	
-	public int getCount();
+	public int getCount(List<Filter> filters);
 
 	public PilUsua validateUsua(String user, String password);
 }

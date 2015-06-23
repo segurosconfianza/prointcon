@@ -22,7 +22,7 @@ import com.confianza.webapp.repository.pila.pilususucu.PilUsusucu;
 public class CPilUsusucu {
 
 	@Autowired
-	private PilUsusucuService pilususucuService;
+	private PilUsusucuService pilUsusucuService;
 	
 	public CPilUsusucu() {
 		super();
@@ -37,14 +37,14 @@ public class CPilUsusucu {
 	@ResponseBody
 	public String list(@PathVariable("ussucons") Long ussucons){
 		
-		return this.pilususucuService.list(ussucons);
+		return this.pilUsusucuService.list(ussucons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.pilususucuService.listAll(pageSize, page);
+		return this.pilUsusucuService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -52,7 +52,7 @@ public class CPilUsusucu {
 	@ResponseBody
 	public String update(@RequestBody PilUsusucu pilususucu, HttpServletRequest request){
 	
-		return this.pilususucuService.update(pilususucu);
+		return this.pilUsusucuService.update(pilususucu);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -61,7 +61,7 @@ public class CPilUsusucu {
 	public String delete(@RequestBody PilUsusucu pilususucu, HttpServletRequest request){
 	
 		//pilususucu.setesta("B");
-		return this.pilususucuService.update(pilususucu);
+		return this.pilUsusucuService.update(pilususucu);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -69,6 +69,13 @@ public class CPilUsusucu {
 	@ResponseBody
 	public String insert(@RequestBody PilUsusucu pilususucu, HttpServletRequest request){
 		
-		return this.pilususucuService.insert(pilususucu);		
+		return this.pilUsusucuService.insert(pilususucu);		
+	}
+	
+	@RequestMapping(value = "/listSucursales.json", method = RequestMethod.GET, produces={"application/json"})
+	@ResponseBody
+	public String listSucur(){
+	
+		return this.pilUsusucuService.listSucur();
 	}
 }

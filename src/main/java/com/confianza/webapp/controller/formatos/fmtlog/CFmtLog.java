@@ -22,7 +22,7 @@ import com.confianza.webapp.repository.formatos.fmtlog.FmtLog;
 public class CFmtLog {
 
 	@Autowired
-	private FmtLogService fmtlogService;
+	private FmtLogService fmtLogService;
 	
 	public CFmtLog() {
 		super();
@@ -37,14 +37,14 @@ public class CFmtLog {
 	@ResponseBody
 	public String list(@PathVariable("slogcons") Long slogcons){
 		
-		return this.fmtlogService.list(slogcons);
+		return this.fmtLogService.list(slogcons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.fmtlogService.listAll(pageSize, page);
+		return this.fmtLogService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -52,7 +52,7 @@ public class CFmtLog {
 	@ResponseBody
 	public String update(@RequestBody FmtLog fmtlog, HttpServletRequest request){
 	
-		return this.fmtlogService.update(fmtlog);
+		return this.fmtLogService.update(fmtlog);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -61,7 +61,7 @@ public class CFmtLog {
 	public String delete(@RequestBody FmtLog fmtlog, HttpServletRequest request){
 	
 		//fmtlog.setesta("B");
-		return this.fmtlogService.update(fmtlog);
+		return this.fmtLogService.update(fmtlog);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -69,6 +69,6 @@ public class CFmtLog {
 	@ResponseBody
 	public String insert(@RequestBody FmtLog fmtlog, HttpServletRequest request){
 		
-		return this.fmtlogService.insert(fmtlog);		
+		return this.fmtLogService.insert(fmtlog);		
 	}
 }

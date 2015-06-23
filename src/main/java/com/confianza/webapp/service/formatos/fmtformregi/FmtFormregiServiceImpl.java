@@ -12,6 +12,7 @@ package com.confianza.webapp.service.formatos.fmtformregi;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.confianza.webapp.repository.formatos.fmtadjunto.FmtAdjunto;
 import com.confianza.webapp.repository.formatos.fmtcampo.FmtCampo;
+import com.confianza.webapp.repository.formatos.fmtestado.FmtEstado;
 import com.confianza.webapp.repository.formatos.fmtformregi.FmtFormregi;
 import com.confianza.webapp.repository.formatos.fmtformregi.FmtFormregiRepository;
 import com.confianza.webapp.repository.formatos.fmtvalocamp.FmtValocamp;
@@ -33,6 +35,7 @@ import com.confianza.webapp.repository.framework.frmarchivo.FrmArchivo;
 import com.confianza.webapp.repository.framework.frmtablas.FrmTablas;
 import com.confianza.webapp.service.formatos.fmtadjunto.FmtAdjuntoService;
 import com.confianza.webapp.service.formatos.fmtcampo.FmtCampoService;
+import com.confianza.webapp.service.formatos.fmtestado.FmtEstadoService;
 import com.confianza.webapp.service.formatos.fmtvalocamp.FmtValocampService;
 import com.confianza.webapp.service.framework.frmarchivo.FrmArchivoService;
 import com.confianza.webapp.service.framework.frmtablas.FrmTablasService;
@@ -43,7 +46,7 @@ import com.confianza.webapp.utils.JSONUtil;
 public class FmtFormregiServiceImpl implements FmtFormregiService{
 	
 	@Autowired
-	private FmtFormregiRepository fmtformregiRepository;
+	private FmtFormregiRepository fmtFormregiRepository;
 	
 	@Autowired
 	private FmtValocampService fmtValocampService;
@@ -60,6 +63,9 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 	@Autowired
 	private FrmTablasService frmTablasService;
 	
+	@Autowired
+	private FmtEstadoService fmtEstadoService;
+	
 	@Autowired  
 	Gson gson;
 	
@@ -67,20 +73,20 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 	 * @return the fmtformregiRepository
 	 */
 	public FmtFormregiRepository getFmtFormregiRepository() {
-		return fmtformregiRepository;
+		return fmtFormregiRepository;
 	}
 
 	/**
 	 * @param fmtformregiRepository the fmtformregiRepository to set
 	 */
 	public void setFmtFormregiRepository(FmtFormregiRepository fmtformregiRepository) {
-		this.fmtformregiRepository = fmtformregiRepository;
+		this.fmtFormregiRepository = fmtformregiRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_FORMREGI_ALL", "FMT_FORMREGI_READ"})
 	public String list(Long id){
-		FmtFormregi listAll=fmtformregiRepository.list(id);
+		FmtFormregi listAll=fmtFormregiRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -91,7 +97,7 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 	
 	@Override
 	public FmtFormregi listEntity(Long id){
-		FmtFormregi listAll=fmtformregiRepository.list(id);
+		FmtFormregi listAll=fmtFormregiRepository.list(id);
 		
 		return listAll;	
 	}
@@ -103,7 +109,7 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<FmtFormregi> listAll=fmtformregiRepository.listAll(init, limit);
+		List<FmtFormregi> listAll=fmtFormregiRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -115,19 +121,19 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_FORMREGI_ALL", "FMT_FORMREGI_UPDATE"})
 	public String update(FmtFormregi fmtformregi){
-		return gson.toJson(fmtformregiRepository.update(fmtformregi));
+		return gson.toJson(fmtFormregiRepository.update(fmtformregi));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_FORMREGI_ALL", "FMT_FORMREGI_DELETE"})
 	public void delete(FmtFormregi fmtformregi){
-		fmtformregiRepository.delete(fmtformregi);
+		fmtFormregiRepository.delete(fmtformregi);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_FORMREGI_ALL", "FMT_FORMREGI_CREATE"})
 	public String insert(FmtFormregi fmtformregi){
-		return gson.toJson(fmtformregiRepository.insert(fmtformregi));
+		return gson.toJson(fmtFormregiRepository.insert(fmtformregi));
 	}
 	
 	@Override	
@@ -160,22 +166,26 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 		fmtformregi.setForeesta("A");
 		fmtformregi.setForefech(Calendar.getInstance().getTime());
 		fmtformregi.setForeuser(user);
-		fmtformregiRepository.insert(fmtformregi);
+		fmtFormregiRepository.insert(fmtformregi);
 		return fmtformregi;
 	} 	
 	
 	@Override	
-	public String loadFormRegiIntermediario(Long vefocons, String user, int pageSize, int page, String order, String stringFilters){ 
+	public String loadFormRegiIntermediario(Long vefocons, int pageSize, int page, String order, String stringFilters){ 
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		Type listOfTestObject = new TypeToken<List<Filter>>(){}.getType();
 		List<Filter> filters = gson.fromJson("["+stringFilters+"]", listOfTestObject);
-		try{
-			List<FmtCampo> campos=fmtCampoService.listEntityCamposCosu(vefocons);
-			List<FmtFormregi> registros=fmtformregiRepository.listAll((pageSize*page)-(pageSize), pageSize, vefocons, user, order, filters);
-			List<FmtValocamp> valoresRegistros=fmtValocampService.listAll((pageSize*page)-(pageSize), pageSize*campos.size(), vefocons, user);
-			List<FrmTablas> estados=frmTablasService.listByCodi("foreesta");
-			result.put("data", JSONUtil.toNameList(generateMaps(campos),generateRows(campos, registros, valoresRegistros, estados)));
+		try{			
+			List<FmtFormregi> registros=fmtFormregiRepository.listAll((pageSize*page)-(pageSize), pageSize, vefocons, order, filters);
+			if(registros.size()>0){
+				List<FmtCampo> campos=fmtCampoService.listEntityCamposCosu(vefocons);
+				List<FmtValocamp> valoresRegistros=fmtValocampService.listAll((pageSize*page)-(pageSize), pageSize*campos.size(), vefocons, generateListCodes(registros));
+				List<FrmTablas> estados=frmTablasService.listByCodi("foreesta");
+				result.put("data", JSONUtil.toNameList(generateMaps(campos),generateRows(campos, registros, valoresRegistros, estados)));
+			}
+			else
+				result.put("data", null);
 			result.put("count", this.getCount(filters));
 			
 		}catch (Exception e) {
@@ -185,21 +195,56 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 		
 		return gson.toJson(result);
 	}
+	
+	@Override	
+	public String loadFormRegiAdmin(Long vefocons, int pageSize, int page, String order, String stringFilters){ 
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		Type listOfTestObject = new TypeToken<List<Filter>>(){}.getType();
+		List<Filter> filters = gson.fromJson("["+stringFilters+"]", listOfTestObject);
+		try{			
+			List<FmtFormregi> registros=fmtFormregiRepository.listAllAdmin((pageSize*page)-(pageSize), pageSize, vefocons, order, filters);
+			if(registros.size()>0){
+				List<FmtCampo> campos=fmtCampoService.listEntityCamposCosu(vefocons);
+				List<FmtValocamp> valoresRegistros=fmtValocampService.listAll((pageSize*page)-(pageSize), pageSize*campos.size(), vefocons, generateListCodes(registros));
+				List<FrmTablas> estados=frmTablasService.listByCodi("foreesta");
+				result.put("data", JSONUtil.toNameList(generateMaps(campos),generateRows(campos, registros, valoresRegistros, estados)));
+			}
+			else
+				result.put("data", null);
+			result.put("count", this.getCountAdmin(filters));
+			  
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.put("error", "Ocurrio un error ");
+		}
+		
+		return gson.toJson(result);
+	}
+
+	private List<Long> generateListCodes(List<FmtFormregi> registros) {
+		List<Long> codigosFormRegi = new ArrayList<Long>();
+		for(FmtFormregi registro:registros)
+			codigosFormRegi.add(registro.getForecons());
+		return codigosFormRegi;
+	}
 
 	private String[] generateMaps(List<FmtCampo> campos) {
 		String[] mapa = initMap(campos);
-		int i=4;
+		int i=6;
 		for(FmtCampo campo:campos)
 			mapa[i++]=campo.getCampnomb();
 		return mapa;
 	}
 
 	private String[] initMap(List<FmtCampo> campos) {
-		String[] mapa= new String[4+campos.size()];
+		String[] mapa= new String[6+campos.size()];
 		mapa[0]="forecons";
 		mapa[1]="forefech";
 		mapa[2]="foreesta";
 		mapa[3]="tablvast";
+		mapa[4]="usuanomb";
+		mapa[5]="usuasucu";
 		return mapa;
 	}
 
@@ -214,7 +259,7 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 	}
 
 	private Object[] generateColumns(List<FmtCampo> campos, List<FmtValocamp> valoresRegistros, FmtFormregi registro, List<FrmTablas> estados) {
-		int i=4;
+		int i=6;
 		Object[] fila = initRow(campos, registro, estados);
 		for(FmtCampo campo:campos){
 			for(FmtValocamp valoresRegistro:valoresRegistros){
@@ -229,7 +274,7 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 	}
 
 	private Object[] initRow(List<FmtCampo> campos, FmtFormregi registro, List<FrmTablas> estados) {
-		Object[] fila=new Object[4+campos.size()];
+		Object[] fila=new Object[6+campos.size()];
 		
 		fila[0]=registro.getForecons();
 		fila[1]=registro.getForefech();
@@ -237,13 +282,22 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 		for(FrmTablas estado:estados)
 			if(estado.getTablclav().equals(registro.getForeesta()))
 				fila[3]=estado.getTablvast();
+		
+		fila[4]=registro.getForeuser();
+		fila[5]=registro.getForeuser();
 		return fila;
 	}
 	
 	@Override
 	public int getCount(List<Filter> filters){
 						
-		return fmtformregiRepository.getCount(filters);
+		return fmtFormregiRepository.getCount(filters);
+	}
+	
+	@Override
+	public int getCountAdmin(List<Filter> filters){
+						
+		return fmtFormregiRepository.getCountAdmin(filters);
 	}
 	
 	@Override	
@@ -253,7 +307,7 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 			Type type = new TypeToken<Map<String, Object>>(){}.getType();   						
 			Map<String, Object> parametersData=gson.fromJson(paramsData, type);
 			
-			FmtFormregi fmtformregi = fmtformregiRepository.list(forecons);
+			FmtFormregi fmtformregi = fmtFormregiRepository.list(forecons);
 			
 			if(fmtValocampService.updateValuesIntermediario(vefocons, forecons, parametersData, user))
 				if(insertFiles(user, file, fmtformregi))
@@ -287,8 +341,17 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 	}
 
 	private FmtFormregi updateFmtFormRegi(FmtFormregi fmtformregi, String user) {
+		insertLastEstado(fmtformregi, user);
 		fmtformregi.setForeesta("M");
-		return fmtformregiRepository.update(fmtformregi);
+		return fmtFormregiRepository.update(fmtformregi);
+	}
+
+	private void insertLastEstado(FmtFormregi fmtformregi, String user) {
+		FmtEstado fmtestado=new FmtEstado();
+		fmtestado.setEstaesta(fmtformregi.getForeesta());
+		fmtestado.setEstafech(new Date());
+		fmtestado.setEstafore(fmtformregi.getForecons());
+		fmtestado.setEstauser(user);
 	}
 
 }

@@ -157,4 +157,28 @@ public class PilUsusucuRepositoryImpl implements PilUsusucuRepository{
 		getSession().save(pilususucu);	
 		return pilususucu;
 	}
+	
+	/**
+	 * Metodo de consulta para los registros de la tabla PilUsusucu
+	 * @return PilUsusucu = coleccion de objetos de la case PilUsusucu que contiene los datos encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public List<PilUsusucu> listSucur(String user){
+		try{
+			String sql = "select "+PilUsusucu.getColumnNames()
+					   + "from PIL_USUSUCU "
+					   + "join PIL_USUA ON (USUACONS=USSUUSUA AND USUAUSUA=:user)";
+						
+			Query query = getSession().createSQLQuery(sql)
+						 .addEntity(PilUsusucu.class)
+						 .setParameter("user", user);
+						 				    
+			return query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}	
 }

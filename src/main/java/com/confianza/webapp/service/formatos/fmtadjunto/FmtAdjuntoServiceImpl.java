@@ -35,7 +35,7 @@ import com.confianza.webapp.utils.User;
 public class FmtAdjuntoServiceImpl implements FmtAdjuntoService{
 	
 	@Autowired
-	private FmtAdjuntoRepository fmtadjuntoRepository;
+	private FmtAdjuntoRepository fmtAdjuntoRepository;
 	
 	@Autowired
 	private FrmArchivoService frmArchivoService;
@@ -47,20 +47,20 @@ public class FmtAdjuntoServiceImpl implements FmtAdjuntoService{
 	 * @return the fmtadjuntoRepository
 	 */
 	public FmtAdjuntoRepository getFmtAdjuntoRepository() {
-		return fmtadjuntoRepository;
+		return fmtAdjuntoRepository;
 	}
 
 	/**
 	 * @param fmtadjuntoRepository the fmtadjuntoRepository to set
 	 */
 	public void setFmtAdjuntoRepository(FmtAdjuntoRepository fmtadjuntoRepository) {
-		this.fmtadjuntoRepository = fmtadjuntoRepository;
+		this.fmtAdjuntoRepository = fmtadjuntoRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_ADJUNTO_ALL", "FMT_ADJUNTO_READ"})
 	public String list(Long id){
-		FmtAdjunto listAll=fmtadjuntoRepository.list(id);
+		FmtAdjunto listAll=fmtAdjuntoRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -76,7 +76,7 @@ public class FmtAdjuntoServiceImpl implements FmtAdjuntoService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<FmtAdjunto> listAll=fmtadjuntoRepository.listAll(init, limit);
+		List<FmtAdjunto> listAll=fmtAdjuntoRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -88,25 +88,25 @@ public class FmtAdjuntoServiceImpl implements FmtAdjuntoService{
 	@Override
 	public int getCount(){
 				
-		return fmtadjuntoRepository.getCount();
+		return fmtAdjuntoRepository.getCount();
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_ADJUNTO_ALL", "FMT_ADJUNTO_UPDATE"})
 	public String update(FmtAdjunto fmtadjunto){
-		return gson.toJson(fmtadjuntoRepository.update(fmtadjunto));
+		return gson.toJson(fmtAdjuntoRepository.update(fmtadjunto));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_ADJUNTO_ALL", "FMT_ADJUNTO_DELETE"})
 	public void delete(FmtAdjunto fmtadjunto){
-		fmtadjuntoRepository.delete(fmtadjunto);
+		fmtAdjuntoRepository.delete(fmtadjunto);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_ADJUNTO_ALL", "FMT_ADJUNTO_CREATE"})
 	public String insert(FmtAdjunto fmtadjunto){
-		return gson.toJson(fmtadjuntoRepository.insert(fmtadjunto));
+		return gson.toJson(fmtAdjuntoRepository.insert(fmtadjunto));
 	}
 	
 	@Override	
@@ -121,7 +121,7 @@ public class FmtAdjuntoServiceImpl implements FmtAdjuntoService{
 				fmtAdjunto.setAdjufore(forecons);
 				fmtAdjunto.setAdjunomb(frmArchivo.getArchnomb());
 				fmtAdjunto.setAdjuuser(user);
-				fmtadjuntoRepository.insert(fmtAdjunto);
+				fmtAdjuntoRepository.insert(fmtAdjunto);
 			}
 			return true;
 		}catch(Exception e){ 
@@ -133,18 +133,18 @@ public class FmtAdjuntoServiceImpl implements FmtAdjuntoService{
 	@Override
 	public void listAdjunto(long forecons, HttpServletRequest request, HttpServletResponse response){		
 		
-		FmtAdjunto adjunto=fmtadjuntoRepository.listAdjunto(forecons);
+		FmtAdjunto adjunto=fmtAdjuntoRepository.listAdjunto(forecons);
 		if(adjunto!=null)
 			frmArchivoService.getfrmArchivo(adjunto.getAdjuarch(), adjunto.getAdjunomb(), request, response);
 	}	
 	
 	@Override
 	public List<FmtAdjunto> listAdjuntoActivos(long forecons){
-		return fmtadjuntoRepository.listAdjuntoActivos(forecons);
+		return fmtAdjuntoRepository.listAdjuntoActivos(forecons);
 	}
 	
 	@Override
 	public String updateIntermediario(FmtAdjunto fmtadjunto){
-		return gson.toJson(fmtadjuntoRepository.update(fmtadjunto));
+		return gson.toJson(fmtAdjuntoRepository.update(fmtadjunto));
 	}
 }

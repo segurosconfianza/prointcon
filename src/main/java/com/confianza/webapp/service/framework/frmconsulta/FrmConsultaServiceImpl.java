@@ -124,8 +124,7 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		return gson.toJson(rolAll);
 	}
 	
-	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
+	@Override	
 	public String listComboDynamic(String conscons){
 		
 		//carga la consulta dinamica

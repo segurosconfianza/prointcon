@@ -26,8 +26,10 @@ import com.confianza.webapp.service.formatos.fmtcampo.FmtCampoService;
 import com.confianza.webapp.service.formatos.fmtestado.FmtEstadoService;
 import com.confianza.webapp.service.formatos.fmtformato.FmtFormatoService;
 import com.confianza.webapp.service.formatos.fmtformregi.FmtFormregiService;
+import com.confianza.webapp.service.framework.frmconsulta.FrmConsultaService;
 import com.confianza.webapp.service.framework.frmi18n.FrmI18nService;
 import com.confianza.webapp.service.framework.frmmenu.FrmMenuService;
+import com.confianza.webapp.service.framework.frmtablas.FrmTablasService;
 import com.confianza.webapp.service.pila.pilusua.PilUsuaService;
 import com.confianza.webapp.utils.Filter;
 import com.confianza.webapp.utils.JSONUtil;
@@ -62,6 +64,12 @@ public class CIntermediario {
 	
 	@Autowired
 	private FmtAdjuntoService fmtAdjuntoService;
+	
+	@Autowired
+	private FrmTablasService frmTablasService;
+	
+	@Autowired
+	private FrmConsultaService frmConsultaService;
 	
 	public CIntermediario() {
 		super();
@@ -115,7 +123,7 @@ public class CIntermediario {
 	@ResponseBody
 	public String loadFormatos(@RequestParam("vefocons") Long vefocons, @RequestParam("user") String user, @RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam("filter") String filters) throws Throwable{
 		
-		return this.fmtformregiService.loadFormRegiIntermediario(vefocons, user, pageSize, page, order, filters);
+		return this.fmtformregiService.loadFormRegiIntermediario(vefocons, pageSize, page, order, filters);
 	}
 	
 	@RequestMapping(value = "/FmrI18n/listModulo.json", params = {"modulo"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
@@ -145,6 +153,20 @@ public class CIntermediario {
 	public void listAdjuntoFmtAdjunto(@RequestParam("forecons") long forecons, HttpServletRequest request, HttpServletResponse response) {
 	
 		this.fmtAdjuntoService.listAdjunto(forecons, request, response);
+	}
+	
+	@RequestMapping(value = "/FrmTablas/listByTablcodi.json", params = {"tablcodi"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseBody
+	public String listByTablcodis(@RequestParam("tablcodi") String tablcodi){
+		
+		return this.frmTablasService.listByTablcodis(tablcodi);
+	}
+	
+	@RequestMapping(value = "/FrmConsulta/listComboDynamic.json", params = {"conscons"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseBody
+	public String listComboDynamic(@RequestParam("conscons") String conscons) throws Exception{
+		
+		return this.frmConsultaService.listComboDynamic(conscons);
 	}
 		
 }

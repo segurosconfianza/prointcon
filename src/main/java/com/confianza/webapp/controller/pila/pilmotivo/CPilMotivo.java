@@ -22,7 +22,7 @@ import com.confianza.webapp.repository.pila.pilmotivo.PilMotivo;
 public class CPilMotivo {
 
 	@Autowired
-	private PilMotivoService pilmotivoService;
+	private PilMotivoService pilMotivoService;
 	
 	public CPilMotivo() {
 		super();
@@ -37,14 +37,14 @@ public class CPilMotivo {
 	@ResponseBody
 	public String list(@PathVariable("devocons") Long devocons){
 		
-		return this.pilmotivoService.list(devocons);
+		return this.pilMotivoService.list(devocons);
 	}
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
-		return this.pilmotivoService.listAll(pageSize, page);
+		return this.pilMotivoService.listAll(pageSize, page);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
@@ -52,7 +52,7 @@ public class CPilMotivo {
 	@ResponseBody
 	public String update(@RequestBody PilMotivo pilmotivo, HttpServletRequest request){
 	
-		return this.pilmotivoService.update(pilmotivo);
+		return this.pilMotivoService.update(pilmotivo);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
@@ -61,7 +61,7 @@ public class CPilMotivo {
 	public String delete(@RequestBody PilMotivo pilmotivo, HttpServletRequest request){
 	
 		//pilmotivo.setesta("B");
-		return this.pilmotivoService.update(pilmotivo);
+		return this.pilMotivoService.update(pilmotivo);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
@@ -69,6 +69,6 @@ public class CPilMotivo {
 	@ResponseBody
 	public String insert(@RequestBody PilMotivo pilmotivo, HttpServletRequest request){
 		
-		return this.pilmotivoService.insert(pilmotivo);		
+		return this.pilMotivoService.insert(pilmotivo);		
 	}
 }

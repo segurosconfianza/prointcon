@@ -24,7 +24,7 @@ import com.confianza.webapp.repository.pila.pilmotiform.PilMotiformRepository;
 public class PilMotiformServiceImpl implements PilMotiformService{
 	
 	@Autowired
-	private PilMotiformRepository pilmotiformRepository;
+	private PilMotiformRepository pilMotiformRepository;
 	
 	@Autowired
 	Gson gson;
@@ -33,20 +33,20 @@ public class PilMotiformServiceImpl implements PilMotiformService{
 	 * @return the pilmotiformRepository
 	 */
 	public PilMotiformRepository getPilMotiformRepository() {
-		return pilmotiformRepository;
+		return pilMotiformRepository;
 	}
 
 	/**
 	 * @param pilmotiformRepository the pilmotiformRepository to set
 	 */
 	public void setPilMotiformRepository(PilMotiformRepository pilmotiformRepository) {
-		this.pilmotiformRepository = pilmotiformRepository;
+		this.pilMotiformRepository = pilmotiformRepository;
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIFORM__ALL", "APP_PILMOTIFORM__READ"})
 	public String list(Long id){
-		PilMotiform listAll=pilmotiformRepository.list(id);
+		PilMotiform listAll=pilMotiformRepository.list(id);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -62,7 +62,7 @@ public class PilMotiformServiceImpl implements PilMotiformService{
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
 		
-		List<PilMotiform> listAll=pilmotiformRepository.listAll(init, limit);
+		List<PilMotiform> listAll=pilMotiformRepository.listAll(init, limit);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", listAll);
@@ -74,25 +74,25 @@ public class PilMotiformServiceImpl implements PilMotiformService{
 	@Override
 	public int getCount(){
 				
-		return pilmotiformRepository.getCount();
+		return pilMotiformRepository.getCount();
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIFORM__ALL", "APP_PILMOTIFORM__UPDATE"})
 	public String update(PilMotiform pilmotiform){
-		return gson.toJson(pilmotiformRepository.update(pilmotiform));
+		return gson.toJson(pilMotiformRepository.update(pilmotiform));
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIFORM__ALL", "APP_PILMOTIFORM__DELETE"})
 	public void delete(PilMotiform pilmotiform){
-		pilmotiformRepository.delete(pilmotiform);
+		pilMotiformRepository.delete(pilmotiform);
 	}
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIFORM__ALL", "APP_PILMOTIFORM__CREATE"})
 	public String insert(PilMotiform pilmotiform){
-		return gson.toJson(pilmotiformRepository.insert(pilmotiform));
+		return gson.toJson(pilMotiformRepository.insert(pilmotiform));
 	}
 	
 }

@@ -231,7 +231,7 @@ public class PilUsua {
 	}		
 	
 	static public String getColumnNames(){
-		return " USUACONS, USUAUNIT, USUADIVE, USUATIIN, USUARAZO, USUANOMB, USUAAPEL, USUAEMAI, USUATELE, USUAPECO, USUAUSUA, USUAPASS, USUATIPO, USUASUCU, USUAESTA ";
+		return " usuacons, usuaunit, usuadive, usuatiin, usuarazo, usuanomb, usuaapel, usuaemai, usuatele, usuapeco, usuausua, usuapass, usuatipo, usuasucu, usuaesta ";
 	}
 	
 	public String toString(){
