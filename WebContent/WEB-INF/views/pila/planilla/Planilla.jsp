@@ -4,8 +4,7 @@
 	<div class="row">
       <div class="col-md-6" ng-controller="PlanillaController" ng-init="init()"><!-- Division grid maestro -->      	
         <div class="well well-sm">
-			<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,INTERMEDIARIO_ALL,INTERMEDIARIO_READ"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalNew" ng-click="createRecordForm()"> Nuevo <span class="glyphicon glyphicon-file"> </span></button></sec:authorize>
-			<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,INTERMEDIARIO_ALL,INTERMEDIARIO_READ"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalNew" ng-click="loadDatatoForm()"  > Editar <span class="glyphicon glyphicon-edit"> </span></button></sec:authorize>
+			<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,INTERMEDIARIO_ALL"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalNew" ng-click="gestionarPlanilla()"> Gestionar <span class="glyphicon glyphicon-file"> </span></button></sec:authorize>			
 			<button type="button" class="btn btn-default btn-sm"><a href="#"> Ayuda <span class="glyphicon glyphicon-info-sign"> </span></a></button>	
 		</div>
 		<h2><label ng-bind-html="title |to_trusted"></label></h2><br/>		    
@@ -15,6 +14,10 @@
         
     	<!-- ventana modal -->
     	<!-- Modal New -->
+    	<style>
+    		.modal .modal-dialog { width: 100%; height: 85% }    
+    		.modal .modal-body { height: 97% } 		     	
+		</style>
 		<div class="modal fade" id="myModalNew" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
@@ -25,21 +28,20 @@
 		      </div>
 		      <div class="modal-body">
 		        <form name="formInsert" class="form-horizontal" role="form">
-		        	<div class="form-group" ng-repeat="column in columns" ng-include="'form_renderer.jsp'"></div>			 			 
-			  	
-				   	<div class="form-group">
-					   <label for="file" class="col-sm-3 control-label"><font color="red">*</font>Seleccione el adjunto: </label>
-					   <div class="col-sm-3">			
-						 <input type="file" ng-file-select ng-model="picFile" name="file" multiple="multiple" required>
-					   </div>
-				    </div>
+		            <div class="col-md-3">
+		        		<div class="form-group" ng-repeat="column in columns" ng-include="'form_renderer.jsp'"></div>
+		        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+		        		<button type="button" class="btn btn-success" ng-click="aprobarRecord()">Aprobar <span class="glyphicon glyphicon-check"></span></button>
+		        		<button type="button" class="btn btn-danger" ng-click="devolverRecord()">Devolver <span class="glyphicon glyphicon-warning-sign"> </span></button>
+		        	</div>				        	
+		        	<div class="col-md-9" data-ng-controller="FmtAdjuntoController" ng-click="fixGridRendering()">
+				      	<div class="panel" align="center" ng-if="loadPdf">
+							<button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Cargando...</button>
+						</div>	                
+	      				<object data="{{content}}" style="width:100%;height:95%;"></object>      				
+			    	</div>		  					   	
 	  			</form>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-		        <button type="button" class="btn btn-primary" ng-click="insertRecord(picFile)" ng-show="buttonNew">Registrar <span class="glyphicon glyphicon-floppy-disk"></span></button>
-		        <button type="button" class="btn btn-success" ng-click="updateRecord(picFile)" ng-show="buttonEdit">Guardar Cambios <span class="glyphicon glyphicon-floppy-disk"></span></button>
-		      </div>
+		      </div>		      
 		    </div>
 		  </div>
 		</div>
@@ -48,23 +50,24 @@
 	    <script type="text/ng-template" id="form_renderer.jsp">  
 			  <label for="{{column.camplabe}}" class="col-sm-3 control-label"><label ng-if="column.camprequ == 1"><font color="red">*</font></label>{{column.camplabe}}</label>
 			  <div class="col-sm-3" ng-if="column.camptipo == 'S'">			
-				<input style="width:100%;" type="text" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" ng-required="column.camprequ">
+				<input style="width:100%;" type="text" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" readonly>
 			  </div>
-              <div class="col-sm-3" ng-if="column.camptipo == 'I' || column.camptipo == 'L'">				
-				<input ng-pattern="/^(0|\-?[1-9][0-9]*)$/" style="width:100%;" type="number" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" ng-required="column.camprequ">
+              <div class="col-sm-3" ng-if="column.camptipo == 'I' || column.camptipo == 'L'">	
+				<input style="width:100%;" type="text" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" ui-number-mask="0" readonly>
 			  </div>
 			  <div class="col-sm-3" ng-if="column.camptipo == 'F' || column.camptipo == 'O'">				
-				<input ng-pattern="^(\d|-)?(\d|,)*\.?\d*$" style="width:100%;" type="number" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" ng-required="column.camprequ" step="any">
+				<input style="width:100%;" type="text" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" step="any" ui-number-mask="2" readonly>
 			  </div>
 			  <div class="col-sm-3" ng-if="column.camptipo == 'D'">			
-              	<input style="width:100%;" type="text" datepicker-popup="dd/MM/yyyy" ng-model="Campos[column.campnomb]" is-open="campoDate" ng-click="campoDate=true" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="column.camprequ" ui-date ui-date-format="dd/MM/yyyy" close-text="Cerrar" current-text="Hoy" clear-text="Limpiar"/>
+              	<input style="width:100%;" type="text" datepicker-popup="dd/MM/yyyy" ng-model="Campos[column.campnomb]" is-open="campoDate" ng-click="campoDate=true" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ui-date ui-date-format="dd/MM/yyyy" close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" readonly/>
 			  </div>
               <div class="col-sm-3" ng-if="column.camptipo == 'CS' || column.camptipo == 'CI'">
-				<select class="form-control" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" ng-options="opt.value as opt.label for opt in options[column.campcomb]" ng-required="column.camprequ"></select>
+				<select class="form-control" name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" ng-options="opt.value as opt.label for opt in options[column.campcomb]" readonly></select>
 	  	      </div>
 			  <div class="col-sm-3" ng-if="column.camptipo == 'TA' || column.camptipo == 'TL'">
-				<textarea name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" ng-required="column.camprequ" rows="20" cols="50%" ng-trim="false"></textarea>
+				<textarea name ="{{column.campcons}}" id="{{column.campcons}}" ng-model="Campos[column.campnomb]" rows="20" cols="50%" ng-trim="false" disabled></textarea>
 	  	      </div>
+			  <input style="width:10%;" type="checkbox" ng-model="Checkbox[column.campnomb]" data-ng-if="column.campvali==1">
         </script>  
                     	    	    		
       </div>

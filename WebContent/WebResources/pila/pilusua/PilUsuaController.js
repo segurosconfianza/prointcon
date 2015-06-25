@@ -240,7 +240,6 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 		}
 		
 		$scope.$on('gridEvento', function(event, pageSize, currentPage, order, searchQuery) {   
-			console.log('gridEvento');
 			$scope.pageSize=pageSize;
 			$scope.currentPage=currentPage;
 			$scope.order=order;

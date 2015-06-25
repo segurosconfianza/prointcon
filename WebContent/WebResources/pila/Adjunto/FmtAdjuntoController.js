@@ -10,7 +10,6 @@ FrmMainApp.controller('FmtAdjuntoController', ['$scope', '$modal', 'PlanillaServ
 	$scope.$on('handleBroadcastAdjunto', function() {
 		
 		$scope.loadPdf=true;
-		console.log($scope.loadPdf);
 		
 		PlanillaService.getDataAdjunto(PlanillaService.id).then(function(dataResponse) {   	        	
 	        if(dataResponse.data.error!=undefined){

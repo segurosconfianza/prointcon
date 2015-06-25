@@ -309,13 +309,21 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 			
 			FmtFormregi fmtformregi = fmtFormregiRepository.list(forecons);
 			
-			if(fmtValocampService.updateValuesIntermediario(vefocons, forecons, parametersData, user))
-				if(insertFiles(user, file, fmtformregi))
-					return gson.toJson("Se actualizaron los datos correctamente");
-			return gson.toJson("Se presentaron errores en la actualizacion del registro");
+			if(fmtformregi.getForeesta().equals("N") || fmtformregi.getForeesta().equals("D")){			
+				if(fmtValocampService.updateValuesIntermediario(vefocons, forecons, parametersData, user))
+					if(insertFiles(user, file, fmtformregi))
+						return gson.toJson("Se actualizaron los datos correctamente");					
+			}
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("tituloError", "Error");
+			result.put("error", "Se presentaron errores en la actualizacion del registro");
+			return gson.toJson(result);
 		}catch (Exception e) {
 			e.printStackTrace();
-			return gson.toJson("Se presentaron errores en la actualizacion del registro"); 
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("tituloError", "Error");
+			result.put("error", "Se presentaron errores en la actualizacion del registro");
+			return gson.toJson(result);
 		}
 	}
 
