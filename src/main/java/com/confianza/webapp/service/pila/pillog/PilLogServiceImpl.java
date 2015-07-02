@@ -44,7 +44,7 @@ public class PilLogServiceImpl implements PilLogService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILLOG__ALL", "APP_PILLOG__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_LOG_ALL", "PIL_LOG_READ"})
 	public String list(Long id){
 		PilLog listAll=pilLogRepository.list(id);
 		
@@ -56,7 +56,7 @@ public class PilLogServiceImpl implements PilLogService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILLOG__ALL", "APP_PILLOG__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_LOG_ALL", "PIL_LOG_READ"})
 	public String listAll(int pageSize, int page){
 	
 		int limit=pageSize;
@@ -78,19 +78,18 @@ public class PilLogServiceImpl implements PilLogService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILLOG__ALL", "APP_PILLOG__UPDATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_LOG_ALL", "PIL_LOG_UPDATE"})
 	public String update(PilLog pillog){
 		return gson.toJson(pilLogRepository.update(pillog));
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILLOG__ALL", "APP_PILLOG__DELETE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_LOG_ALL", "PIL_LOG_DELETE"})
 	public void delete(PilLog pillog){
 		pilLogRepository.delete(pillog);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILLOG__ALL", "APP_PILLOG__CREATE"})
 	public String insert(PilLog pillog){
 		return gson.toJson(pilLogRepository.insert(pillog));
 	}

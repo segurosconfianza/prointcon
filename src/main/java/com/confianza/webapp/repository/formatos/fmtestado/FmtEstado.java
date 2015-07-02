@@ -98,7 +98,7 @@ public class FmtEstado {
 	}		
 	
 	static public String getColumnNames(){
-		return " ESTACONS, ESTAFORE, ESTAFECH, ESTAUSER, ESTAESTA ";
+		return " estacons, estafore, estafech, estauser, estaesta ";
 	}
 	
 	public String toString(){

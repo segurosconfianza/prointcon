@@ -7,6 +7,7 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	$scope.options={};	
 	$scope.paramsSend={};	
 	$scope.Checkbox = {};
+	$scope.Devolver = false;
 	
 	//botones de los formularios modal
 	$scope.buttonNew=false;
@@ -23,6 +24,14 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	
 	//Funcion para inicializar los datos en la carga de la pagina
 	$scope.init = function() {
+		Service.getMotivos().then(function(dataResponse) {        	                                        	
+			$scope.motivos=dataResponse.data.data;
+			$scope.optionsMotivo=[];	
+    		angular.forEach($scope.motivos, function(reg) {
+    			$scope.optionsMotivo.push({value:reg.devocons, label:reg.devonomb});	
+        	});
+        });
+		
 		Service.loadI18n().then(function(dataResponse) {        	                                        	
 	       	 
 			Service.setI18n(dataResponse.data);
@@ -54,12 +63,13 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 			    	    	else{
 			    	    		$scope.columns=dataResponse.data.data;
 			    	    		columns=[];
-			    	    		columns[0]={field: "forecons", displayName: getName(Service.getI18n(), "forecons"), headerCellTemplate: filterBetweenNumber};
-			    	    		columns[1]={field: "forefech", displayName: getName(Service.getI18n(), "forefech"), headerCellTemplate: filterBetweenDate};
-			    	    		columns[2]={field: "foreesta", displayName: getName(Service.getI18n(), "foreesta"), visible: false};
-			    	    		columns[3]={field: "tablvast", displayName: getName(Service.getI18n(), "foreesta"), headerCellTemplate: filterText, cellTemplate: '<div><img src="{{icons[row.getProperty(col.field)]}}" width="20" height="20"></img>{{row.getProperty(col.field)}}</div>'};
-			    	    		columns[4]={field: "usuanomb", displayName: getName(Service.getI18n(), "usuanomb"), headerCellTemplate: filterText};
-			    	    		columns[5]={field: "usuasucu", displayName: getName(Service.getI18n(), "usuasucu"), headerCellTemplate: filterBetweenNumber};
+			    	    		columns[0]={field: "forecons", displayName: getName(Service.getI18n(), "forecons", "FMT_FORMREGI"), headerCellTemplate: filterBetweenNumber, visible: false};
+			    	    		columns[1]={field: "forefech", displayName: getName(Service.getI18n(), "forefech", "FMT_FORMREGI"), headerCellTemplate: filterBetweenDate};
+			    	    		columns[2]={field: "foreesta", displayName: getName(Service.getI18n(), "foreesta", "FMT_FORMREGI"), visible: false};
+			    	    		columns[3]={field: "tablvast", displayName: getName(Service.getI18n(), "foreesta", "FMT_FORMREGI"), headerCellTemplate: filterText, cellTemplate: '<div><img src="{{icons[row.getProperty(col.field)]}}" width="20" height="20"></img>{{row.getProperty(col.field)}}</div>'};
+			    	    		columns[4]={field: "usuaunit", displayName: getName(Service.getI18n(), "usuaunit", "PIL_USUA"), headerCellTemplate: filterText, visible: false};
+			    	    		columns[5]={field: "usuarazo", displayName: getName(Service.getI18n(), "usuarazo", "PIL_USUA"), headerCellTemplate: filterText, visible: false};
+			    	    		columns[6]={field: "usuasucu", displayName: getName(Service.getI18n(), "usuasucu", "PIL_USUA"), headerCellTemplate: filterBetweenNumber, visible: false};
 			    	    		//recorro los campos para cargar los data de los combos
 			    	    		for(i=0; i<$scope.columns.length;i++){    				    	    	    		
 	    	    	    			//si el tipo de dato es columna
@@ -76,15 +86,20 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 	    	    	    			}
 	    	    	    			
 	    	    	    			if($scope.columns[i].camptipo=="D" || $scope.columns[i].camptipo=="T")
-	    	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenDate};
+	    	    	    				columns[i+7]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenDate};
 	    	    	    			else if($scope.columns[i].camptipo=="O" || $scope.columns[i].camptipo=="I" || $scope.columns[i].camptipo=="L" || $scope.columns[i].camptipo=="F")
-	    	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenNumber, cellTemplate:'<div>{{row.getProperty(col.field) | number}}</div>'};
+	    	    	    				columns[i+7]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenNumber, cellTemplate:'<div>{{row.getProperty(col.field) | number}}</div>'};
 	    	    	    			else if($scope.columns[i].camptipo=="B")
-	    	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenNumber};
+	    	    	    				columns[i+7]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterBetweenNumber};
 	    	    	    			else
-	    	    	    				columns[i+4]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterText};
+	    	    	    				columns[i+7]={field: $scope.columns[i].campnomb, displayName: $scope.columns[i].camplabe, headerCellTemplate: filterText};
 	    	    	    		}
 			    	    		
+			    	    		$scope.usuaunitlabel=getName(Service.getI18n(), "usuaunit", "PIL_USUA");
+			    	    		$scope.usuarazolabel=getName(Service.getI18n(), "usuarazo", "PIL_USUA");
+			    	    		$scope.devonomblabel=getName(Service.getI18n(), "devonomb", "PIL_MOTIVO");
+			    	    		$scope.devodesclabel=getName(Service.getI18n(), "devodesc", "PIL_MOTIVO");
+			    	    		$scope.devotitleabel=getName(Service.getI18n(), "-", "PIL_MOTIFORM");
 			    	    		$scope.columnDefs=columns;	
 			    	    		
 			    	    		//cargo las sucursales a las cuales tiene asigando este analista
@@ -114,22 +129,23 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
         		
         	}
         	$scope.Campos["forecons"]=rowItem.entity["forecons"];
+        	$scope.Campos["foreesta"]=rowItem.entity["foreesta"];
+        	$scope.Campos["usuaunit"]=rowItem.entity["usuaunit"];
+        	$scope.Campos["usuasucu"]=rowItem.entity["usuasucu"];
+        	$scope.Campos["usuarazo"]=rowItem.entity["usuarazo"];
         
         	Service.prepForLoad(rowItem.entity.forecons);      
         }
     };
      
-    function getName(i18n,colum){
+    function getName(i18n,colum,modulo){
     	var log = [];
     	angular.forEach(i18n, function(fila, index) {
-    		if(fila.etincamp==colum)  
+    		if(fila.etincamp==colum && fila.modunomb==modulo)  
     			this.push(fila);
    		}, log);
     	
-    	if(log[0]!=null)
-    		return log[0].etinetiq;
-    	else 
-    		return "";
+    	return log[0].etinetiq;        	
     }
     
     $scope.whatClassIsIt= function(column){
@@ -162,15 +178,17 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
 					}								
 				}
 			}
+			
+			if($scope.Checkbox['usuarazo']!=true || $scope.Checkbox['usuaunit']!=true)
+				verify=false;
 							
 			if(verify){		
 				
-				/*Service.aprobarRecord(formData, $scope.Campos["forecons"]).then(function(dataResponse) {					 	      
+				Service.aprobarRecord($scope.Campos["forecons"]).then(function(dataResponse) {					 	      
 	        		alert(dataResponse.data);	        				        			
 		        	
 	        		$scope.loadMyGrid();
-		        }); */
-				alert("Listo");
+		        });
 			}else{ 
 				alert("Datos vacios o incorrectos: Favor diligencie todos los campos");
 			}
@@ -195,6 +213,41 @@ FrmMainApp.controller('PlanillaController', ['$scope', 'PlanillaService', '$filt
         	else 
         		$scope.$broadcast('loadDataGrid',dataResponse.data.data, dataResponse.data.count, $scope.pageSize, $scope.currentPage);
         });
+	}
+	
+	$scope.putDesc = function() {
+		     	                                        	
+		angular.forEach($scope.motivos, function(reg) {
+			if(reg.devocons===$scope.Campos['devonomb'])
+				$scope.Campos['devodesc']="Sr(a) "+$scope.Campos['usuarazo']+". \nLa planilla diligenciada ha sido devuelta por el siguiente motivo:\n "+reg.devodesc;	
+    	});
+	}
+	
+	$scope.devolverActivar = function() {
+     	
+		$scope.Devolver = true;
+	}
+	
+	$scope.devolverRecord= function(){	
+				
+		Service.devolverRecord($scope.Campos["forecons"],$scope.Campos["devonomb"],$scope.Campos["devodesc"]).then(function(dataResponse) {		
+			if(dataResponse.data.error!=undefined)
+    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+        	else{
+        		alert(dataResponse.data.data);
+        		$scope.Devolver = false;
+        	}
+        	
+    		$scope.loadMyGrid();
+        });
+    }
+	
+	$scope.gestionarPlanilla = function() {
+		
+	    if($scope.Campos["foreesta"]==='A' || $scope.Campos["foreesta"]==='C')
+	    	$scope.activeButtons=false;
+	    else
+	    	$scope.activeButtons=true;
 	}
  }            
 ])

@@ -50,7 +50,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 			 $scope.usuapeco = "" ,
 			 $scope.usuausua = "" ,
 			 $scope.usuapass = "" ,
-			 $scope.usuatipo = 2 ,
+			 $scope.usuatipo = 1 ,
 			 $scope.usuasucu = "" ,
 			 $scope.usuaesta = 'A'         	
         }                

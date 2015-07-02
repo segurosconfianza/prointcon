@@ -140,11 +140,11 @@ public class CIntermediario {
 		return this.fmtauditoriaService.listAll(pageSize, page, forecons);
 	}
 	
-	@RequestMapping(value = "/FmtEstado/listAll.json", params = {"page","pageSize", "forecons"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/FmtEstado/listAll.json", params = {"page","pageSize","order","filter"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
-	public String listAllFmtEstado(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("forecons") long forecons){
+	public String listAllFmtEstado(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam("filter") String filters){
 	
-		return this.fmtEstadoService.listAll(pageSize, page, forecons);
+		return this.fmtEstadoService.listAll(pageSize, page, order, filters);
 	}
 	
 	@RequestMapping(value = "/FmtAdjunto/listAdjunto.json", params = {"forecons"},  method = RequestMethod.GET, produces={"application/json"})

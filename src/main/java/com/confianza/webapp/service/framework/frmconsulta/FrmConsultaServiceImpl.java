@@ -63,7 +63,7 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMCONSULTA_ALL", "APP_FRMCONSULTA_READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_READ"})
 	public String list(Long id){
 		
 		return gson.toJson(frmConsultaRepository.list(id));
@@ -160,7 +160,7 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMCONSULTA_ALL", "APP_FRMCONSULTA_READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_READ"})
 	public String listAll(int pageSize, int page){
 	
 			int limit=pageSize*page;
@@ -176,27 +176,27 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}	
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMCONSULTA_ALL", "APP_FRMCONSULTA_READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_READ"})
 	public int getCount(){
 				
 		return frmConsultaRepository.getCount();
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMCONSULTA_ALL", "APP_FRMCONSULTA_UPDATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_UPDATE"})
 	public String update(FrmConsulta frmconsulta){
 		
 		return gson.toJson(frmConsultaRepository.update(frmconsulta));
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMCONSULTA_ALL", "APP_FRMCONSULTA_DELETE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_DELETE"})
 	public void delete(FrmConsulta frmconsulta){
 		frmConsultaRepository.delete(frmconsulta);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMCONSULTA_ALL", "APP_FRMCONSULTA_CREATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_CREATE"})
 	public String insert(FrmConsulta frmconsulta){
 		
 			//frmconsulta.setesta("A");

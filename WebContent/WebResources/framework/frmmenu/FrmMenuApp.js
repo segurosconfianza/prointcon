@@ -1,4 +1,4 @@
-var FrmMainApp=angular.module('FrmMainApp', ['ui.tree', 'ngGrid', 'ngRoute', 'ui.bootstrap', 'ngRoute', 'ngFileUpload' ]);  
+var FrmMainApp=angular.module('FrmMainApp', ['ui.tree', 'ngGrid', 'ngRoute', 'ui.bootstrap', 'ngFileUpload', 'ui.utils.masks' ]);  
 
 FrmMainApp.config(['$routeProvider',
    	function($routeProvider) {
@@ -27,7 +27,19 @@ FrmMainApp.config(['$routeProvider',
   	      },
   	      controller: 'PilUsuaController'
   	    }).
-  	  when('/Planilla/:PlanillaId', {
+  	    when('/PilUsuaanalis', {
+  	      templateUrl: function(params) {
+  	          return  WEB_SERVER+'PilUsua/PilUsuaanalis';
+  	      },
+  	      controller: 'PilUsuaanalisisController'
+  	    }).
+  	    when('/PilSucuranalisis', {
+  	      templateUrl: function(params) {
+  	          return  WEB_SERVER+'PilUsua/PilSucuranalisis';
+  	      },
+  	      controller: 'PilUsuaanalisisController'
+  	    }).
+  	    when('/Planilla/:PlanillaId', {
   	      templateUrl: function(params) {
   	          return  WEB_SERVER+'FmtFormato/Planilla/';
   	      },

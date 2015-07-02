@@ -61,7 +61,7 @@ public class FmtLogAOPImpl{
 				
 		CreateLog(fmtformregi.toString(), "FmtFormregi", fmtformregi.getForeuser());
 		return fmtformregi;
-	}
+	} 
 	
 	@Pointcut("execution(* com.confianza.webapp.repository.formatos.fmtvalocamp.FmtValocampRepositoryImpl.insert(..))")	
 	public void pointInsertRecordFmtValocamp(){		

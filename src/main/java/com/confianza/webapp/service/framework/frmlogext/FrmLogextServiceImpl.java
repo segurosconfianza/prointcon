@@ -40,13 +40,13 @@ public class FrmLogextServiceImpl implements FrmLogextService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMLOGEXT__ALL", "APP_FRMLOGEXT__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_LOGEXT_ALL", "FRM_LOGEXT_READ"})
 	public FrmLogext list(Long id){
 		return frmlogextRepository.list(id);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMLOGEXT__ALL", "APP_FRMLOGEXT__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_LOGEXT_ALL", "FRM_LOGEXT_READ"})
 	public List<FrmLogext> listAll(int pageSize, int page){
 	
 		int limit=pageSize*page;
@@ -62,19 +62,19 @@ public class FrmLogextServiceImpl implements FrmLogextService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMLOGEXT__ALL", "APP_FRMLOGEXT__UPDATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_LOGEXT_ALL", "FRM_LOGEXT_UPDATE"})
 	public FrmLogext update(FrmLogext frmlogext){
 		return frmlogextRepository.update(frmlogext);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMLOGEXT__ALL", "APP_FRMLOGEXT__DELETE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_LOGEXT_ALL", "FRM_LOGEXT_DELETE"})
 	public void delete(FrmLogext frmlogext){
 		frmlogextRepository.delete(frmlogext);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMLOGEXT__ALL", "APP_FRMLOGEXT__CREATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_LOGEXT_ALL", "FRM_LOGEXT_CREATE"})
 	public FrmLogext insert(FrmLogext frmlogext){
 		return frmlogextRepository.insert(frmlogext);
 	}					
