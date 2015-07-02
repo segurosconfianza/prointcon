@@ -96,7 +96,7 @@ public class PilUsusucuServiceImpl implements PilUsusucuService{
 		List<Filter> filters = gson.fromJson("["+stringFilters+"]", listOfTestObject);
 		
 		List<Object[]> listAllAnalistas=pilUsusucuRepository.listAllAnalistas(init, limit, order, filters); 
-		Object[] obj=listAllAnalistas.get(0);
+		
 		//cast a ser mapeados por cada campo
 		List<Map<String, Object>> listAll = JSONUtil.toNameList(this.getColumMap(),listAllAnalistas);
 				

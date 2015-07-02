@@ -48,9 +48,9 @@ public class CPilUsusucu {
 		return this.pilUsusucuService.listAll(pageSize, page, order, filters);
 	}
 	
-	@RequestMapping(value = "/listAllAnalistas.json", params = {"page","pageSize","order","filter"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAllAnalistas.json", method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
-	public String listAllAnalistas(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam("filter") String filters){
+	public String listAllAnalistas(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam(value ="filter", required=false) String filters){
 	
 		return this.pilUsusucuService.listAllAnalistas(pageSize, page, order, filters);
 	}
