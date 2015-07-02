@@ -50,7 +50,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 			 $scope.usuapeco = "" ,
 			 $scope.usuausua = "" ,
 			 $scope.usuapass = "" ,
-			 $scope.usuatipo = 2 ,
+			 $scope.usuatipo = 1 ,
 			 $scope.usuasucu = "" ,
 			 $scope.usuaesta = 'A'         	
         }                
@@ -240,7 +240,6 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 		}
 		
 		$scope.$on('gridEvento', function(event, pageSize, currentPage, order, searchQuery) {   
-			console.log('gridEvento');
 			$scope.pageSize=pageSize;
 			$scope.currentPage=currentPage;
 			$scope.order=order;

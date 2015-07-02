@@ -11,11 +11,13 @@ package com.confianza.webapp.repository.pila.pilususucu;
 
 import java.util.List;
 
+import com.confianza.webapp.utils.Filter;
+
 public interface PilUsusucuRepository {
 	
 	public PilUsusucu list(Long id);
 	
-	public List<PilUsusucu> listAll(int init, int limit);	
+	public List<PilUsusucu> listAll(int init, int limit, String order, List<Filter> filters);	
 	
 	public PilUsusucu update(PilUsusucu pilususucu);
 	
@@ -23,7 +25,11 @@ public interface PilUsusucuRepository {
 	
 	public PilUsusucu insert(PilUsusucu pilususucu);
 	
-	public int getCount();
+	public int getCount(List<Filter> filters);
 
 	public List<PilUsusucu> listSucur(String user);
+
+	public List<Object[]> listAllAnalistas(int init, int limit, String order, List<Filter> filters);
+
+	public int getCountAnalistas(List<Filter> filters);
 }

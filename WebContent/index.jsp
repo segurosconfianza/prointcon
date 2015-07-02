@@ -98,11 +98,20 @@
 	    <script  src="WebResources/pila/pilusua/PilUsuaService.js"></script>
 	    <script  src="WebResources/pila/pilusua/PilUsuaController.js"></script>
 	    
+	    <script  src="WebResources/pila/pilusuaanalis/PilUsuaanalisService.js"></script>
+	    <script  src="WebResources/pila/pilusuaanalis/PilUsuaanalisController.js"></script>
+	    <script  src="WebResources/pila/pilusuasucu/PilUsuasucuController.js"></script>
+	    
+		<script  src="WebResources/pila/pilsucuranalisis/PilSucuranalisisController.js"></script>
+		<script  src="WebResources/pila/pilsucuranalisis/PilSucuranalisisService.js"></script>
+	    <script  src="WebResources/pila/pilusuasucuranalisis/PilUsuasucuranalisisController.js"></script>
+	    
 	    <script  src="WebResources/pila/planilla/PlanillaService.js"></script>
 	    <script  src="WebResources/pila/planilla/PlanillaController.js"></script>
 		<script  src="WebResources/pila/Adjunto/FmtAdjuntoController.js"></script>
 	    <script  src="WebResources/pila/Auditoria/FmtAuditoriaController.js"></script>
 	    <script  src="WebResources/pila/Estado/FmtEstadoController.js"></script>
+	    <script  src="WebResources/pila/pilmotiform/PilMotiformController.js"></script>
 	    
 		<script type="text/javascript" Language="JavaScript">
 			document.createElement('ng-view');

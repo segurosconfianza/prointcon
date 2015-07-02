@@ -19,11 +19,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.confianza.webapp.utils.Filter;
+import com.confianza.webapp.utils.SqlFunctions;
+
 @Repository
 public class FmtEstadoRepositoryImpl implements FmtEstadoRepository{
 	
 	@Autowired
 	private SessionFactory sessionFactory;  	
+	
+	@Autowired
+	private SqlFunctions sqlFunctions;
 	
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
@@ -95,13 +101,17 @@ public class FmtEstadoRepositoryImpl implements FmtEstadoRepository{
 	 */
 	@Override
 	@Transactional
-	public int getCount(){
+	public int getCount(List<Filter> filters){
 		try{
 			String sql = "select count(*) "
 					   + "from FmtEstado ";
-						
+			
+			sql = sqlFunctions.completeSQL(null, filters, sql, FmtEstado.getColumnNames());
+			
 			Query query = getSession().createQuery(sql);
 	        
+			 query=sqlFunctions.setParameters(filters, query);
+			 
 			Iterator it = query.list().iterator();
 	        Long ret = new Long(0);
 	        
@@ -166,16 +176,18 @@ public class FmtEstadoRepositoryImpl implements FmtEstadoRepository{
 	 */
 	@Override
 	@Transactional
-	public List<FmtEstado> listAll(int init, int limit, long forecons){
+	public List<FmtEstado> listAll(int init, int limit, String order, List<Filter> filters){
 		try{
 			String sql = "select "+FmtEstado.getColumnNames()
-					   + "from FMT_ESTADO "
-					   + "where ESTAFORE = :forecons";
-						
+					   + "from FMT_ESTADO ";
+				
+			sql = sqlFunctions.completeSQL(order, filters, sql, FmtEstado.getColumnNames());
+			
 			Query query = getSession().createSQLQuery(sql)
-						 .addEntity(FmtEstado.class)
-						 .setParameter("forecons", forecons);
-						 
+						 .addEntity(FmtEstado.class);
+				
+			query=sqlFunctions.setParameters(filters, query);
+			
 			if(limit!=0){
 				query.setFirstResult(init);			
 				query.setMaxResults(limit);

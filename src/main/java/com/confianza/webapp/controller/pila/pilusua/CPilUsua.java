@@ -37,6 +37,16 @@ public class CPilUsua {
 		return "pila/pilusua/PilUsua";
 	}
 	
+	@RequestMapping("/PilUsuaanalis") 
+	public String indexanalis() {
+		return "pila/pilusuaanalis/PilUsuaanalis";
+	}
+	
+	@RequestMapping("/PilSucuranalisis") 
+	public String indexsucursales() {
+		return "pila/pilsucuranalisis/PilSucuranalisis";
+	}
+	
 	@RequestMapping(value = "/{usuacons}.json", method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
 	public String list(@PathVariable("usuacons") Long usuacons){

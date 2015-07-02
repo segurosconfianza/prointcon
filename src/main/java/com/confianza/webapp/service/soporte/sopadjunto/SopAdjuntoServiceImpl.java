@@ -49,7 +49,7 @@ public class SopAdjuntoServiceImpl implements SopAdjuntoService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_SOPADJUNTO__ALL", "APP_SOPADJUNTO__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOP_ADJUNTO_ALL", "SOP_ADJUNTO_READ"})
 	public String list(Long id){
 		SopAdjunto listAll=sopAdjuntoRepository.list(id);
 		
@@ -61,7 +61,7 @@ public class SopAdjuntoServiceImpl implements SopAdjuntoService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_SOPADJUNTO__ALL", "APP_SOPADJUNTO__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOP_ADJUNTO_ALL", "SOP_ADJUNTO_READ"})
 	public String listAll(int pageSize, int page){
 	
 		int limit=pageSize*page;
@@ -83,19 +83,19 @@ public class SopAdjuntoServiceImpl implements SopAdjuntoService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_SOPADJUNTO__ALL", "APP_SOPADJUNTO__UPDATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOP_ADJUNTO_ALL", "SOP_ADJUNTO_UPDATE"})
 	public String update(SopAdjunto sopadjunto){
 		return gson.toJson(sopAdjuntoRepository.update(sopadjunto));
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_SOPADJUNTO__ALL", "APP_SOPADJUNTO__DELETE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOP_ADJUNTO_ALL", "SOP_ADJUNTO_DELETE"})
 	public void delete(SopAdjunto sopadjunto){
 		sopAdjuntoRepository.delete(sopadjunto);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_SOPADJUNTO__ALL", "APP_SOPADJUNTO__CREATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOP_ADJUNTO_ALL", "SOP_ADJUNTO_CREATE"})
 	public String insert(SopAdjunto sopadjunto){
 		return gson.toJson(sopAdjuntoRepository.insert(sopadjunto));
 	}

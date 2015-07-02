@@ -29,5 +29,7 @@ public interface PilUsuaService{
 	public int getCount(List<Filter> filters);
 
 	public String validateUsua(String user, String password);
+
+	public List<PilUsua> listAllFormregi(List<Long> codigosFormRegi);
 	
 }

@@ -28,4 +28,6 @@ public interface PilUsuaRepository {
 	public int getCount(List<Filter> filters);
 
 	public PilUsua validateUsua(String user, String password);
+
+	public List<PilUsua> listAllFormregi(List<Long> codigosFormRegi);
 }

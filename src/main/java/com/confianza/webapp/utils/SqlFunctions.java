@@ -32,6 +32,8 @@ public class SqlFunctions {
 	}
 	
 	private String generateWhere(List<Filter> filters, String where, String columns) {
+
+		if(filters!=null)
 		for(Filter filter:filters){
 			if((columns).matches("(.*)"+filter.getCampo()+"(.*)")){
 				if(where.isEmpty()){
@@ -59,6 +61,7 @@ public class SqlFunctions {
 	public Query setParameters(List<Filter> filters, Query query) {
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 		
+		if(filters!=null)
 		for(Filter filter:filters){
 			    if(filter.getTipo().equals("IN")){
 			    	if(filter.getTipodato().equals("Number")){

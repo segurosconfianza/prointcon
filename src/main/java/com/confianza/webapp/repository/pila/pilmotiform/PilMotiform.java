@@ -6,7 +6,7 @@ package com.confianza.webapp.repository.pila.pilmotiform;
   * @version	1.0 
   * @Fecha		30/10/2014 
   * @since		1.0            
-  * @app		pila  
+  * @app		formatos  
   */                          
 
 import java.util.Date;
@@ -109,7 +109,7 @@ public class PilMotiform {
 	}		
 	
 	static public String getColumnNames(){
-		return " MOFOCONS, MOFOFORE, MOFODEVO, MOFODESC, MOFOFECH, MOFOUSER ";
+		return " mofocons, mofofore, mofodevo, mofodesc, mofofech, mofouser ";
 	}
 	
 	public String toString(){

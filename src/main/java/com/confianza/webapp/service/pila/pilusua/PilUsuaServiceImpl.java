@@ -18,7 +18,6 @@ import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -111,5 +110,10 @@ public class PilUsuaServiceImpl implements PilUsuaService{
 			return gson.toJson("true");
 		else
 			return gson.toJson("false");
+	}
+	
+	@Override
+	public List<PilUsua> listAllFormregi(List<Long> codigosFormRegi){
+		return pilUsuaRepository.listAllFormregi(codigosFormRegi);
 	}
 }
