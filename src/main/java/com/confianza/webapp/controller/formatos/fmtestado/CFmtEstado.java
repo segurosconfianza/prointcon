@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 
+
 import com.confianza.webapp.service.formatos.fmtestado.FmtEstadoService;
 import com.confianza.webapp.repository.formatos.fmtestado.FmtEstado;
 
@@ -41,11 +42,11 @@ public class CFmtEstado {
 		return this.fmtEstadoService.list(estacons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize","order","filter"},  method = RequestMethod.GET, produces={"application/json"})
 	@ResponseBody
-	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
+	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam("filter") String filters){
 	
-		return this.fmtEstadoService.listAll(pageSize, page);
+		return this.fmtEstadoService.listAll(pageSize, page, order, filters );
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})

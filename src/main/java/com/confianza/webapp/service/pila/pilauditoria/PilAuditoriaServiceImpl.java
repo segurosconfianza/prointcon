@@ -44,7 +44,7 @@ public class PilAuditoriaServiceImpl implements PilAuditoriaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_AUDITORIA_ALL", "PIL_AUDITORIA_READ"})
 	public String list(Long id){
 		PilAuditoria listAll=pilAuditoriaRepository.list(id);
 		
@@ -56,7 +56,7 @@ public class PilAuditoriaServiceImpl implements PilAuditoriaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_AUDITORIA_ALL", "PIL_AUDITORIA_READ"})
 	public String listAll(int pageSize, int page){
 	
 		int limit=pageSize;
@@ -78,19 +78,19 @@ public class PilAuditoriaServiceImpl implements PilAuditoriaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__UPDATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_AUDITORIA_ALL", "PIL_AUDITORIA_UPDATE"})
 	public String update(PilAuditoria pilauditoria){
 		return gson.toJson(pilAuditoriaRepository.update(pilauditoria));
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__DELETE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_AUDITORIA_ALL", "PIL_AUDITORIA_DELETE"})
 	public void delete(PilAuditoria pilauditoria){
 		pilAuditoriaRepository.delete(pilauditoria);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__CREATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_AUDITORIA_ALL", "PIL_AUDITORIA_CREATE"})
 	public String insert(PilAuditoria pilauditoria){
 		return gson.toJson(pilAuditoriaRepository.insert(pilauditoria));
 	}

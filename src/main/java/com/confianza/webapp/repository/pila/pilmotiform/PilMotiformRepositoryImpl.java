@@ -6,7 +6,7 @@ package com.confianza.webapp.repository.pila.pilmotiform;
   * @version	1.0 
   * @Fecha		30/10/2014 
   * @since		1.0            
-  * @app		pila  
+  * @app		formatos  
   */                          
 
 import java.util.List;
@@ -19,11 +19,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.confianza.webapp.utils.SqlFunctions;
+import com.confianza.webapp.utils.Filter;
+
 @Repository
 public class PilMotiformRepositoryImpl implements PilMotiformRepository{
 	
 	@Autowired
 	private SessionFactory sessionFactory;  	
+	
+	@Autowired
+	private SqlFunctions sqlFunctions;
 	
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
@@ -68,13 +74,17 @@ public class PilMotiformRepositoryImpl implements PilMotiformRepository{
 	 */
 	@Override
 	@Transactional
-	public List<PilMotiform> listAll(int init, int limit){
+	public List<PilMotiform> listAll(int init, int limit, String order, List<Filter> filters){
 		try{
 			String sql = "select "+PilMotiform.getColumnNames()
 					   + "from PIL_MOTIFORM ";
+				
+			sql = sqlFunctions.completeSQL(order, filters, sql, PilMotiform.getColumnNames());
 						
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(PilMotiform.class);
+				
+			query=sqlFunctions.setParameters(filters, query);
 						 
 			if(limit!=0){
 				query.setFirstResult(init);			
@@ -95,12 +105,16 @@ public class PilMotiformRepositoryImpl implements PilMotiformRepository{
 	 */
 	@Override
 	@Transactional
-	public int getCount(){
+	public int getCount(List<Filter> filters){
 		try{
 			String sql = "select count(*) "
 					   + "from PilMotiform ";
+				
+			sql = sqlFunctions.completeSQL(null, filters, sql, PilMotiform.getColumnNames());
 						
 			Query query = getSession().createQuery(sql);
+	        
+	        query=sqlFunctions.setParameters(filters, query);
 	        
 			Iterator it = query.list().iterator();
 	        Long ret = new Long(0);

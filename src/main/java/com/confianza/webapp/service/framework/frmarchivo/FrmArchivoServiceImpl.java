@@ -65,7 +65,7 @@ public class FrmArchivoServiceImpl implements FrmArchivoService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMARCHIVO__ALL", "APP_FRMARCHIVO__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_ARCHIVO_ALL", "FRM_ARCHIVO_READ"})
 	public String list(Long id){
 		FrmArchivo listAll=frmArchivoRepository.list(id);
 		
@@ -77,7 +77,7 @@ public class FrmArchivoServiceImpl implements FrmArchivoService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMARCHIVO__ALL", "APP_FRMARCHIVO__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_ARCHIVO_ALL", "FRM_ARCHIVO_READ"})
 	public String listAll(int pageSize, int page){
 	
 		int limit=pageSize*page;
@@ -99,19 +99,19 @@ public class FrmArchivoServiceImpl implements FrmArchivoService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMARCHIVO__ALL", "APP_FRMARCHIVO__UPDATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_ARCHIVO_ALL", "FRM_ARCHIVO_UPDATE"})
 	public String update(FrmArchivo frmarchivo){
 		return gson.toJson(frmArchivoRepository.update(frmarchivo));
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMARCHIVO__ALL", "APP_FRMARCHIVO__DELETE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_ARCHIVO_ALL", "FRM_ARCHIVO_DELETE"})
 	public void delete(FrmArchivo frmarchivo){
 		frmArchivoRepository.delete(frmarchivo);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMARCHIVO__ALL", "APP_FRMARCHIVO__CREATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_ARCHIVO_ALL", "FRM_ARCHIVO_CREATE"})
 	public String insert(FrmArchivo frmarchivo){
 		return gson.toJson(frmArchivoRepository.insert(frmarchivo));
 	}

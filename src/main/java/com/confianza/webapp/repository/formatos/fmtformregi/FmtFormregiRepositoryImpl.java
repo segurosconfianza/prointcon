@@ -156,7 +156,6 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 					   + "join PIL_USUA     ON (USUAUSUA=FOREUSER) ";
 						
 			sql = completeSQL(order, filters, sql);
-			System.out.println("sql: "+sql);
 			
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(FmtFormregi.class);
@@ -244,9 +243,18 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 					}
 				}
 				else if(filter.getTipodato().equals("Number")){
-					query.setDouble(filter.getCampo(), new Double(filter.getVal1()));
-					if(filter.getVal2()!=null)	{
-						query.setDouble(filter.getCampo()+"2", new Double(filter.getVal2()));
+					
+					if(filter.getCampo().equals("usuasucu") && !filter.getTipo().equals("IN")){
+						query.setDouble(filter.getCampo()+"o", new Double(filter.getVal1()));
+						if(filter.getVal2()!=null)	{
+							query.setDouble(filter.getCampo()+"o2", new Double(filter.getVal2()));
+						}
+					}
+					else{
+						query.setDouble(filter.getCampo(), new Double(filter.getVal1()));
+						if(filter.getVal2()!=null)	{
+							query.setDouble(filter.getCampo()+"2", new Double(filter.getVal2()));
+						}
 					}
 				}
 				else{
@@ -266,38 +274,48 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 		if(order!=null){
 			String campoorde=order.replace("order by", "").replace("desc", "").replace("asc", "").replace(" ", "");
 			
-			if((FmtFormregi.getColumnNames()).matches("(.*)"+campoorde+"(.*)")) 
-				sql+=" "+order;
-			else if("tablvast".matches("(.*)"+campoorde+"(.*)")){
-				sql+=order;
-				//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
-				sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, tablvast, ");
-			}
-			else if("usuanomb".matches("(.*)"+campoorde+"(.*)")){
-				sql+=order;
-				//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
-				sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuanomb, ");
-			}			
-			else if("usuasucu".matches("(.*)"+campoorde+"(.*)")){
-				sql+=order;
-				//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
-				sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuasucu, ");
-			}
-			else{
-				if(where.isEmpty())
-					sql+=" WHERE campnomb='"+campoorde+"' ";
-				else
-					sql+=" AND campnomb='"+campoorde+"' ";				
-				sql+=" order by vacavalo ";
-				sql=sql.replace("distinct(forecons) forecons,", "distinct(forecons) forecons, vacavalo, ");
-			}
+			sql = evaluateField(order, sql, where, campoorde);
+		}
+		return sql;
+	}
+
+	private String evaluateField(String order, String sql, String where, String campoorde) {
+		if((FmtFormregi.getColumnNames()).matches("(.*)"+campoorde+"(.*)")) 
+			sql+=" "+order;
+		else if("tablvast".matches("(.*)"+campoorde+"(.*)")){
+			sql+=order;
+			//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
+			sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, tablvast, ");
+		}
+		else if("usuarazo".matches("(.*)"+campoorde+"(.*)")){
+			sql+=order;
+			//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
+			sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuarazo, ");
+		}			
+		else if("usuaunit".matches("(.*)"+campoorde+"(.*)")){
+			sql+=order;
+			//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
+			sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuaunit, ");
+		}
+		else if("usuasucu".matches("(.*)"+campoorde+"(.*)")){
+			sql+=order;
+			//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
+			sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuasucu, ");
+		}
+		else{
+			if(where.isEmpty())
+				sql+=" WHERE campnomb='"+campoorde+"' ";
+			else
+				sql+=" AND campnomb='"+campoorde+"' ";				
+			sql+=" order by vacavalo ";
+			sql=sql.replace("distinct(forecons) forecons,", "distinct(forecons) forecons, vacavalo, ");
 		}
 		return sql;
 	}
 
 	private String generateWhere(List<Filter> filters, String where) {
 		for(Filter filter:filters){
-			if((FmtFormregi.getColumnNames()+", tablvast, usuanomb").matches("(.*)"+filter.getCampo()+"(.*)") || filter.getCampo().equals("usuasucu")){
+			if((FmtFormregi.getColumnNames()+", tablvast, usuasucu, usuarazo, usuaunit").matches("(.*)"+filter.getCampo()+"(.*)") ){
 				if(where.isEmpty()){
 					where+=" WHERE ";
 					where+= generateCondition(filter);
@@ -322,12 +340,19 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	}
 
 	private String generateCondition(Filter filter) {
-		if(filter.getTipo().equals("BETWEEN"))
-			return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
+		if(filter.getTipo().equals("BETWEEN")){
+			if(filter.getCampo().equals("usuasucu") && !filter.getTipo().equals("IN"))
+				return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo()+"o AND :"+filter.getCampo()+"2";
+			else
+				return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
+		}
 		if(filter.getTipo().equals("IN"))
 			return filter.getCampo()+" IN(:"+filter.getCampo()+")";
 		else
-			return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo();
+			if(filter.getCampo().equals("usuasucu") && !filter.getTipo().equals("IN"))
+				return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo()+"o";
+			else
+				return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo();
 	}
 	
 	private String generateConditionValocamp(Filter filter) {

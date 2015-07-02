@@ -11,6 +11,8 @@ package com.confianza.webapp.repository.formatos.fmtestado;
 
 import java.util.List;
 
+import com.confianza.webapp.utils.Filter;
+
 public interface FmtEstadoRepository {
 	
 	public FmtEstado list(Long id);
@@ -23,7 +25,7 @@ public interface FmtEstadoRepository {
 	
 	public FmtEstado insert(FmtEstado fmtestado);
 	
-	public int getCount();
+	public int getCount(List<Filter> filters);
 
-	public List<FmtEstado> listAll(int init, int limit, long forecons);
+	public List<FmtEstado> listAll(int init, int limit, String order, List<Filter> filters);
 }
