@@ -113,6 +113,9 @@
 	    <script  src="WebResources/pila/Estado/FmtEstadoController.js"></script>
 	    <script  src="WebResources/pila/pilmotiform/PilMotiformController.js"></script>
 	    
+	    <script  src="WebResources/soporte/cierrecarteracuadre/CierreCarteraCuadreController.js"></script>
+	    <script  src="WebResources/soporte/cierrecarteracuadre/CierreCarteraCuadreService.js"></script>
+	    
 		<script type="text/javascript" Language="JavaScript">
 			document.createElement('ng-view');
 				   

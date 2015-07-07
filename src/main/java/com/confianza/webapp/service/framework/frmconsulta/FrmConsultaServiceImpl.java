@@ -9,13 +9,21 @@ package com.confianza.webapp.service.framework.frmconsulta;
   * @app		framework  
   */                          
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +32,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsulta;
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsultaRepository;
 import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
+import com.confianza.webapp.service.email.sendEmail.SendEmail;
 import com.confianza.webapp.service.framework.frmparametro.FrmParametroService;
+import com.confianza.webapp.service.framework.frmtablas.FrmTablasService;
 import com.confianza.webapp.service.soporte.sopmotivo.SopMotivoService;
+import com.confianza.webapp.utils.CFile;
 import com.confianza.webapp.utils.CharsetString;
 import com.confianza.webapp.utils.JSONUtil;
 import com.google.gson.Gson;
@@ -45,6 +56,9 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	
 	@Autowired
 	private SopMotivoService sopMotivoService;
+	
+	@Autowired
+	private SendEmail sendEmail;
 	
 	private CharsetString charsetString=new CharsetString();
 	
@@ -83,6 +97,9 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	public FrmConsulta listProcedureChild(String id){
 		return frmConsultaRepository.listProcedureChild(id);
 	}
+	
+	@Autowired
+	private FrmTablasService frmTablasService;
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
@@ -158,22 +175,6 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		return null;
 		
 	}
-	
-	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_READ"})
-	public String listAll(int pageSize, int page){
-	
-			int limit=pageSize*page;
-			int init=limit-pageSize;
-			
-			List<FrmConsulta> listAll=frmConsultaRepository.listAll(init, limit);
-			
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("data", listAll);
-			result.put("count", this.getCount());
-			
-			return gson.toJson(result);		
-	}	
 	
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_READ"})
@@ -271,4 +272,72 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		FrmConsulta frmConsulta=this.listChild(conscons);
 		return gson.toJson(frmConsulta.getConscons());	
 	}
+	
+	@Override
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_UPDATE"})
+	public String ExecuteProcess(String conscons, String params, HttpServletRequest request){
+		
+		sendEmail.sendMessage("Cartera", "PRUEBA", "ESTO ES UNA PRUEBA", "hgonzalez@confianza.com.co", null, request);
+		sendEmail.sendMessage("Cartera", "PRUEBA", "ESTO ES UNA PRUEBA", "hgg0501@hotmail.com", null, request);
+		sendEmail.sendMessage("Cartera", "PRUEBA", "ESTO ES UNA PRUEBA", "heileen@gmail.com", null, request);
+		
+		/*Type type = new TypeToken<Map<String, Object>>(){}.getType();
+		Map<String, Object> parameters=gson.fromJson(params, type);//charsetString.convertUTF8ToISO88591(params)   								
+		
+		//carga la consulta dinamica					
+		FrmConsulta frmConsulta=this.listProcedureChild(conscons);
+		List<FrmParametro> parametros=this.frmParametroService.listParamsCosuType(new Long(conscons));
+		
+		//Map<String, Object> p=this.loadProcedure(frmConsulta, parametros, parameters, null);
+		Map<String, Object> p=new HashMap<String, Object>();
+		
+		//se ejecutan las consultas hijas donde se crearan los archivos excel
+		List<FrmConsulta> hijosConsulta=frmConsultaRepository.listAll(Integer.parseInt(conscons));
+		for(FrmConsulta consulta:hijosConsulta){			
+			List<Object[]> listAll=this.loadListData(consulta, null, null);
+			String[] columns=consulta.getConscolu().split(",");			
+			
+			StringBuilder stringFileExcel = new StringBuilder();
+			
+			stringFileExcel.append("<tr>");
+			for(int i=0;i<columns.length;i++){
+				stringFileExcel.append("<th>"+columns[i]+"</th>");
+			}
+			stringFileExcel.append("</tr>");
+			
+			double totalPrima = 0;
+			for(Object[] row:listAll){
+				stringFileExcel.append("<tr>");
+				for(int i=0;i<columns.length;i++){
+					stringFileExcel.append("<td>"+row[i]+"</td>");
+					if(columns[i].equals("prima"))
+						totalPrima+=Double.parseDouble(row[i].toString());
+				}
+				stringFileExcel.append("</tr>");
+			}
+			
+			//crear el archivo xls
+			String fechaRuta[]=parameters.get("XFECINI").toString().split("/");
+			String rutaArchivo=frmTablasService.listByTablcodi("ruta"+consulta.getConscons()).getTablvast()+fechaRuta[1]+"-"+fechaRuta[2];
+			
+			File dir = new File(rutaArchivo+fechaRuta[1]+"-"+fechaRuta[2]);
+			if (!dir.exists())
+	            dir.mkdirs();			
+			try {
+				CFile obj=new CFile(fechaRuta[1]+"-"+fechaRuta[2]+".xls", "application/vnd.ms-excel", stringFileExcel.toString().getBytes());
+				File serverFile = new File(rutaArchivo + File.separator + obj.getName());
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+				stream.write(obj.getBytes());
+				stream.close();
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return gson.toJson(p);	*/
+		
+		return "";
+	}
+	
 }
