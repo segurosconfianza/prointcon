@@ -44,7 +44,13 @@ FrmMainApp.config(['$routeProvider',
   	          return  WEB_SERVER+'FmtFormato/Planilla/';
   	      },
   	      controller: 'PlanillaController'
-  	    }).	  
+  	    }).	
+  	    when('/CierreCarteraCuadre/:soporteId', {
+  	      templateUrl: function(params) {
+  	          return  WEB_SERVER+'FrmConsulta/CierreCarteraCuadre/';
+  	      },
+  	      controller: 'CierreCarteraCuadreController'
+  	    }).	
    	    otherwise({
    	      
    	    });

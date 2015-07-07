@@ -58,14 +58,7 @@ public class CFrmConsulta {
 		
 		return this.frmConsultaService.list(conscons);
 	}
-	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
-	@ResponseBody
-	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
-	
-		return this.frmConsultaService.listAll(pageSize, page);
-	}
-	
+		
 	@RequestMapping(value = "/loadRecord.json", params = {"conscons","params"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String loadRecord(@RequestParam("conscons") String conscons, @RequestParam("params") String params) throws Throwable{
@@ -146,5 +139,18 @@ public class CFrmConsulta {
 			
 		return this.frmConsultaService.loadConsChield(conscons);
 	}	
+	
+	@RequestMapping("/CierreCarteraCuadre/")
+	public String soporteCierreCarteraCuadre() {
+		return "soporte/cierrecartera/CierreCarteraCuadre";
+	}
+	
+	@RequestMapping(value = "/ExecuteProcess.json", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseBody
+	public String ExecuteProcess(@RequestParam("conscons") String conscons, @RequestParam("params") String params, HttpServletRequest request ) throws Throwable{
+			
+		String result=this.frmConsultaService.ExecuteProcess(conscons, params, request);  
 		
+		return result;
+	}
 }
