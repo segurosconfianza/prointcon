@@ -252,18 +252,14 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 */
 	@Override
 	@Transactional(readOnly=true)
-	public List<FrmConsulta> listAll(int init, int limit){
+	public List<FrmConsulta> listAll(int id){
 		try{
 			String sql = "select "+FrmConsulta.getColumnNames()
-					   + "from FrmConsulta ";
+					   + "from Frm_Consulta where conspadr = :padre and constipo=1 ";
 						
 			Query query = getSession().createSQLQuery(sql)
-						 .addEntity(FrmConsulta.class);
-						 
-			if(init==0 && limit!=0){
-				query.setFirstResult(init);			
-				query.setMaxResults(limit);
-			}
+						 .addEntity(FrmConsulta.class)
+						 .setParameter("padre", id);						 			
 					     
 			return query.list();
 		}catch(Exception e){
@@ -421,7 +417,8 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 					CallableStatement cst = connection.prepareCall(procedure);
 												
 					cst=putParametersInput(p, fp, cst, "E");
-					cst=putParametersInput(pd, fp, cst, "S");
+					if(pd!=null)
+						cst=putParametersInput(pd, fp, cst, "S");
 					
 					cst=putParameterOutput(fp, cst);
 					

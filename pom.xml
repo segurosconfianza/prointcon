@@ -215,6 +215,11 @@
 			<version>3.3.3</version>
 			<type>pom</type>
 		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<!-- Maven will append the version to the finalName (which is the name 

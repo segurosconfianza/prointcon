@@ -20,7 +20,7 @@ public interface FrmConsultaRepository {
 	
 	public FrmConsulta list(Long id);
 	
-	public List<FrmConsulta> listAll(int init, int limit);	
+	public List<FrmConsulta> listAll(int id);	
 	
 	public FrmConsulta update(FrmConsulta frmconsulta);
 	
