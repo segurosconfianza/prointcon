@@ -316,24 +316,19 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	private String generateWhere(List<Filter> filters, String where) {
 		for(Filter filter:filters){
 			if((FmtFormregi.getColumnNames()+", tablvast, usuasucu, usuarazo, usuaunit").matches("(.*)"+filter.getCampo()+"(.*)") ){
-				if(where.isEmpty()){
+				if(where.isEmpty())
 					where+=" WHERE ";
-					where+= generateCondition(filter);
-				}
-				else{
+				else
 					where+=" AND ";
-					where+= generateCondition(filter);
-				}
+				where+= generateCondition(filter);
 			}
 			else{
-				if(where.isEmpty()){
+				if(where.isEmpty())
 					where+=" WHERE ";
-					where+= "campnomb='"+filter.getCampo()+"' AND "+generateConditionValocamp(filter);
-				}
-				else{
+				else
 					where+=" AND ";
-					where+= "campnomb='"+filter.getCampo()+"' AND "+generateConditionValocamp(filter);
-				}
+								
+				where+= "campnomb='"+filter.getCampo()+"' AND "+generateConditionValocamp(filter);
 			}
 		}
 		return where;
@@ -357,9 +352,15 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	
 	private String generateConditionValocamp(Filter filter) {
 		if(filter.getTipo().equals("BETWEEN"))
-			return " vacavalo "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
+			if(filter.getTipodato().equals("Number"))
+				return " COALESCE(TO_NUMBER(REGEXP_SUBSTR(vacavalo, '^\\d+')), 0) "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
+			else
+				return " vacavalo "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
 		else
-			return " vacavalo "+filter.getTipo()+" :"+filter.getCampo();
+			if(filter.getTipodato().equals("Number"))
+				return " COALESCE(TO_NUMBER(REGEXP_SUBSTR(vacavalo, '^\\d+')), 0) "+filter.getTipo()+" :"+filter.getCampo();
+			else
+				return " vacavalo "+filter.getTipo()+" :"+filter.getCampo();
 	}
 	
 	/**

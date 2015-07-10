@@ -34,21 +34,21 @@ public class CFmtVersform {
 		return "formatos/fmtversform/FmtVersform";
 	}
 	
-	@RequestMapping(value = "/{vefocons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{vefocons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("vefocons") Long vefocons){
 		
 		return this.fmtVersformService.list(vefocons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.fmtVersformService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FmtVersform fmtversform, HttpServletRequest request){
@@ -56,7 +56,7 @@ public class CFmtVersform {
 		return this.fmtVersformService.update(fmtversform);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FmtVersform fmtversform, HttpServletRequest request){
@@ -65,7 +65,7 @@ public class CFmtVersform {
 		return this.fmtVersformService.update(fmtversform);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FmtVersform fmtversform, HttpServletRequest request){
@@ -73,7 +73,7 @@ public class CFmtVersform {
 		return this.fmtVersformService.insert(fmtversform);		
 	}
 	
-	@RequestMapping(value = "/lastVersion.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/lastVersion.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String lastVersion(@PathVariable("vefoform") Long vefoform){
 		

@@ -1,8 +1,8 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR, ADMINPLANILLA/1_ALL, ADMINPLANILLA/1_READ">
-	<div class="row">
-      <div class="col-md-6" ng-controller="PlanillaController" ng-init="init()"><!-- Division grid maestro -->      	
+	
+      <div ng-controller="PlanillaController" ng-init="init()"><!-- Division grid maestro -->      	
         <div class="well well-sm">
 			<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,ADMINPLANILLA/1_ALL"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalNew" ng-click="gestionarPlanilla()"> Gestionar <span class="glyphicon glyphicon-file"> </span></button></sec:authorize>			
 			<button type="button" class="btn btn-default btn-sm"><a href="#"> Ayuda <span class="glyphicon glyphicon-info-sign"> </span></a></button>	
@@ -23,12 +23,11 @@
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-		        <h4 class="modal-title" id="myModalLabel"><label data-ng-bind-html="title |to_trusted"></label></h4>
-		    	<h4>Por favor, ingrese los siguientes datos para consultar la informaci&oacute;n. (<font color="red">*</font>) Campos obligatorios.<h4>
+		        <h4 class="modal-title" id="myModalLabel"><label data-ng-bind-html="title |to_trusted"></label></h4>		    	
 		      </div>
 		      <div class="modal-body2">
 		        <form name="formInsert" class="form-horizontal" role="form">
-		            <div class="col-md-3">
+		            <div class="col-md-4">
 		            	<div class="form-group" >
 		            		  <label for="usuaunit" class="col-sm-4 control-label"><label><font color="red">*</font></label>{{usuaunitlabel}}</label>
 							  <div class="col-sm-6">			
@@ -68,7 +67,7 @@
 		        		</div>	
 		        	
 		        	</div>		        				        
-		        	<div class="col-md-9" data-ng-controller="FmtAdjuntoController" ng-click="fixGridRendering()">
+		        	<div class="col-md-8" data-ng-controller="FmtAdjuntoController" ng-click="fixGridRendering()">
 				      	<div class="panel" align="center" ng-if="loadPdf">
 							<button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Cargando...</button>
 						</div>	                
@@ -79,6 +78,7 @@
 		    </div>
 		  </div>
 		</div>
+    	<custom-alert name-modal="myModalError" label-error="Ninguno"></custom-alert>
     	
         <!-- Nested list template -->
 	    <script type="text/ng-template" id="form_renderer.jsp">  
@@ -104,19 +104,19 @@
 			  <input style="width:10%;" type="checkbox" ng-model="Checkbox[column.campnomb]" data-ng-if="column.campvali==1">
         </script>  
                     	    	    		
-      </div>
-        <div class="col-md-6" ><!-- Division grid detalle -->
+      </div><p/>
+        <div><!-- Division grid detalle -->
         	<div class="well well-sm">		
         		<button type="button" class="btn btn-default btn-sm"><a href="#"> Ayuda <span class="glyphicon glyphicon-info-sign"> </span></a></button>	
-			</div>
+			</div>			
 	      	<tabset>		    
 			    <tab heading="{{ventanaTitulo}}" ng-controller="FmtAdjuntoController" ng-click="fixGridRendering()">
 			      	<h3>&nbsp;&nbsp;</h3>
 			      	<div class="panel" align="center" ng-if="loadPdf">
 						<button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Cargando...</button>
-					</div>	                
-      				<object data="{{content}}" style="width:100%;height:100%;"></object>
-      				
+					</div>
+					<object data="{{content}}" style="width:100%;height:100%;"></object>   					
+					<custom-alert name-modal="myModalErrorAdjunto" label-error="Ninguno"></custom-alert>         
 			    </tab>
 			    <tab heading="{{ventanaTitulo}}" ng-controller="FmtAuditoriaController" ng-click="fixGridRendering()">
 			      	<h3>{{ventanaTitulo}}&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalAudito"> Ver <span class="glyphicon glyphicon-eye-open"> </span></button></h3>	                
@@ -140,7 +140,8 @@
 					      </div>
 					    </div>
 					  </div>
-					</div>  
+					</div>  					
+					<custom-alert name-modal="myModalErrorAuditoria" label-error="Ninguno"></custom-alert>
 			    </tab>
 			    <tab heading="{{ventanaTitulo}}" ng-controller="FmtEstadoController" ng-click="fixGridRendering()">
 			      	<h3>{{ventanaTitulo}}&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalEstado"> Ver <span class="glyphicon glyphicon-eye-open"> </span></button></h3>	                
@@ -194,6 +195,7 @@
 					    </div>
 					  </div>
 					</div>  
+					<custom-alert name-modal="myModalErrorEstado" label-error="Ninguno"></custom-alert>
 			    </tab>
 			    <tab heading="{{ventanaTitulo}}" ng-controller="PilMotiformController" ng-click="fixGridRendering()">
 			      	<h3>{{ventanaTitulo}}&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalMotiform"> Ver <span class="glyphicon glyphicon-eye-open"> </span></button></h3>	                
@@ -253,8 +255,10 @@
 					    </div>
 					  </div>
 					</div>  
+					<custom-alert labelerror="Ninguno"></custom-alert>
+					<custom-alert name-modal="myModalMotiForm" label-error="Ninguno"></custom-alert>
 			    </tab>
 			</tabset>      			
         </div>	    	       
-    </div>
+    
 </sec:authorize>      

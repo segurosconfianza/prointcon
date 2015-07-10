@@ -63,7 +63,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 				$scope.buttonDelete=false;					        	
 			}
 			else
-				alert("Favor seleccione una fila");
+				$scope.sendAlert("Favor seleccione una fila");
         }                       
 		
 		$scope.deleteRecordForm= function(){
@@ -74,7 +74,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 				$scope.buttonDelete=true;					        	
 			}
 			else
-				alert("Favor seleccione una fila");
+				$scope.sendAlert("Favor seleccione una fila");
         }
 		
 		$scope.insertRecord= function(){						
@@ -97,9 +97,10 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 				 $scope.usuatipo = row.usuatipo ,
 				 $scope.usuasucu = row.usuasucu ,
 				 $scope.usuaesta = row.usuaesta      
-								
-	        	alert("Se creo el registro correctamente");
-				$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
+					
+				 $scope.sendAlert("Se creo el registro correctamente");
+				$('#myModalNew').modal('hide');
+				$scope.loadMyGrid();
 	        }); 
         }
 		
@@ -124,36 +125,37 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 				 $scope.usuasucu = row.usuasucu ,
 				 $scope.usuaesta = row.usuaesta 
 									        
-	        	alert("Se actualizo el registro correctamente");
-				
-				$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
+				 $scope.sendAlert("Se actualizo el registro correctamente");
+				 $scope.loadMyGrid();
 	        }); 
         }
 		
 		$scope.deleteRecord= function(){
-						
+			$scope.usuaesta = "I"; 
+			
 			Service.deleteRecord($scope.usuacons,$scope.usuaunit,$scope.usuadive,$scope.usuatiin,$scope.usuarazo,$scope.usuanomb,$scope.usuaapel,$scope.usuaemai,$scope.usuatele,$scope.usuapeco,$scope.usuausua,$scope.usuapass,$scope.usuatipo,$scope.usuasucu,$scope.usuaesta).then(function(dataResponse) {        	            
 				row=dataResponse.data;
 				
-				$scope.usuacons = row.usuacons ,
-				$scope.usuaunit = row.usuaunit ,
-				$scope.usuadive = row.usuadive ,
-				$scope.usuatiin = row.usuatiin ,
-				$scope.usuarazo = row.usuarazo ,
-				$scope.usuanomb = row.usuanomb ,
-				$scope.usuaapel = row.usuaapel ,
-				$scope.usuaemai = row.usuaemai ,
-				$scope.usuatele = row.usuatele ,
-				$scope.usuapeco = row.usuapeco ,
-				$scope.usuausua = row.usuausua ,
-				$scope.usuapass = row.usuapass ,
-				$scope.usuatipo = row.usuatipo ,
-				$scope.usuasucu = row.usuasucu ,
-				$scope.usuaesta = row.usuaesta 
+				$scope.usuacons = row.usuacons ;
+				$scope.usuaunit = row.usuaunit ;
+				$scope.usuadive = row.usuadive ;
+				$scope.usuatiin = row.usuatiin ;
+				$scope.usuarazo = row.usuarazo ;
+				$scope.usuanomb = row.usuanomb ;
+				$scope.usuaapel = row.usuaapel ;
+				$scope.usuaemai = row.usuaemai ;
+				$scope.usuatele = row.usuatele ;
+				$scope.usuapeco = row.usuapeco ;
+				$scope.usuausua = row.usuausua ;
+				$scope.usuapass = row.usuapass ;
+				$scope.usuatipo = row.usuatipo ;
+				$scope.usuasucu = row.usuasucu ;
+				$scope.usuaesta = row.usuaesta ;
 
-	        	alert("Se borro el registro correctamente");
+				$scope.sendAlert("Se inactivo el registro correctamente");
+				$('#myModalNew').modal('hide');
 				
-				$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
+				$scope.loadMyGrid();
 	        }); 
         }	
 		
@@ -213,7 +215,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 			Service.getCombo("usuatiin").then(function(dataResponse) {  
 				
 				if(dataResponse.data.error!=undefined)
-		    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+					$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 		    	else{
 					$scope.optionsUsuatiin = dataResponse.data;
 					$scope.usuatiin = $scope.optionsUsuatiin[1];
@@ -222,7 +224,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 			
 			Service.getCombo("usuaesta").then(function(dataResponse) {  
 				if(dataResponse.data.error!=undefined)
-		    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+					$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 		    	else{				
 					$scope.optionsUsuaesta = dataResponse.data;
 					$scope.usuatiin = $scope.optionsUsuaesta[1];
@@ -231,7 +233,7 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 
 			Service.getSucursales(5).then(function(dataResponse) {    					    					
 				if(dataResponse.data.error!=undefined)
-		    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+					$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 		    	else{    			   
 		    		$scope.optionsSucursales = dataResponse.data.data;   
 		    		$scope.usuaesta = $scope.optionsSucursales[1];
@@ -253,11 +255,14 @@ FrmMainApp.controller('PilUsuaController', ['$scope', 'PilUsuaService',function(
 			
 			Service.getData($scope.pageSize, $scope.currentPage, $scope.order, $scope.searchQuery.concat($scope.basicSearchQuery)).then(function(dataResponse) {
 	    		if(dataResponse.data.error!=undefined)
-	    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    			$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	        	else 
 	        		$scope.$broadcast('loadDataGrid',dataResponse.data.data, dataResponse.data.count, $scope.pageSize, $scope.currentPage);
 	        });
 		}
-				
+		
+		$scope.sendAlert = function(error){
+			$scope.$broadcast('loadDataError', error);
+		}
     }            
     ])

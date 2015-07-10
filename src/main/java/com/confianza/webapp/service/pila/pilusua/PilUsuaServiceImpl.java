@@ -9,6 +9,8 @@ package com.confianza.webapp.service.pila.pilusua;
   * @app		pila  
   */                          
 
+import static org.springframework.ldap.query.LdapQueryBuilder.query;
+
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +23,11 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.confianza.webapp.repository.framework.security.Person;
+import com.confianza.webapp.repository.framework.security.PersonAttributesMapperImpl;
 import com.confianza.webapp.repository.pila.pilusua.PilUsua;
 import com.confianza.webapp.repository.pila.pilusua.PilUsuaRepository;
+import com.confianza.webapp.service.security.AutenticateImpl;
 import com.confianza.webapp.utils.Filter;
 
 @Service
@@ -30,6 +35,9 @@ public class PilUsuaServiceImpl implements PilUsuaService{
 	
 	@Autowired
 	private PilUsuaRepository pilUsuaRepository;
+	
+	@Autowired
+	private	AutenticateImpl autenticateImpl;
 	
 	@Autowired
 	Gson gson;
@@ -115,5 +123,11 @@ public class PilUsuaServiceImpl implements PilUsuaService{
 	@Override
 	public List<PilUsua> listAllFormregi(List<Long> codigosFormRegi){
 		return pilUsuaRepository.listAllFormregi(codigosFormRegi);
+	}
+	
+	@Override
+	public String validateUser(String username){
+		
+		return gson.toJson(autenticateImpl.validateUser(username));
 	}
 }

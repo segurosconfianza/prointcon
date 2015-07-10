@@ -55,8 +55,7 @@ public class PilMotivoServiceImpl implements PilMotivoService{
 		return gson.toJson(result);	
 	}
 	
-	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_MOTIVO_ALL", "PIL_MOTIVO_READ"})
+	@Override	 
 	public String listAll(int pageSize, int page){
 	
 		int limit=pageSize;

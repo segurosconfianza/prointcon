@@ -20,43 +20,42 @@ public class SendEmailImpl implements SendEmail {
 	private MailSender mailSender;
 	
 	@Autowired
-    private SimpleMailMessage templateMessage;
-	
-	@Autowired
     private JavaMailSenderImpl sender;
 		
 	private static final String fuente="<font style='font-size: (11 pt); font-family: tahoma; text-align:left'>";
 	private static final String th="<th style='text-align:left'>";
 	
 	@Override
-	public void sendMessage(String app, String subject,  String text, String to, String[] cc, HttpServletRequest request) {
+	public boolean sendMessage(String app, String subject,  String text, String to, String[] cc, HttpServletRequest request) {
 		 
 		MimeMessage message = sender.createMimeMessage();
 		MimeMessageHelper helper;
 		
-        if(cc!=null)
-        	templateMessage.setCc(cc);
-        
         try {
 			helper = new MimeMessageHelper(message, true);
 			helper.setTo(to);
 			helper.setFrom("webappconfianza@confianza.com.co");
     		helper.setSubject(subject);
     		helper.setText(getBody(app, subject, text), true);
+    		if(cc!=null)
+            	helper.setCc(cc);
     		helper.addInline("firmaWebApp", new FileSystemResource(request.getSession().getServletContext().getRealPath("/Imagenes/Confianza/FirmaAplicativoWeb.png")));
     		
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
         
         try{
-        	
         	sender.send(message);
+        	return true;
         }
         catch(MailException ex) {
-            System.err.println(ex.getMessage());
+        	ex.printStackTrace();
+        	return false;
         }
+        
     }
 
 	private String getBody(String app, String subject, String text) {

@@ -5,15 +5,18 @@ FrmMainApp.controller('FmtAdjuntoController', ['$scope', '$modal', 'PlanillaServ
 	$scope.showModal = false;
 	$scope.loadPdf=false;
 	
-	$scope.ventanaTitulo=getName(PlanillaService.getI18n(), "-", "FMT_ADJUNTO");
-	
+	$scope.$on('handleBroadcastAuditoriaI18n', function() {
+		
+		$scope.ventanaTitulo=getName(PlanillaService.getI18n(), "-", "FMT_ADJUNTO");
+    });
+
 	$scope.$on('handleBroadcastAdjunto', function() {
 		
 		$scope.loadPdf=true;
 		
 		PlanillaService.getDataAdjunto(PlanillaService.id).then(function(dataResponse) {   	        	
 	        if(dataResponse.data.error!=undefined){
-	        	alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	        	$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	        	$scope.loadPdf=false;
         	}
         	else{ 
@@ -21,6 +24,7 @@ FrmMainApp.controller('FmtAdjuntoController', ['$scope', '$modal', 'PlanillaServ
     		    var fileURL = URL.createObjectURL(file);
     		    $scope.content = $sce.trustAsResourceUrl(fileURL);
     		    $scope.loadPdf=false;
+    		    $scope.fixGridRendering();
         	}
         });	        
     }); 		                     	                    
@@ -40,5 +44,9 @@ FrmMainApp.controller('FmtAdjuntoController', ['$scope', '$modal', 'PlanillaServ
     		return log[0].etinetiq;
     	return "";
     }
+    
+    $scope.sendAlert = function(error){
+		$scope.$broadcast('loadDataError', error);
+	}
   }            
 ])

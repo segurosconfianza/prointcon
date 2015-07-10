@@ -32,21 +32,21 @@ public class CPilMotiform {
 		return "formatos/pilmotiform/PilMotiform";
 	}
 	
-	@RequestMapping(value = "/{mofocons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{mofocons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("mofocons") Long mofocons){
 		
 		return this.pilmotiformService.list(mofocons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize","order","filter"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize","order","filter"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam("filter") String filters){
 	
 		return this.pilmotiformService.listAll(pageSize, page, order, filters);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody PilMotiform pilmotiform, HttpServletRequest request){
@@ -54,7 +54,7 @@ public class CPilMotiform {
 		return this.pilmotiformService.update(pilmotiform);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody PilMotiform pilmotiform, HttpServletRequest request){
@@ -63,7 +63,7 @@ public class CPilMotiform {
 		return this.pilmotiformService.update(pilmotiform);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody PilMotiform pilmotiform, HttpServletRequest request){
@@ -71,11 +71,11 @@ public class CPilMotiform {
 		return this.pilmotiformService.insert(pilmotiform);		
 	}
 	
-	@RequestMapping(value = "/insertDevolucion", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insertDevolucion", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insertDevolucion(@RequestBody PilMotiform pilmotiform, HttpServletRequest request){
 		
-		return this.pilmotiformService.insertDevolucion(pilmotiform);		
+		return this.pilmotiformService.insertDevolucion(pilmotiform, request);
 	}
 }

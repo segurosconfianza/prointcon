@@ -201,7 +201,7 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 	private FmtFormregi createFormRegi(Long vefocons, String user) {
 		FmtFormregi fmtformregi=new FmtFormregi();
 		fmtformregi.setForevefo(vefocons);
-		fmtformregi.setForeesta("A");
+		fmtformregi.setForeesta("N");
 		fmtformregi.setForefech(Calendar.getInstance().getTime());
 		fmtformregi.setForeuser(user);
 		fmtFormregiRepository.insert(fmtformregi);
@@ -366,7 +366,7 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 			}
 			Map<String, Object> result = new HashMap<String, Object>();
 			result.put("tituloError", "Error");
-			result.put("error", "Se presentaron errores en la actualizacion del registro");
+			result.put("error", "No se puede actualizar el formato por el estado en el que se encuentra");
 			return gson.toJson(result);
 		}catch (Exception e) {
 			e.printStackTrace();

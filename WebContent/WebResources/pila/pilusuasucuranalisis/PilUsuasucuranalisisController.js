@@ -49,7 +49,7 @@ FrmMainApp.controller('PilUsuasucuranalisisController', ['$scope', 'PilSucuranal
     			$scope.buttonDelete=false;					        	
     		}
     		else
-    			alert("Favor seleccione una fila");
+    			$scope.sendAlert("Favor seleccione una fila");
         }                       
     	
     	$scope.deleteRecordForm= function(){
@@ -60,7 +60,7 @@ FrmMainApp.controller('PilUsuasucuranalisisController', ['$scope', 'PilSucuranal
     			$scope.buttonDelete=true;					        	
     		}
     		else
-    			alert("Favor seleccione una fila");
+    			$scope.sendAlert("Favor seleccione una fila");
         }
     	
     	$scope.insertRecord= function(){
@@ -68,12 +68,13 @@ FrmMainApp.controller('PilUsuasucuranalisisController', ['$scope', 'PilSucuranal
     		Service.insertRecordChild($scope.ussucons,$scope.ussuusua,$scope.ussusucu,$scope.ussuesta).then(function(dataResponse) {        	            
     			row=dataResponse.data;
     			
-    			 $scope.ussucons = row.ussucons;
-    			 $scope.ussuusua = row.ussuusua;
-    			 $scope.ussusucu = row.ussusucu;
-    			 $scope.ussuesta = row.ussuesta;    
-    							
-            	alert("Se creo el registro correctamente");
+    			$scope.ussucons = row.ussucons;
+    			$scope.ussuusua = row.ussuusua;
+    			$scope.ussusucu = row.ussusucu;
+    			$scope.ussuesta = row.ussuesta;    
+    				
+    			$scope.sendAlert("Se creo el registro correctamente");
+				$('#myModalNewChild').modal('hide');
             	
             	$scope.loadMyGrid();
             }); 
@@ -88,15 +89,15 @@ FrmMainApp.controller('PilUsuasucuranalisisController', ['$scope', 'PilSucuranal
     			 $scope.ussuusua = row.ussuusua;
     			 $scope.ussusucu = row.ussusucu;
     			 $scope.ussuesta = row.ussuesta; 
-    								        
-            	alert("Se actualizo el registro correctamente");
-            	
+    				
+    			 $scope.sendAlert("Se actualizo el registro correctamente");
+    			 
             	$scope.loadMyGrid();
             }); 
         }
     	
     	$scope.deleteRecord= function(){
-    					
+    		$scope.ussuesta = "I"; 			
     		Service.deleteRecordChild($scope.ussucons,$scope.ussuusua,$scope.ussusucu,$scope.ussuesta).then(function(dataResponse) {        	            
     			row=dataResponse.data;
     			
@@ -105,8 +106,9 @@ FrmMainApp.controller('PilUsuasucuranalisisController', ['$scope', 'PilSucuranal
     			 $scope.ussusucu = row.ussusucu;
     			 $scope.ussuesta = row.ussuesta; 
 
-            	alert("Se borro el registro correctamente");
-            	
+    			 $scope.sendAlert("Se inactivo el registro correctamente");
+    			 $('#myModalNewChild').modal('hide');
+    			 
             	$scope.loadMyGrid();
             }); 
         }
@@ -153,7 +155,7 @@ FrmMainApp.controller('PilUsuasucuranalisisController', ['$scope', 'PilSucuranal
 	              									
 			Service.getCombo("usuaesta").then(function(dataResponse) {  
 				if(dataResponse.data.error!=undefined)
-		    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+					$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 		    	else{				
 					$scope.optionsEstados = dataResponse.data;
 				}
@@ -161,10 +163,9 @@ FrmMainApp.controller('PilUsuasucuranalisisController', ['$scope', 'PilSucuranal
 
 			Service.getConsulta(31).then(function(dataResponse) {    					    					
 				if(dataResponse.data.error!=undefined)
-		    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
-		    	else{    			   
+					$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+		    	else  			   
 		    		$scope.optionsAnalistas = dataResponse.data.data;   
-		    	}
 			});
 		}
 		
@@ -189,12 +190,15 @@ FrmMainApp.controller('PilUsuasucuranalisisController', ['$scope', 'PilSucuranal
 				
 				Service.getDataChild($scope.pageSize, $scope.currentPage, $scope.order, basicSearchQuery).then(function(dataResponse) {
 		    		if(dataResponse.data.error!=undefined)
-		    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+		    			$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 		        	else 
 		        		$scope.$broadcast('loadDataGrid',dataResponse.data.data, dataResponse.data.count, $scope.pageSize, $scope.currentPage);
 		        });
 			}
 		}
-				
+		
+		$scope.sendAlert = function(error){
+			$scope.$broadcast('loadDataError', error);
+		}
     }            
     ])

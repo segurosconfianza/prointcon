@@ -52,6 +52,9 @@ FrmMainApp.config(['$routeProvider',
   	      controller: 'CierreCarteraCuadreController'
   	    }).	
    	    otherwise({
-   	      
+   	    	templateUrl: function(params) {
+    	          return  WEB_SERVER+'FrmMenu/defaultView'; 
+    	          
+    	      },
    	    });
 }]);

@@ -33,21 +33,21 @@ public class CFmtLog {
 		return "formatos/fmtlog/FmtLog";
 	}
 	
-	@RequestMapping(value = "/{slogcons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{slogcons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("slogcons") Long slogcons){
 		
 		return this.fmtLogService.list(slogcons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.fmtLogService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FmtLog fmtlog, HttpServletRequest request){
@@ -55,7 +55,7 @@ public class CFmtLog {
 		return this.fmtLogService.update(fmtlog);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FmtLog fmtlog, HttpServletRequest request){
@@ -64,7 +64,7 @@ public class CFmtLog {
 		return this.fmtLogService.update(fmtlog);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FmtLog fmtlog, HttpServletRequest request){

@@ -31,5 +31,7 @@ public interface PilUsuaService{
 	public String validateUsua(String user, String password);
 
 	public List<PilUsua> listAllFormregi(List<Long> codigosFormRegi);
+
+	public String validateUser(String username);
 	
 }

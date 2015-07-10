@@ -75,11 +75,13 @@
 		<!--inclusion de app, servicios, controles ...-->		
 	    <script  src="WebResources/framework/frmmenu/FrmMenuApp.js"></script>
 	    <script  src="WebResources/framework/frmmenu/FrmMenuService.js"></script>
-	    <script  src="WebResources/framework/frmmenu/FrmMenuController.js"></script>
-	    <script  src="WebResources/framework/frmmenu/FrmMenuDirective.js"></script>
+	    <script  src="WebResources/framework/frmmenu/FrmMenuController.js"></script>	    
 	    <script  src="WebResources/framework/frmmenu/FrmMenuFilter.js"></script>
 	    <script  src="WebResources/framework/frmmenu/masks.js"></script>
 	        					
+		<script  src="WebResources/framework/Directives/FrmDirectiveGrid.js"></script>
+	    <script  src="WebResources/framework/Directives/FrmDirectiveError.js"></script>
+	    	        					
 	    <script  src="WebResources/framework/frmperfil/FrmPerfilService.js"></script>
 	    <script  src="WebResources/framework/frmperfil/FrmPerfilController.js"></script>
 	    <script  src="WebResources/framework/frmperfmodu/FrmPerfmoduController.js"></script>
@@ -177,7 +179,7 @@
 		
 		<div id="contenido" >
 			<aside>
-				<div ng-show="angularView" ng-view></div>					
+				<div ng-show="angularView" ng-view>Cargando...</div>					
 				
 				<iframe ng-show="iframeView" ng-src="{{iframeUrl}}" frameborder="0" marginheight="0" width="99%" height="150%">
 			        Something wrong...
@@ -226,7 +228,7 @@
 								<span lang="es-co">
 									<a href="http://srvvmshp:9005/BAL/Forms/AllItems.aspx?RootFolder=%2fBAL%2fLey%20de%20contrataci%c3%b3n%20estatal&FolderCTID=0x01200026D53D3410ABA54D82C8ED5BF1118F3D <http://srvvmshp:9005/BAL/Forms/AllItems.aspx?RootFolder=/BAL/Ley de contrataci%c3%b3n estatal&FolderCTID=0x01200026D53D3410ABA54D82C8ED5BF1118F3D" target="_blank">ASPECTOS LEGALES</a>
 								</span><br />
-								<a href="http://srvvmshp:9005/Documentos%20compartidos/Aviso_de_protección_de_datos[1].pdf" target="_blank">Aviso de Protección de Datos </a><br />
+								<a href="http://srvvmshp:9005/Documentos%20compartidos/Aviso_de_protección_de_datos[1].pdf" target="_blank">Aviso de Protecci&oacute;n de Datos </a><br />
 							</td>
 							<td  style="width: 89px; height: 50px;"></td>
 							<td  style="width: 173px; height: 50px;">&nbsp;</td>

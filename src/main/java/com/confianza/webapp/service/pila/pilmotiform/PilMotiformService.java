@@ -11,6 +11,8 @@ package com.confianza.webapp.service.pila.pilmotiform;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.confianza.webapp.repository.pila.pilmotiform.PilMotiform;
 import com.confianza.webapp.utils.Filter;
 
@@ -28,6 +30,9 @@ public interface PilMotiformService{
 	
 	public int getCount(List<Filter> filters);
 
-	public String insertDevolucion(PilMotiform pilmotiform);
+	public String insertDevolucion(PilMotiform pilmotiform, HttpServletRequest request);
+
+	String listAllIntermediario(int pageSize, int page, String order,
+			String stringFilters);
 	
 }
