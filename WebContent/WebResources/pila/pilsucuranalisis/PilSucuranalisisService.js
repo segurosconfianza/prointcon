@@ -2,6 +2,7 @@ var FrmMainApp=angular.module('FrmMainApp');
 
 FrmMainApp.service('PilSucuranalisisService', function($http, $rootScope, $routeParams) {	    	
 		this.id=0;
+		this.sucunomb='';
 		this.I18n;
     	
     	this.getData = function(pageSize, page, order, filter) {    		    		
@@ -31,7 +32,7 @@ FrmMainApp.service('PilSucuranalisisService', function($http, $rootScope, $route
 		this.getConsulta = function(consultaId) {    
     		return $http({
     	        method: 'GET',
-    	        url: WEB_SERVER+'FrmConsulta/listComboDynamic.json',
+    	        url: WEB_SERVER+'FrmConsulta/listCombo.json',
     	        params: {conscons: consultaId}
     	     });
     	 }
@@ -41,8 +42,9 @@ FrmMainApp.service('PilSucuranalisisService', function($http, $rootScope, $route
 	        $rootScope.$broadcast('handleBroadcastUsuasucurI18n');
 	    }
 	        	
-		this.prepForLoad = function(id) {
+		this.prepForLoad = function(id, sucunomb) {
 	        this.id = id;
+	        this.sucunomb=sucunomb;
 	        this.loadChildren();
 		}
 		

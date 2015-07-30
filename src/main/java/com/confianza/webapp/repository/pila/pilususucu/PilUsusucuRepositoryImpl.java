@@ -249,7 +249,7 @@ public class PilUsusucuRepositoryImpl implements PilUsusucuRepository{
 		try{
 			String sql = "select "+PilUsusucu.getColumnNames()
 					   + "from PIL_USUSUCU "
-					   + "join PIL_USUA ON (USUACONS=USSUUSUA AND USUAUSUA=:user)";
+					   + "join PIL_USUA ON (USUACONS=USSUUSUA AND USUAUSUA=:user) where USSUESTA='A'";
 						
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(PilUsusucu.class)

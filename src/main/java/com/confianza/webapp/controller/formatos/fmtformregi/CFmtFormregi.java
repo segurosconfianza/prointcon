@@ -80,10 +80,17 @@ public class CFmtFormregi {
 		return this.fmtFormregiService.loadFormRegiAdmin(vefocons, pageSize, page, order, filters);
 	}
 	
-	@RequestMapping(value = "/aprobarRecord.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@RequestMapping(value = "/aprobarRecord.json", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String aprobarRecord(@RequestParam("forecons") Long forecons) throws Throwable{
 		
 		return this.fmtFormregiService.aprobarRecord(forecons);
+	}
+	
+	@RequestMapping(value = "/cancelarRecord.json", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseBody
+	public String cancelarRecord(@RequestParam("forecons") Long forecons) throws Throwable{
+		
+		return this.fmtFormregiService.cancelarRecord(forecons);
 	}
 }

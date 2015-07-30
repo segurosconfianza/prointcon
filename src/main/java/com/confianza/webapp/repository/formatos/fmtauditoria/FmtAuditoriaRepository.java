@@ -10,6 +10,9 @@ package com.confianza.webapp.repository.formatos.fmtauditoria;
   */                          
 
 import java.util.List;
+import java.util.Map;
+
+import com.confianza.webapp.utils.Filter;
 
 public interface FmtAuditoriaRepository {
 	
@@ -25,5 +28,5 @@ public interface FmtAuditoriaRepository {
 	
 	public int getCount();
 
-	public List<FmtAuditoria> listAll(int init, int limit, long forecons);
+	public Map<String, Object> listAllFrmFormregi(int init, int limit, String order, List<Filter> filters, long forecons);
 }

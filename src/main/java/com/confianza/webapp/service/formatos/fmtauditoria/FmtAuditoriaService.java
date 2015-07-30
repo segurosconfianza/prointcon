@@ -27,6 +27,8 @@ public interface FmtAuditoriaService{
 	
 	public int getCount();
 
-	public String listAll(int pageSize, int page, long forecons);
+	public void generateAudit(String audicamp, Long audicopk, String tabla, String audivaan, String audivanu, Long trancons);
+
+	public String listAllFrmFormregi(int pageSize, int page, String order, String stringFilters, Long forecons);
 	
 }

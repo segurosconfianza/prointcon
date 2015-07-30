@@ -9,7 +9,9 @@ FrmMainApp.controller('PilUsuasucuController', ['$scope', 'PilUsuaanalisisServic
 	
 	$scope.$on('handleBroadcastUsusucu', function() {
 		$scope.ussuusua = Service.id;
-		
+		$scope.usuausua = Service.usuausua;
+		if($scope.ussucons!=null && $scope.ussucons!=undefined && Service.id!=null && Service.id!=undefined)
+			$scope.initRecordForm();
 		$scope.loadMyGrid();        
     });
 
@@ -94,6 +96,8 @@ FrmMainApp.controller('PilUsuasucuController', ['$scope', 'PilUsuaanalisisServic
 		$scope.currentPage=currentPage;
 		$scope.order=order;
 		$scope.searchQuery=searchQuery;
+		if($scope.searchQuery==undefined)
+			$scope.searchQuery=[];
 		
     	if($scope.directiveGrid)
     		$scope.loadMyGrid();
@@ -117,25 +121,36 @@ FrmMainApp.controller('PilUsuasucuController', ['$scope', 'PilUsuaanalisisServic
 	}
 	
 	$scope.createRecordForm= function(){
+	    if(Service.id!=null && Service.id!=undefined && Service.id!=0){
+	    	$scope.initRecordForm();
+			$('#myModalNewChild').modal('show'); 
+	    }else{
+			$scope.sendAlert("Favor seleccione una fila");			
+			$('#myModalNewChild').modal('hide');
+		}
+    }    
+	
+	$scope.initRecordForm= function(){
 	    $scope.buttonNew=true;
 		$scope.buttonEdit=false;
 		$scope.buttonDelete=false;
 		
 		$scope.ussucons = undefined ;
-		 $scope.ussuusua = $scope.ussuusua;
-		 $scope.ussusucu = "" ;
-		 $scope.ussuesta = "A" ;        	
-    }                
+		$scope.ussuusua = Service.id;
+		$scope.ussusucu = "" ;
+		$scope.ussuesta = "A" ;  
+    }    
     
 	$scope.loadDatatoForm= function(){			
-		
-		if($scope.ussucons!=null || $scope.ussucons!=undefined){
+		if($scope.ussucons!=null && $scope.ussucons!=undefined && Service.id!=null && Service.id!=undefined && Service.id!=0){
 			$scope.buttonNew=false;
 			$scope.buttonEdit=true;
-			$scope.buttonDelete=false;					        	
+			$scope.buttonDelete=false;
+			$('#myModalNewChild').modal('show');
+		}else{
+			$scope.sendAlert("Favor seleccione una fila");			
+			$('#myModalNewChild').modal('hide');
 		}
-		else
-			$scope.sendAlert("Favor seleccione una fila");
     }                       
 	
 	$scope.deleteRecordForm= function(){
@@ -143,43 +158,52 @@ FrmMainApp.controller('PilUsuasucuController', ['$scope', 'PilUsuaanalisisServic
 		if($scope.ussucons!=null || $scope.ussucons!=undefined){
 			$scope.buttonNew=false;
 			$scope.buttonEdit=false;
-			$scope.buttonDelete=true;					        	
-		}
-		else
+			$scope.buttonDelete=true;		
+			$('#myModalNewChild').modal('show');
+		}else{
 			$scope.sendAlert("Favor seleccione una fila");
+			$('#myModalNewChild').modal('hide');
+		}
     }
 	
 	$scope.insertRecord= function(){
-		
 		Service.insertRecordChild($scope.ussucons,$scope.ussuusua,$scope.ussusucu,$scope.ussuesta).then(function(dataResponse) {        	            
-			row=dataResponse.data;
-			
-			 $scope.ussucons = row.ussucons;
-			 $scope.ussuusua = row.ussuusua;
-			 $scope.ussusucu = row.ussusucu;
-			 $scope.ussuesta = row.ussuesta;    
+			if(dataResponse.data.error!=undefined)
+				$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    	else{	
+				row=dataResponse.data;
 				
-			 $scope.sendAlert("Se creo el registro correctamente");
-			 
-			$('#myModalNewChild').modal('hide');
-			
-        	$scope.loadMyGrid();
+				$scope.ussucons = row.ussucons;
+				$scope.ussuusua = row.ussuusua;
+				$scope.ussusucu = row.ussusucu;
+				$scope.ussuesta = row.ussuesta;    
+				
+				console.log("no se porque no funciona", $('#myModalNewChild'));
+				
+				$scope.sendAlert("Se creo el registro correctamente");
+				$('#myModalNewChild').modal('hide');
+				$scope.loadMyGrid();
+	    	}
         }); 
     }
 	
 	$scope.updateRecord= function(){
 		
 		Service.updateRecordChild($scope.ussucons,$scope.ussuusua,$scope.ussusucu,$scope.ussuesta).then(function(dataResponse) {        	            
-			row=dataResponse.data;
-			
-			 $scope.ussucons = row.ussucons;
-			 $scope.ussuusua = row.ussuusua;
-			 $scope.ussusucu = row.ussusucu;
-			 $scope.ussuesta = row.ussuesta; 
-						
-			 $scope.sendAlert("Se actualizo el registro correctamente");
-			
-        	$scope.loadMyGrid();
+			if(dataResponse.data.error!=undefined)
+				$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    	else{	 
+				 row=dataResponse.data;
+				
+				 $scope.ussucons = row.ussucons;
+				 $scope.ussuusua = row.ussuusua;
+				 $scope.ussusucu = row.ussusucu;
+				 $scope.ussuesta = row.ussuesta; 
+							
+				 $scope.sendAlert("Se actualizo el registro correctamente");
+				 $('#myModalNewChild').modal('hide');
+	        	 $scope.loadMyGrid();
+	    	}
         }); 
     }
 	
@@ -188,17 +212,20 @@ FrmMainApp.controller('PilUsuasucuController', ['$scope', 'PilUsuaanalisisServic
 		$scope.ussuesta = "I" ;
 		
 		Service.deleteRecordChild($scope.ussucons,$scope.ussuusua,$scope.ussusucu,$scope.ussuesta).then(function(dataResponse) {        	            
-			row=dataResponse.data;
-			
-			 $scope.ussucons = row.ussucons;
-			 $scope.ussuusua = row.ussuusua;
-			 $scope.ussusucu = row.ussusucu;
-			 $scope.ussuesta = row.ussuesta; 
-
-			 $scope.sendAlert("Se inactivo el registro correctamente");
-			 $('#myModalNewChild').modal('hide');
-			 
-			 $scope.loadMyGrid();
+			if(dataResponse.data.error!=undefined)
+				$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    	else{	 
+				 row=dataResponse.data;
+				
+				 $scope.ussucons = row.ussucons;
+				 $scope.ussuusua = row.ussuusua;
+				 $scope.ussusucu = row.ussusucu;
+				 $scope.ussuesta = row.ussuesta; 
+	
+				 $scope.sendAlert("Se inactivo el registro correctamente");
+				 $('#myModalNewChild').modal('hide');
+				 $scope.loadMyGrid();
+	    	}
         }); 
     }
 	

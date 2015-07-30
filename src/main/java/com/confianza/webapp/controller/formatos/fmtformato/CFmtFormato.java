@@ -39,6 +39,11 @@ public class CFmtFormato {
 		return "pila/planilla/Planilla";
 	}
 	
+	@RequestMapping("/AdminPlanilla/")
+	public String adminPlanilla() {
+		return "pila/planillaadmin/PlanillaAdmin";
+	}
+	
 	@RequestMapping(value = "/{formcons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("formcons") Long formcons){

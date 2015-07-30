@@ -12,16 +12,17 @@ package com.confianza.webapp.repository.formatos.fmtformregi;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Iterator;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.metamodel.SessionFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,9 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	Gson gson;
 	
 	public Session getSession() {
+		
+		FmtFormregiInterceptor.setSessionFactory(sessionFactory);
+		sessionFactory.getCurrentSession().sessionWithOptions().interceptor(FmtFormregiInterceptor);
 		
 		return sessionFactory.getCurrentSession();
 	}
@@ -135,7 +139,8 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	@Override
 	@Transactional
 	public FmtFormregi insert(FmtFormregi fmtformregi){
-		getSession().save(fmtformregi);	
+			
+		getSession().saveOrUpdate(fmtformregi);
 		return fmtformregi;
 	}
 	
