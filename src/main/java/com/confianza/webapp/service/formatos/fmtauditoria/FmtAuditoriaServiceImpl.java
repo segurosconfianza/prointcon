@@ -9,16 +9,21 @@ package com.confianza.webapp.service.formatos.fmtauditoria;
   * @app		formatos  
   */                          
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.confianza.webapp.repository.formatos.fmtauditoria.FmtAuditoria;
 import com.confianza.webapp.repository.formatos.fmtauditoria.FmtAuditoriaRepository;
+import com.confianza.webapp.utils.Filter;
 
 @Service
 public class FmtAuditoriaServiceImpl implements FmtAuditoriaService{
@@ -90,23 +95,38 @@ public class FmtAuditoriaServiceImpl implements FmtAuditoriaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_AUDITORIA_ALL", "FMT_AUDITORIA_CREATE"})
 	public String insert(FmtAuditoria fmtauditoria){
 		return gson.toJson(fmtAuditoriaRepository.insert(fmtauditoria));
+	}		
+	
+	@Override
+	public void generateAudit(String audicamp, Long audicopk, String tabla, String audivaan, String audivanu, Long trancons) {
+		FmtAuditoria fmtAuditoria=new FmtAuditoria();
+		fmtAuditoria.setAudicamp(audicamp);
+		fmtAuditoria.setAudicopk(audicopk);
+		fmtAuditoria.setAuditabl(tabla);
+		fmtAuditoria.setAudivaan(audivaan);
+		fmtAuditoria.setAudivanu(audivanu);		
+		fmtAuditoria.setAuditran(trancons);
+		
+		fmtAuditoriaRepository.insert(fmtAuditoria);
 	}
 	
 	@Override
-	public String listAll(int pageSize, int page, long forecons){
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_AUDITORIA_ALL", "FMT_AUDITORIA_READ"})
+	public String listAllFrmFormregi(int pageSize, int page, String order, String stringFilters, Long forecons){
 	
 		int limit=pageSize;
 		int init=(pageSize*page)-(pageSize);
-		
-		List<FmtAuditoria> listAll=fmtAuditoriaRepository.listAll(init, limit, forecons);
+		Type listOfTestObject = new TypeToken<List<Filter>>(){}.getType();
+		List<Filter> filters = null;
+		if(!stringFilters.equals("null"))
+			filters = gson.fromJson("["+stringFilters+"]", listOfTestObject);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("data", listAll);
+		result=fmtAuditoriaRepository.listAllFrmFormregi(init, limit, order, filters, forecons);
 		result.put("count", this.getCount());
 		
-		return gson.toJson(result);	
-	}	
+		return gson.toJson(result);	 
+	}
 }

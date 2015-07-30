@@ -56,7 +56,7 @@ public class CPilUsua {
 	
 	@RequestMapping(value = "/listAll.json", params = {"page","pageSize","order","filter"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
-	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam("filter") String filters){
+	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam(value ="filter", required=false) String filters){
 	
 		return this.pilUsuaService.listAll(pageSize, page, order, filters);
 	}
@@ -80,7 +80,7 @@ public class CPilUsua {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
-	public String insert(@RequestBody PilUsua pilusua, HttpServletRequest request){
+	public String insert(@RequestBody PilUsua pilusua,HttpServletRequest request){
 		
 		return this.pilUsuaService.insert(pilusua);		
 	}

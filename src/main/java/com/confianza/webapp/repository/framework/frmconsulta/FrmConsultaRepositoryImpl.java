@@ -89,7 +89,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	public FrmConsulta list(Long id){
 		try{
 			String sql = "select "+FrmConsulta.getColumnNames()
-					   + "from FrmConsulta "
+					   + "from Frm_Consulta "  
 					   + "where conscons = :id ";
 						
 			Query query = getSession().createSQLQuery(sql)
@@ -114,7 +114,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 		try{
 			String sql = "select "+FrmConsulta.getColumnNames()
 					   + "from Frm_Consulta "
-					   + "where conscons = :id ";
+					   + "where consnomb = :id ";
 						
 			Query query = getSession().createSQLQuery(sql)	
 						 .addEntity(FrmConsulta.class)	

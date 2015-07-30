@@ -15,14 +15,18 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.confianza.webapp.repository.framework.frmperfil.FrmPerfil;
 import com.confianza.webapp.repository.framework.frmsesion.FrmSesion;
 import com.confianza.webapp.repository.framework.frmtransaccion.FrmTransaccion;
 import com.confianza.webapp.repository.framework.frmtransaccion.FrmTransaccionRepository;
+import com.confianza.webapp.service.framework.frmsesion.FrmSesionService;
 import com.google.gson.Gson;
 
 @Service
@@ -34,6 +38,9 @@ public class FrmTransaccionServiceImpl implements FrmTransaccionService{
 	@Autowired
 	private FrmTransaccionRepository frmTransaccionRepository;
 		
+	@Autowired
+	private FrmSesionService frmSesionService;
+	
 	/**
 	 * @return the frmtransaccionRepository
 	 */
@@ -97,5 +104,30 @@ public class FrmTransaccionServiceImpl implements FrmTransaccionService{
 		frmtransaccion.setTranfecr(new Date());
 				
 	    return frmTransaccionRepository.insert(frmtransaccion);
+	}
+	
+	@Override
+	public Long generateTransaction(String user) {
+		FrmTransaccion frmtransaccion;
+
+		FrmSesion frmSesion=(FrmSesion) getSession().getAttribute("frmSesion");
+		if(frmSesion==null)
+			frmtransaccion = createTransactionIntermediario(user);
+		else
+			frmtransaccion=this.insert(frmSesion.getSesicons());
+		
+		return frmtransaccion.getTrancons();
+	}
+	
+	private static HttpSession getSession() {
+	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	    return attr.getRequest().getSession(); // true == allow create
+	}
+	
+	//si es una peticion de intermediario no tendra la sesion iniciada en este backbone por lo tanto es caso especial
+	private FrmTransaccion createTransactionIntermediario(String user) {
+		FrmSesion frmSesion=frmSesionService.insert(user, "INTERMEDIARIO");		
+		FrmTransaccion frmtransaccion=this.insert(frmSesion.getSesicons());
+		return frmtransaccion;
 	}
 }

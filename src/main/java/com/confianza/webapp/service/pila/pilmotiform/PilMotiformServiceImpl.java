@@ -135,7 +135,7 @@ public class PilMotiformServiceImpl implements PilMotiformService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_MOTIFORM_ALL", "PIL_MOTIFORM_UPDATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_MOTIFORM_ALL", "PIL_MOTIFORM_CREATE"})
 	public String insertDevolucion(PilMotiform pilmotiform, HttpServletRequest request){
 		
 		pilmotiform.setMofofech(new Date());
@@ -151,10 +151,10 @@ public class PilMotiformServiceImpl implements PilMotiformService{
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		if(pilmotiform.getMofocons()!=null || !pilmotiform.getMofocons().equals(0)){
-			if(sendEmail.sendMessage("Pila", "Devolucion", pilmotiform.getMofodesc(), usuario.getUsuaemai(), null, request))
-				result.put("data", "Se registro el motivo id: "+pilmotiform.getMofocons()+", y se envio el correo al usuario");
+			if(sendEmail.sendMessage("Pila", "Devolución", pilmotiform.getMofodesc(), usuario.getUsuaemai(), null, "/Imagenes/Firmas/CentrodeContacto.png", request))
+				result.put("data", "Se registro la devolución con el número: "+pilmotiform.getMofocons()+" y se envió el correo al usuario.");
 			else
-				result.put("data", "Se registro el motivo id: "+pilmotiform.getMofocons()+", y no se pudo enviar el correo al usuario");
+				result.put("data", "Se registro la devolución con el número: "+pilmotiform.getMofocons()+" y no se pudo enviar el correo al usuario.");
 		}
 		else{
 			result.put("error", "Error al registrar el motivo");

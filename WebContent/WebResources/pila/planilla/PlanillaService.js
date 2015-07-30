@@ -16,7 +16,7 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
 		return $http({
 	        method: 'GET',
 	        url: WEB_SERVER+'FrmI18n/listModulo.json',
-	        params: {modulo: 'FMT_FORMREGI,FMT_AUDITORIA,FMT_ESTADO,FMT_ADJUNTO,PIL_USUA,PIL_MOTIVO,PIL_MOTIFORM' }
+	        params: {modulo: 'FMT_FORMREGI,FMT_AUDITORIA,FMT_ESTADO,FMT_ADJUNTO,PIL_USUA,PIL_MOTIVO,PIL_MOTIFORM,FRM_TRANSACCION' }
 	     });
 	 } 
 	
@@ -68,6 +68,15 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
 	     });
 	 }
 	
+	this.cancelarRecord = function(forecons) {    	
+		
+		return $http({
+	        method: 'POST',
+	        url: WEB_SERVER+'FmtFormregi/cancelarRecord.json',
+	        params: {forecons: forecons}
+	     });
+	 }
+
 	//Children
 	this.prepForLoadI18n = function() {	                                
         $rootScope.$broadcast('handleBroadcastAuditoriaI18n');
@@ -99,8 +108,8 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
     this.getDataAuditoria = function(pageSize, page, order, filter) {  		
 		return $http({
 	        method: 'GET',
-	        url: WEB_SERVER+'FmtAuditoria/listAll.json',
-	        params: {pageSize: pageSize, page: page, order: order, filter: filter }
+	        url: WEB_SERVER+'FmtAuditoria/listAllFormregi.json',
+	        params: {pageSize: pageSize, page: page, order: order, filter: filter, forecons: this.id }
 	     });		
 	 }
     
@@ -127,7 +136,7 @@ FrmMainApp.service('PlanillaService', function($http, $rootScope, $routeParams) 
     
     this.aprobarRecord = function(forecons) {    		    		
 		return $http({
-	        method: 'GET',
+	        method: 'POST',
 	        url:  WEB_SERVER+'FmtFormregi/aprobarRecord.json', 
 	        params: {forecons: forecons}
 	     });

@@ -9,6 +9,7 @@ package com.confianza.webapp.aop.service;
   * @app		framework  
   */                          
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +46,12 @@ public class ServiceAOPImpl{
 	public String interceptController(ProceedingJoinPoint point) throws Throwable{
 		try{
 			return (String) point.proceed();
+		}catch( DataIntegrityViolationException e){ 
+			e.printStackTrace();
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("tituloError", "Datos no registrados");
+			result.put("error", "No se registro porque viola la restricción única");
+			return gson.toJson(result);
 		}catch(NullPointerException e){
 			e.printStackTrace();
 			Map<String, Object> result = new HashMap<String, Object>();

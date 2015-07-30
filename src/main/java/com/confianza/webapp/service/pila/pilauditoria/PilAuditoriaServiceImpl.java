@@ -14,9 +14,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.google.gson.Gson;
+import com.confianza.webapp.repository.formatos.fmtauditoria.FmtAuditoria;
 import com.confianza.webapp.repository.pila.pilauditoria.PilAuditoria;
 import com.confianza.webapp.repository.pila.pilauditoria.PilAuditoriaRepository;
 
@@ -93,6 +96,19 @@ public class PilAuditoriaServiceImpl implements PilAuditoriaService{
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_AUDITORIA_ALL", "PIL_AUDITORIA_CREATE"})
 	public String insert(PilAuditoria pilauditoria){
 		return gson.toJson(pilAuditoriaRepository.insert(pilauditoria));
+	}
+	
+	@Override
+	public void generateAudit(String audicamp, Long audicopk, String tabla, String audivaan, String audivanu, Long trancons) {
+		PilAuditoria pilauditoria=new PilAuditoria();
+		pilauditoria.setAudicamp(audicamp);
+		pilauditoria.setAudicopk(audicopk);
+		pilauditoria.setAuditabl(tabla);
+		pilauditoria.setAudivaan(audivaan);
+		pilauditoria.setAudivanu(audivanu);		
+		pilauditoria.setAuditran(trancons);
+		
+		pilAuditoriaRepository.insert(pilauditoria);
 	}
 	
 }

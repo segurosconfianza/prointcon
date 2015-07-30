@@ -2,6 +2,7 @@ var FrmMainApp=angular.module('FrmMainApp');
 
 FrmMainApp.service('PilUsuaanalisisService', function($http, $rootScope, $routeParams) {	    	
 		this.id=0;
+		this.usuausua='';
 		this.I18n;
     	
     	this.getData = function(pageSize, page, order, filter) {    		    		
@@ -91,8 +92,9 @@ FrmMainApp.service('PilUsuaanalisisService', function($http, $rootScope, $routeP
 	        $rootScope.$broadcast('handleBroadcastUsusucuI18n');
 	    }
 	        	
-		this.prepForLoad = function(id) {
+		this.prepForLoad = function(id, usuausua) {
 	        this.id = id;
+	        this.usuausua=usuausua;
 	        this.loadChildren();
 		}
 		

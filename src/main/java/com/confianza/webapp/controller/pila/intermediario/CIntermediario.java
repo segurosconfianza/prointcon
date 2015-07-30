@@ -143,9 +143,9 @@ public class CIntermediario {
 	
 	@RequestMapping(value = "/FmtAuditoria/listAll.json", params = {"page","pageSize", "forecons"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
-	public String listAllFmtAuditoria(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("forecons") long forecons){
+	public String listAllFmtAuditoria(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page,@RequestParam("order") String order,@RequestParam("stringFilters") String stringFilters, @RequestParam("forecons") long forecons){
 	
-		return this.fmtauditoriaService.listAll(pageSize, page, forecons);
+		return this.fmtauditoriaService.listAllFrmFormregi(pageSize, page, order, stringFilters, forecons);
 	}
 	
 	@RequestMapping(value = "/FmtEstado/listAll.json", params = {"page","pageSize","order","filter"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
