@@ -46,4 +46,6 @@ public interface FmtFormregiService{
 	public String aprobarRecord(Long forecons);
 
 	public String devolverRecord(Long forecons);
+
+	public String cancelarRecord(Long forecons);
 }

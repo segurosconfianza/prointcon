@@ -34,21 +34,21 @@ public class CFmtFormregi {
 		return "formatos/fmtformregi/FmtFormregi";
 	}
 	
-	@RequestMapping(value = "/{forecons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{forecons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("forecons") Long forecons){
 		
 		return this.fmtFormregiService.list(forecons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.fmtFormregiService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FmtFormregi fmtformregi, HttpServletRequest request){
@@ -56,7 +56,7 @@ public class CFmtFormregi {
 		return this.fmtFormregiService.update(fmtformregi);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FmtFormregi fmtformregi, HttpServletRequest request){
@@ -65,7 +65,7 @@ public class CFmtFormregi {
 		return this.fmtFormregiService.update(fmtformregi);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FmtFormregi fmtformregi, HttpServletRequest request){
@@ -80,10 +80,17 @@ public class CFmtFormregi {
 		return this.fmtFormregiService.loadFormRegiAdmin(vefocons, pageSize, page, order, filters);
 	}
 	
-	@RequestMapping(value = "/aprobarRecord.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@RequestMapping(value = "/aprobarRecord.json", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String aprobarRecord(@RequestParam("forecons") Long forecons) throws Throwable{
 		
 		return this.fmtFormregiService.aprobarRecord(forecons);
+	}
+	
+	@RequestMapping(value = "/cancelarRecord.json", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseBody
+	public String cancelarRecord(@RequestParam("forecons") Long forecons) throws Throwable{
+		
+		return this.fmtFormregiService.cancelarRecord(forecons);
 	}
 }

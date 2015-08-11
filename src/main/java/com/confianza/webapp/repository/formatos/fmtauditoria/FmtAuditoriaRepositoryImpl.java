@@ -9,8 +9,12 @@ package com.confianza.webapp.repository.formatos.fmtauditoria;
   * @app		formatos  
   */                          
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -19,11 +23,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.confianza.webapp.repository.formatos.fmtformregi.FmtFormregi;
+import com.confianza.webapp.repository.framework.frmconsulta.FrmConsulta;
+import com.confianza.webapp.repository.pila.pilusua.PilUsua;
+import com.confianza.webapp.service.framework.frmconsulta.FrmConsultaService;
+import com.confianza.webapp.utils.Filter;
+import com.confianza.webapp.utils.JSONUtil;
+import com.confianza.webapp.utils.SqlFunctions;
+
 @Repository
 public class FmtAuditoriaRepositoryImpl implements FmtAuditoriaRepository{
 	
 	@Autowired
 	private SessionFactory sessionFactory;  	
+	
+	@Autowired
+	private SqlFunctions sqlFunctions;
+	
+	@Autowired
+	private FrmConsultaService frmConsultaService;
 	
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
@@ -163,31 +181,35 @@ public class FmtAuditoriaRepositoryImpl implements FmtAuditoriaRepository{
 	
 	/**
 	 * Metodo de consulta para los registros de la tabla FmtAuditoria
-	 * @return FmtAuditoria = coleccion de objetos de la case FmtAuditoria que contiene los datos encontrados
 	 * @throws Exception
 	 */
 	@Override
 	@Transactional
-	public List<FmtAuditoria> listAll(int init, int limit, long forecons){
+	public Map<String, Object> listAllFrmFormregi(int init, int limit, String order, List<Filter> filters, long forecons){
 		try{
-			String sql = "select "+FmtAuditoria.getColumnNames()
-					   + "from FMT_AUDITORIA "
-					   + "join FMT_FORMREGI ON (FORECONS = AUDICOPK AND audicamp='FmtFormregi' AND FORECONS = :forecons) "
-					   + "join FMT_VALOCAMP ON (VACACONS = AUDICOPK AND audicamp='FmtValocamp' AND VACAFORE = :forecons) ";
+			FrmConsulta consulta=frmConsultaService.listName("FMT_AUDITORIA_FMT_FORMREGI");
+			
+			String sql = consulta.getConslsql();
 						
-			Query query = getSession().createSQLQuery(sql)
-						 .addEntity(FmtAuditoria.class)
-						 .setParameter("forecons", forecons);
-						 
+			sql = sqlFunctions.completeSQL(order, filters, sql, consulta.getConscolu());
+			
+			Query query = getSession().createSQLQuery(sql);
+			
+			query.setParameter("forecons", forecons);
+			query=sqlFunctions.setParameters(filters, query);
+			
 			if(limit!=0){
 				query.setFirstResult(init);			
 				query.setMaxResults(limit);
 			}
-					     
-			return query.list();
+			
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("data", JSONUtil.toNameList(consulta.getConscolu().split(","),query.list()));
+			
+			return result;
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;
 		}
-	}	
+	}
 }

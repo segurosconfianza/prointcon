@@ -35,21 +35,21 @@ public class CFmtCampo {
 		return "formatos/fmtcampo/FmtCampo";
 	}
 	
-	@RequestMapping(value = "/{campcons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{campcons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("campcons") Long campcons){
 		
 		return this.fmtCampoService.list(campcons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.fmtCampoService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FmtCampo fmtcampo, HttpServletRequest request){
@@ -57,7 +57,7 @@ public class CFmtCampo {
 		return this.fmtCampoService.update(fmtcampo);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FmtCampo fmtcampo, HttpServletRequest request){
@@ -66,7 +66,7 @@ public class CFmtCampo {
 		return this.fmtCampoService.update(fmtcampo);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FmtCampo fmtcampo, HttpServletRequest request){

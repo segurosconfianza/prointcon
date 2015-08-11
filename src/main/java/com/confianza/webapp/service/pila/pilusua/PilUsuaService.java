@@ -22,8 +22,6 @@ public interface PilUsuaService{
 	
 	public String insert(PilUsua pilusua);
 	
-	public String update(PilUsua pilusua);
-	
 	public void delete(PilUsua pilusua);	
 	
 	public int getCount(List<Filter> filters);
@@ -31,5 +29,9 @@ public interface PilUsuaService{
 	public String validateUsua(String user, String password);
 
 	public List<PilUsua> listAllFormregi(List<Long> codigosFormRegi);
-	
+
+	public String validateUser(String username);
+
+	public String update(PilUsua pilusua);
+
 }

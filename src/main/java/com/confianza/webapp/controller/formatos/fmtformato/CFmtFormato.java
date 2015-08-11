@@ -39,21 +39,26 @@ public class CFmtFormato {
 		return "pila/planilla/Planilla";
 	}
 	
-	@RequestMapping(value = "/{formcons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping("/AdminPlanilla/")
+	public String adminPlanilla() {
+		return "pila/planillaadmin/PlanillaAdmin";
+	}
+	
+	@RequestMapping(value = "/{formcons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("formcons") Long formcons){
 		
 		return this.fmtFormatoService.list(formcons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.fmtFormatoService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FmtFormato fmtformato, HttpServletRequest request){
@@ -61,7 +66,7 @@ public class CFmtFormato {
 		return this.fmtFormatoService.update(fmtformato);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FmtFormato fmtformato, HttpServletRequest request){
@@ -70,7 +75,7 @@ public class CFmtFormato {
 		return this.fmtFormatoService.update(fmtformato);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FmtFormato fmtformato, HttpServletRequest request){

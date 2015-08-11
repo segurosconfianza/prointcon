@@ -46,10 +46,11 @@ FrmMainApp.controller('PilSucuranalisisController', ['$scope', 'PilSucuranalisis
                 	sortInfo:{ fields: ['sucucons'], directions: ['asc']},
                 	selectedItems: [],
                     afterSelectionChange: function (rowItem, event) {
+                    	if($scope.sucucons!=rowItem.entity.sucucons)
+                    		Service.prepForLoad(rowItem.entity.sucucons, rowItem.entity.sucunomb);
+                    	
                     	$scope.sucucons = rowItem.entity.sucucons; 
                     	$scope.sucunomb = rowItem.entity.sucunomb;
-                    	
-                    	Service.prepForLoad(rowItem.entity.sucucons);
                     }
                 };
 	            	                      
@@ -62,6 +63,8 @@ FrmMainApp.controller('PilSucuranalisisController', ['$scope', 'PilSucuranalisis
 			$scope.currentPage=currentPage;
 			$scope.order=order;
 			$scope.searchQuery=searchQuery;
+			if($scope.searchQuery==undefined)
+				$scope.searchQuery=[];
 			
 	    	if($scope.directiveGrid)
 	    		$scope.loadMyGrid();
@@ -71,10 +74,14 @@ FrmMainApp.controller('PilSucuranalisisController', ['$scope', 'PilSucuranalisis
 			
 			Service.getData($scope.pageSize, $scope.currentPage, $scope.order, $scope.searchQuery).then(function(dataResponse) {
 	    		if(dataResponse.data.error!=undefined)
-	    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    			$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	        	else 
 	        		$scope.$broadcast('loadDataGrid',dataResponse.data.data, dataResponse.data.count, $scope.pageSize, $scope.currentPage);
 	        });
+		}
+		
+		$scope.sendAlert = function(error){
+			$scope.$broadcast('loadDataError', error);
 		}
 				
     }            

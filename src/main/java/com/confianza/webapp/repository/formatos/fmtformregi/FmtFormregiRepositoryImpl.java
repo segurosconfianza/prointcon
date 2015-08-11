@@ -12,16 +12,17 @@ package com.confianza.webapp.repository.formatos.fmtformregi;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Iterator;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.metamodel.SessionFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,9 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	Gson gson;
 	
 	public Session getSession() {
+		
+		FmtFormregiInterceptor.setSessionFactory(sessionFactory);
+		sessionFactory.getCurrentSession().sessionWithOptions().interceptor(FmtFormregiInterceptor);
 		
 		return sessionFactory.getCurrentSession();
 	}
@@ -135,7 +139,8 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	@Override
 	@Transactional
 	public FmtFormregi insert(FmtFormregi fmtformregi){
-		getSession().save(fmtformregi);	
+			
+		getSession().saveOrUpdate(fmtformregi);
 		return fmtformregi;
 	}
 	
@@ -316,24 +321,19 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	private String generateWhere(List<Filter> filters, String where) {
 		for(Filter filter:filters){
 			if((FmtFormregi.getColumnNames()+", tablvast, usuasucu, usuarazo, usuaunit").matches("(.*)"+filter.getCampo()+"(.*)") ){
-				if(where.isEmpty()){
+				if(where.isEmpty())
 					where+=" WHERE ";
-					where+= generateCondition(filter);
-				}
-				else{
+				else
 					where+=" AND ";
-					where+= generateCondition(filter);
-				}
+				where+= generateCondition(filter);
 			}
 			else{
-				if(where.isEmpty()){
+				if(where.isEmpty())
 					where+=" WHERE ";
-					where+= "campnomb='"+filter.getCampo()+"' AND "+generateConditionValocamp(filter);
-				}
-				else{
+				else
 					where+=" AND ";
-					where+= "campnomb='"+filter.getCampo()+"' AND "+generateConditionValocamp(filter);
-				}
+								
+				where+= "campnomb='"+filter.getCampo()+"' AND "+generateConditionValocamp(filter);
 			}
 		}
 		return where;
@@ -357,9 +357,15 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	
 	private String generateConditionValocamp(Filter filter) {
 		if(filter.getTipo().equals("BETWEEN"))
-			return " vacavalo "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
+			if(filter.getTipodato().equals("Number"))
+				return " COALESCE(TO_NUMBER(REGEXP_SUBSTR(vacavalo, '^\\d+')), 0) "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
+			else
+				return " vacavalo "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
 		else
-			return " vacavalo "+filter.getTipo()+" :"+filter.getCampo();
+			if(filter.getTipodato().equals("Number"))
+				return " COALESCE(TO_NUMBER(REGEXP_SUBSTR(vacavalo, '^\\d+')), 0) "+filter.getTipo()+" :"+filter.getCampo();
+			else
+				return " vacavalo "+filter.getTipo()+" :"+filter.getCampo();
 	}
 	
 	/**

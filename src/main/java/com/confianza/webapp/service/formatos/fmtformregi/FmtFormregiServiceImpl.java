@@ -12,7 +12,6 @@ package com.confianza.webapp.service.formatos.fmtformregi;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,20 +26,20 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.confianza.webapp.repository.formatos.fmtadjunto.FmtAdjunto;
 import com.confianza.webapp.repository.formatos.fmtcampo.FmtCampo;
-import com.confianza.webapp.repository.formatos.fmtestado.FmtEstado;
 import com.confianza.webapp.repository.formatos.fmtformregi.FmtFormregi;
 import com.confianza.webapp.repository.formatos.fmtformregi.FmtFormregiRepository;
 import com.confianza.webapp.repository.formatos.fmtvalocamp.FmtValocamp;
 import com.confianza.webapp.repository.framework.frmarchivo.FrmArchivo;
 import com.confianza.webapp.repository.framework.frmtablas.FrmTablas;
 import com.confianza.webapp.repository.pila.pilusua.PilUsua;
-import com.confianza.webapp.repository.pila.pilusua.PilUsuaRepository;
 import com.confianza.webapp.service.formatos.fmtadjunto.FmtAdjuntoService;
+import com.confianza.webapp.service.formatos.fmtauditoria.FmtAuditoriaService;
 import com.confianza.webapp.service.formatos.fmtcampo.FmtCampoService;
 import com.confianza.webapp.service.formatos.fmtestado.FmtEstadoService;
 import com.confianza.webapp.service.formatos.fmtvalocamp.FmtValocampService;
 import com.confianza.webapp.service.framework.frmarchivo.FrmArchivoService;
 import com.confianza.webapp.service.framework.frmtablas.FrmTablasService;
+import com.confianza.webapp.service.framework.frmtransaccion.FrmTransaccionService;
 import com.confianza.webapp.service.pila.pilusua.PilUsuaService;
 import com.confianza.webapp.service.security.userDetails;
 import com.confianza.webapp.utils.Filter;
@@ -72,6 +71,12 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 	
 	@Autowired
 	private PilUsuaService pilUsuaService;
+	
+	@Autowired
+	private FrmTransaccionService frmTransaccionService;
+	
+	@Autowired
+	private FmtAuditoriaService fmtAuditoriaService;
 	
 	@Autowired
 	userDetails userDetails;
@@ -155,10 +160,16 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 		
 		fmtEstadoService.insertLastEstado(fmtformregi, userDetails.getUser());
 		
-		fmtformregi.setForeesta("A");
-		fmtFormregiRepository.update(fmtformregi);
-		
-		return gson.toJson("El id: "+forecons+" ha sido aprobado");
+		if(fmtformregi.getForeesta().equals("N") || fmtformregi.getForeesta().equals("M")){
+			Long transcons=frmTransaccionService.generateTransaction("");
+			generateAudit("foreesta",fmtformregi.getForecons(),"FmtFormregi", fmtformregi.getForeesta(),"A", transcons);
+			fmtformregi.setForeesta("A");
+			fmtFormregiRepository.update(fmtformregi);
+			
+			return gson.toJson("El id: "+forecons+" ha sido aprobado");
+		}
+		else
+			return gson.toJson("El id: "+forecons+" ha no sido aprobado, por el estado en el que se encuentra");
 	}
 	
 	@Override
@@ -166,6 +177,8 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 	public String devolverRecord(Long forecons){
 		FmtFormregi fmtformregi=fmtFormregiRepository.list(forecons);
 		
+		Long transcons=frmTransaccionService.generateTransaction("");
+		generateAudit("foreesta",fmtformregi.getForecons(),"FmtFormregi", fmtformregi.getForeesta(),"D", transcons);
 		fmtEstadoService.insertLastEstado(fmtformregi, userDetails.getUser());
 		
 		fmtformregi.setForeesta("D");
@@ -201,7 +214,7 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 	private FmtFormregi createFormRegi(Long vefocons, String user) {
 		FmtFormregi fmtformregi=new FmtFormregi();
 		fmtformregi.setForevefo(vefocons);
-		fmtformregi.setForeesta("A");
+		fmtformregi.setForeesta("N");
 		fmtformregi.setForefech(Calendar.getInstance().getTime());
 		fmtformregi.setForeuser(user);
 		fmtFormregiRepository.insert(fmtformregi);
@@ -358,15 +371,16 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 			Map<String, Object> parametersData=gson.fromJson(paramsData, type);
 			
 			FmtFormregi fmtformregi = fmtFormregiRepository.list(forecons);
+			Long trancons=frmTransaccionService.generateTransaction(user);
 			
-			if(fmtformregi.getForeesta().equals("N") || fmtformregi.getForeesta().equals("D")){			
-				if(fmtValocampService.updateValuesIntermediario(vefocons, forecons, parametersData, user))
-					if(insertFiles(user, file, fmtformregi))
+			if(fmtformregi.getForeesta().equals("N") || fmtformregi.getForeesta().equals("D") || fmtformregi.getForeesta().equals("M")){			
+				if(fmtValocampService.updateValuesIntermediario(vefocons, forecons, parametersData, user, trancons))
+					if(insertFiles(user, file, fmtformregi, trancons))
 						return gson.toJson("Se actualizaron los datos correctamente");					
 			}
 			Map<String, Object> result = new HashMap<String, Object>();
 			result.put("tituloError", "Error");
-			result.put("error", "Se presentaron errores en la actualizacion del registro");
+			result.put("error", "No se puede actualizar el formato por el estado en el que se encuentra");
 			return gson.toJson(result);
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -377,12 +391,12 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 		}
 	}
 
-	private boolean insertFiles(String user, ArrayList<MultipartFile> file, FmtFormregi fmtformregi) throws Exception {
+	private boolean insertFiles(String user, ArrayList<MultipartFile> file, FmtFormregi fmtformregi, Long transcons) throws Exception {
 		if(file.size()>0){
 			inactivarAdjuntos(fmtformregi);
 			List<FrmArchivo> listAll=this.frmArchivoService.ingresarArchivos(file, "archinte");
 			if(fmtAdjuntoService.insertAdjuntos(fmtformregi.getForecons(), user, listAll)){
-				updateFmtFormRegi(fmtformregi, user);
+				updateFmtFormRegi(fmtformregi, user, transcons);
 				return true;
 			}
 			return false;
@@ -398,10 +412,33 @@ public class FmtFormregiServiceImpl implements FmtFormregiService{
 		}
 	}
 
-	private FmtFormregi updateFmtFormRegi(FmtFormregi fmtformregi, String user) {
-		fmtEstadoService.insertLastEstado(fmtformregi, user);
-		fmtformregi.setForeesta("M");
-		return fmtFormregiRepository.update(fmtformregi);
-	}	
-
+	private FmtFormregi updateFmtFormRegi(FmtFormregi fmtformregi, String user, Long transcons) {
+		if(!fmtformregi.getForeesta().equals("N")){
+			generateAudit("foreesta",fmtformregi.getForecons(),"FmtFormregi", fmtformregi.getForeesta(),"M", transcons);
+			fmtEstadoService.insertLastEstado(fmtformregi, user);
+			fmtformregi.setForeesta("M");
+			fmtFormregiRepository.update(fmtformregi);
+		}
+		return fmtformregi;
+	}
+	
+	private void generateAudit(String audicamp, Long audicopk, String tabla, String audivaan, String audivanu, Long trancons) {
+		fmtAuditoriaService.generateAudit(audicamp, audicopk, tabla, audivaan, audivanu, trancons);
+	}
+	
+	@Override
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FMT_FORMREGI_ALL", "FMT_FORMREGI_UPDATE"})
+	public String cancelarRecord(Long forecons){
+		FmtFormregi fmtformregi=fmtFormregiRepository.list(forecons);
+		
+		fmtEstadoService.insertLastEstado(fmtformregi, userDetails.getUser());
+		
+		
+		Long transcons=frmTransaccionService.generateTransaction("");
+		generateAudit("foreesta",fmtformregi.getForecons(),"FmtFormregi", fmtformregi.getForeesta(),"C", transcons);
+		fmtformregi.setForeesta("C");
+		fmtFormregiRepository.update(fmtformregi);
+		
+		return gson.toJson("El id: "+forecons+" ha sido cancelado");
+	}
 }

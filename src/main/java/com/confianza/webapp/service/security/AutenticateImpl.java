@@ -97,5 +97,18 @@ public class AutenticateImpl implements AuthenticationProvider {
 	public boolean supports(Class<? extends Object> authentication) {
 		// TODO Auto-generated method stub
 		return authentication.equals(UsernamePasswordAuthenticationToken.class);
-	}		
+	}	
+	
+	public boolean validateUser(String username){
+		
+		List<Person> lista = null;
+		lista =  ldapTemplate.search(query().	  
+        		 filter("(&(objectClass=person)(sAMAccountName="+username+"))"),
+        		 new PersonAttributesMapperImpl());
+		
+		if(lista!=null && lista.size()>0)
+			return true;
+		else 
+			return false;
+	}
 }

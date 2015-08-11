@@ -47,21 +47,21 @@ public class CPilUsua {
 		return "pila/pilsucuranalisis/PilSucuranalisis";
 	}
 	
-	@RequestMapping(value = "/{usuacons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{usuacons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("usuacons") Long usuacons){
 		
 		return this.pilUsuaService.list(usuacons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize","order","filter"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize","order","filter"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
-	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam("filter") String filters){
+	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam(value ="filter", required=false) String filters){
 	
 		return this.pilUsuaService.listAll(pageSize, page, order, filters);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody PilUsua pilusua, HttpServletRequest request){
@@ -69,20 +69,27 @@ public class CPilUsua {
 		return this.pilUsuaService.update(pilusua);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody PilUsua pilusua, HttpServletRequest request){
 	
-		//pilusua.setesta("B");
 		return this.pilUsuaService.update(pilusua);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
-	public String insert(@RequestBody PilUsua pilusua, HttpServletRequest request){
+	public String insert(@RequestBody PilUsua pilusua,HttpServletRequest request){
 		
 		return this.pilUsuaService.insert(pilusua);		
-	}		
+	}
+	
+	@RequestMapping(value = "/validateUser", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseStatus( HttpStatus.CREATED )
+	@ResponseBody
+	public String validateUser(@RequestParam String username){
+		
+		return this.pilUsuaService.validateUser(username);		
+	}
 }

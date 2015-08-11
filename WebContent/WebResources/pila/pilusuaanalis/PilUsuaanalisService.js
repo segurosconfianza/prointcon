@@ -2,6 +2,7 @@ var FrmMainApp=angular.module('FrmMainApp');
 
 FrmMainApp.service('PilUsuaanalisisService', function($http, $rootScope, $routeParams) {	    	
 		this.id=0;
+		this.usuausua='';
 		this.I18n;
     	
     	this.getData = function(pageSize, page, order, filter) {    		    		
@@ -39,6 +40,15 @@ FrmMainApp.service('PilUsuaanalisisService', function($http, $rootScope, $routeP
     	     });
     	 }
     	
+    	this.validateUser = function(username) {    	
+    		
+    		return $http({
+    	        method: 'GET',
+    	        url: WEB_SERVER+'PilUsua/validateUser',
+    	        params: { username: username},
+    	     });
+    	 }
+
 		this.updateRecord = function(usuacons,usuaunit,usuadive,usuatiin,usuarazo,usuanomb,usuaapel,usuaemai,usuatele,usuapeco,usuausua,usuapass,usuatipo,usuasucu,usuaesta) {    	
     		
 			data = {usuacons : usuacons, usuaunit : usuaunit, usuadive : usuadive, usuatiin : usuatiin, usuarazo : usuarazo, usuanomb : usuanomb, usuaapel : usuaapel, usuaemai : usuaemai, usuatele : usuatele, usuapeco : usuapeco, usuausua : usuausua, usuapass : usuapass, usuatipo : usuatipo, usuasucu : usuasucu, usuaesta : usuaesta};
@@ -82,8 +92,9 @@ FrmMainApp.service('PilUsuaanalisisService', function($http, $rootScope, $routeP
 	        $rootScope.$broadcast('handleBroadcastUsusucuI18n');
 	    }
 	        	
-		this.prepForLoad = function(id) {
+		this.prepForLoad = function(id, usuausua) {
 	        this.id = id;
+	        this.usuausua=usuausua;
 	        this.loadChildren();
 		}
 		
@@ -109,7 +120,7 @@ FrmMainApp.service('PilUsuaanalisisService', function($http, $rootScope, $routeP
     	        data: data
     	     });
     	 }
-    	
+	    
 		this.updateRecordChild = function(ussucons,ussuusua,ussusucu,ussuesta) {    	
     		
 			data = {ussucons : ussucons, ussuusua : ussuusua, ussusucu : ussusucu, ussuesta : ussuesta};

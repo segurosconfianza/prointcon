@@ -2,7 +2,7 @@ FrmMainApp.directive('customGrid', function($compile) {
 
 	  return {
 	    restrict: 'E',
-	    template: '<div class="gridStyle" ng-grid="gridOptions"></div>',
+	    template: '<div class="gridStyle" ng-grid="gridOptions" style="width: 100%"></div>',
 	    scope : { cols : '=', selectedItems : '=', customOptions : '=', evento : '@', eventoGrid : '@', icons : '='}, 
 	    replace : false,
 	    transclude : false,
@@ -54,7 +54,7 @@ FrmMainApp.directive('customGrid', function($compile) {
             enablePaging: true,
             enableColumnResize: true,
             filterOptions: $scope.filterOptions,
-            headerRowHeight: 85,
+            headerRowHeight: 88,
             multiSelect: false,
             pagingOptions: $scope.pagingOptions,
             plugins: [filterBarPlugin],
@@ -68,7 +68,7 @@ FrmMainApp.directive('customGrid', function($compile) {
   	    };		  	    	    	     	   
 	    
 	    $scope.$watch('pagingOptions', function (newVal, oldVal) {
-	        if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
+	        if (newVal !== oldVal || newVal.currentPage !== oldVal.currentPage) {
 	        	$scope.$emit('gridEvento', $scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, "order by "+$scope.gridOptions.sortInfo.fields+" "+$scope.gridOptions.sortInfo.directions);
 	        }
 	    }, true);

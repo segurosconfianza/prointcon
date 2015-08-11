@@ -18,17 +18,17 @@ FrmMainApp.controller('FmtAuditoriaController', ['$scope', 'PlanillaService',fun
     	
     	columns=[ { field: "audicons", displayName: getName(Service.getI18n(), "audicons", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterBetweenNumber } ,
     	          { field: "auditran", displayName: getName(Service.getI18n(), "auditran", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterBetweenNumber } ,
-    	          { field: "auditabl", displayName: getName(Service.getI18n(), "auditabl", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterText } ,
-    	          { field: "audicopk", displayName: getName(Service.getI18n(), "audicopk", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterText } ,
     	          { field: "audicamp", displayName: getName(Service.getI18n(), "audicamp", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterText } ,
     	          { field: "audivaan", displayName: getName(Service.getI18n(), "audivaan", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterText } ,
-    	          { field: "audivanu", displayName: getName(Service.getI18n(), "audivanu", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterText }  
+    	          { field: "audivanu", displayName: getName(Service.getI18n(), "audivanu", "FMT_AUDITORIA"), visible: true, headerCellTemplate: filterText } ,
+    	          { field: "sesiusua", displayName: getName(Service.getI18n(), "foreuser", "FMT_FORMREGI"), visible: true, headerCellTemplate: filterText },
+    	          { field: "tranfecr", displayName: getName(Service.getI18n(), "tranfecr", "FRM_TRANSACCION"), visible: true, headerCellTemplate: filterText }
              ];
         $scope.columnDefs=columns;
         $scope.ventanaTitulo=getName(Service.getI18n(), "-", "FMT_AUDITORIA");
         
-        $scope.gridOptions = {  
-        	sortInfo:{ fields: ['audicons'], directions: ['desc']},
+        $scope.gridOptions = {          	
+    		sortInfo:{ fields: ['audicons'], directions: ['desc']},
         	selectedItems: [],
             afterSelectionChange: function (rowItem, event) {
             	$scope.audicons = rowItem.entity.audicons; 
@@ -78,27 +78,32 @@ FrmMainApp.controller('FmtAuditoriaController', ['$scope', 'PlanillaService',fun
 		$scope.currentPage=currentPage;
 		$scope.order=order;
 		$scope.searchQuery=searchQuery;
+		if($scope.searchQuery==undefined)
+			$scope.searchQuery=[];
 		
     	if($scope.directiveGrid)
     		$scope.loadMyGrid();
     });
 	
 	$scope.loadMyGrid= function(){			
-		var basicSearchQuery;		
+		var basicSearchQuery=null;		
 		if($scope.forecons!=undefined){
-			basicSearchQuery=[{campo: 'auditabl', tipo: "IN", val1: '[FMT_FORMREGI,FMT_VALOCAMP]', tipodato: "String"},{campo: 'audicopk', tipo: "=", val1: $scope.forecons, tipodato: "Number"}];
 			
 			if($scope.searchQuery!=undefined)
 				basicSearchQuery=$scope.searchQuery.concat(basicSearchQuery);
 			
 			Service.getDataAuditoria($scope.pageSize, $scope.currentPage, $scope.order, basicSearchQuery).then(function(dataResponse) {
 	    		if(dataResponse.data.error!=undefined)
-	    			alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    			$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	        	else 
 	        		$scope.$broadcast('loadDataGrid',dataResponse.data.data, dataResponse.data.count, $scope.pageSize, $scope.currentPage);
 	        });
 		}
 	}	
+	
+	$scope.sendAlert = function(error){
+		$scope.$broadcast('loadDataError', error);
+	}
 
 }            
 ])

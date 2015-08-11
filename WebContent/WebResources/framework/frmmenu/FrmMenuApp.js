@@ -51,7 +51,16 @@ FrmMainApp.config(['$routeProvider',
   	      },
   	      controller: 'CierreCarteraCuadreController'
   	    }).	
+  	  when('/AdminPlanilla/:PlanillaId', {
+  	      templateUrl: function(params) {
+  	          return  WEB_SERVER+'FmtFormato/AdminPlanilla/';
+  	      },
+  	      controller: 'PlanillaController'
+  	    }).	
    	    otherwise({
-   	      
+   	    	templateUrl: function(params) {
+    	          return  WEB_SERVER+'FrmMenu/defaultView'; 
+    	          
+    	      },
    	    });
 }]);

@@ -23,6 +23,7 @@ import com.confianza.webapp.repository.formatos.fmtcampo.FmtCampo;
 import com.confianza.webapp.repository.formatos.fmtcampo.FmtCampoRepository;
 import com.confianza.webapp.repository.formatos.fmtvalocamp.FmtValocamp;
 import com.confianza.webapp.repository.formatos.fmtvalocamp.FmtValocampRepository;
+import com.confianza.webapp.service.formatos.fmtauditoria.FmtAuditoriaService;
 
 @Service
 public class FmtValocampServiceImpl implements FmtValocampService{
@@ -32,6 +33,9 @@ public class FmtValocampServiceImpl implements FmtValocampService{
 	
 	@Autowired
 	private FmtCampoRepository fmtCampoRepository;
+	
+	@Autowired
+	private FmtAuditoriaService fmtAuditoriaService;
 	
 	private enum typesData { S, CS, CI, D, I, L, T, O, B, F, TA, TL};
 	
@@ -175,17 +179,18 @@ public class FmtValocampServiceImpl implements FmtValocampService{
 	}
 	
 	@Override  
-	public boolean updateValuesIntermediario(Long vefocons, Long vacafore, Map<String, Object> parametersData, String user){
+	public boolean updateValuesIntermediario(Long vefocons, Long vacafore, Map<String, Object> parametersData, String user, Long trancons){
 		
 		try{
 			List<FmtCampo> listAllCampos=fmtCampoRepository.listCamposCosu(vefocons);	
 			List<FmtValocamp> listAllValocamp=fmtValocampRepository.listAll(vacafore);
 			
+			
 			for(FmtCampo campo:listAllCampos){
 				for(FmtValocamp fmtValocamp:listAllValocamp){
 					if(campo.getCampcons().equals(fmtValocamp.getVacacamp())){
 						if(!fmtValocamp.getVacavalo().equals(parametersData.get(campo.getCampnomb()).toString())){
-							updateFmtValocamp(parametersData, campo, fmtValocamp, user);
+							updateFmtValocamp(parametersData, campo, fmtValocamp, user, trancons);  
 						}
 						break;
 					}
@@ -198,9 +203,29 @@ public class FmtValocampServiceImpl implements FmtValocampService{
 		}
 	}
 
-	@Override  
-	public  FmtValocamp updateFmtValocamp(Map<String, Object> parametersData, FmtCampo campo, FmtValocamp fmtValocamp, String user) {
+	@Override
+	public  FmtValocamp updateFmtValocamp(Map<String, Object> parametersData, FmtCampo campo, FmtValocamp fmtValocamp, String user, Long trancons) {
 		fmtValocamp.setVacavalo(this.getValue(campo.getCamptipo(), parametersData.get(campo.getCampnomb()).toString()));
+		FmtValocamp fmtValocampOld=fmtValocampRepository.list(fmtValocamp.getVacacons());
+		
+		validateChanges(fmtValocamp, fmtValocampOld, user, trancons);
+		
 		return fmtValocampRepository.update(fmtValocamp);
 	}
+
+	private void validateChanges(FmtValocamp fmtValocamp, FmtValocamp fmtValocampOld, String user, Long trancons) {
+				
+		if(!fmtValocampOld.getVacacamp().equals(fmtValocamp.getVacacamp()))
+			generateAudit("vacacamp",fmtValocampOld.getVacacons(),"FmtValocamp",fmtValocampOld.getVacacamp().toString(),fmtValocamp.getVacacamp().toString(), trancons);
+		if(!fmtValocampOld.getVacafore().equals(fmtValocamp.getVacafore()))
+			generateAudit("vacafore",fmtValocampOld.getVacacons(),"FmtValocamp",fmtValocampOld.getVacafore().toString(),fmtValocamp.getVacafore().toString(), trancons);
+		if(!fmtValocampOld.getVacavalo().equals(fmtValocamp.getVacavalo()))
+			generateAudit("vacavalo",fmtValocampOld.getVacacons(),"FmtValocamp",fmtValocampOld.getVacavalo().toString(),fmtValocamp.getVacavalo().toString(), trancons);
+	}
+
+	private void generateAudit(String audicamp, Long audicopk, String tabla, String audivaan, String audivanu, Long trancons) {
+		fmtAuditoriaService.generateAudit(audicamp, audicopk, tabla, audivaan, audivanu, trancons);
+	}
+
+	
 }

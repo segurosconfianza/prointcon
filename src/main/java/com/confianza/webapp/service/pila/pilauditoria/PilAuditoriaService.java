@@ -10,6 +10,7 @@ package com.confianza.webapp.service.pila.pilauditoria;
   */                          
 
 import java.util.List;
+
 import com.confianza.webapp.repository.pila.pilauditoria.PilAuditoria;
 
 public interface PilAuditoriaService{
@@ -25,5 +26,7 @@ public interface PilAuditoriaService{
 	public void delete(PilAuditoria pilauditoria);	
 	
 	public int getCount();
+
+	public void generateAudit(String audicamp, Long audicopk, String tabla, String audivaan, String audivanu, Long trancons);
 	
 }

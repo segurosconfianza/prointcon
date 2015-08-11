@@ -145,7 +145,7 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	public String listComboDynamic(String conscons){
 		
 		//carga la consulta dinamica
-		FrmConsulta frmConsulta=this.listName(conscons);
+		FrmConsulta frmConsulta=frmConsultaRepository.list(new Long(conscons));
 		
 		//carga los datos de la consulta
 		List<Object[]> rAll=this.loadListData(frmConsulta, null, null);		

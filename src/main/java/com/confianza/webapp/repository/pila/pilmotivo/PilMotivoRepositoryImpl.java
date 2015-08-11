@@ -71,7 +71,7 @@ public class PilMotivoRepositoryImpl implements PilMotivoRepository{
 	public List<PilMotivo> listAll(int init, int limit){
 		try{
 			String sql = "select "+PilMotivo.getColumnNames()
-					   + "from PIL_MOTIVO ";
+					   + "from PIL_MOTIVO order by devocons ";
 						
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(PilMotivo.class);

@@ -46,6 +46,7 @@
 		        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 		        		<button type="button" class="btn btn-success" ng-click="aprobarRecord()" data-ng-if="activeButtons">Aprobar <span class="glyphicon glyphicon-check"></span></button>
 		        		<button type="button" class="btn btn-danger" ng-click="devolverActivar()" data-ng-if="activeButtons">Devolver <span class="glyphicon glyphicon-warning-sign"> </span></button>
+		        		<button type="button" class="btn btn-danger" ng-click="cancelarRecord()">Cancelar <span class="glyphicon glyphicon-remove"> </span></button>	 
 		        		
 		        		<div ng-show="Devolver"><p/>
 		        			<div class="form-group" >

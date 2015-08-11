@@ -32,6 +32,11 @@ public class CFrmMenu {
 	public String index(Model model) {
 		return "framework/frmmenu/FrmMenu";
 	}
+	
+	@RequestMapping("/defaultView")
+	public String defaul() {
+		return "default";
+	}
 
 	@RequestMapping(value = "/{menucons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	public @ResponseBody String list(@PathVariable("menucons") Long menucons){
