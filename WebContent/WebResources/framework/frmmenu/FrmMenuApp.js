@@ -47,7 +47,7 @@ FrmMainApp.config(['$routeProvider',
   	    }).	
   	    when('/CierreCarteraCuadre/:soporteId', {
   	      templateUrl: function(params) {
-  	          return  WEB_SERVER+'FrmConsulta/CierreCarteraCuadre/';
+  	          return  WEB_SERVER+'CierreCartera/CierreCarteraCuadre/';
   	      },
   	      controller: 'CierreCarteraCuadreController'
   	    }).	
@@ -57,6 +57,12 @@ FrmMainApp.config(['$routeProvider',
   	      },
   	      controller: 'PlanillaController'
   	    }).	
+  	  when('/CierreCancelacionesAuto/:soporteId', {
+  	      templateUrl: function(params) {
+  	    	return  WEB_SERVER+'CierreCancelaciones/CierreCancelacionesAutomaticas/';
+  	      },
+  	      controller: 'CierreCancelacionesAutomaticasController'
+  	    }).
    	    otherwise({
    	    	templateUrl: function(params) {
     	          return  WEB_SERVER+'FrmMenu/defaultView'; 

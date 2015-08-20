@@ -133,11 +133,6 @@
 			<version>2.0.2.RELEASE</version>
 		</dependency>
 		<dependency>
-		    <groupId>poi</groupId>
-		    <artifactId>poi</artifactId>
-		    <version>3.1-FINAL</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-ldap</artifactId>
 			<version>3.2.5.RELEASE</version>
@@ -219,6 +214,11 @@
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.11</version>
 		</dependency>
 	</dependencies>
 	<build>
