@@ -122,6 +122,9 @@
 	    <script  src="WebResources/cierre/cierrecancelacionesautomaticas/CierreCancelacionesAutomaticasController.js"></script>
 	    <script  src="WebResources/cierre/cierrecancelacionesautomaticas/CierreCancelacionesAutomaticasService.js"></script>
 	    
+	    <script  src="WebResources/cierre/generacioncierrecartera/GeneracionCierreCarteraController.js"></script>
+	    <script  src="WebResources/cierre/generacioncierrecartera/GeneracionCierreCarteraService.js"></script>
+	    
 		<script type="text/javascript" Language="JavaScript">
 			document.createElement('ng-view');
 				   

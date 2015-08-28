@@ -82,6 +82,8 @@ public class FileExcelImpl implements FileExcel {
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		
 		for(SheetExcel sheetExcel:sheets){
+			System.out.println(sheetExcel.getNameSheet()+"/*/*/*/*/*//**//*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*");
+			sheetExcel.initStyles(workbook);
 			initOwnCellStyleHeader(sheetExcel);
 			//crear la hoja de excel
 			HSSFSheet sheet = workbook.createSheet(sheetExcel.getNameSheet());
@@ -94,7 +96,24 @@ public class FileExcelImpl implements FileExcel {
 				row = sheet.createRow(numRow++);
 				numCell=0;
 				for(Object objCell:objRow)
-					createRow(sheetExcel.getTypeData(), objCell);	
+					createRow(sheetExcel.getTypeData(), objCell);
+			}
+			row = sheet.createRow(numRow++);
+			row = sheet.createRow(numRow++);
+			
+			if(sheetExcel.getListAllExtra()!=null){
+				sheetExcel.setCellStyleExtra(workbook);
+				CellStyle=sheetExcel.getCellStyle();
+				CellStyleDate=sheetExcel.getCellStyleDate();
+				CellStyleNumberInt=sheetExcel.getCellStyleNumberInt();
+				CellStyleNumberDouble=sheetExcel.getCellStyleNumberDouble();
+				
+				for(Object[] objRow:sheetExcel.getListAllExtra()){			
+					row = sheet.createRow(numRow++);
+					numCell=0;
+					for(Object objCell:objRow)
+						createRow(sheetExcel.getTypeData(), objCell);	
+				}
 			}
 		}
 		return workbook;

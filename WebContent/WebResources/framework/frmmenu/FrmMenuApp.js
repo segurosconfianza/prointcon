@@ -63,6 +63,12 @@ FrmMainApp.config(['$routeProvider',
   	      },
   	      controller: 'CierreCancelacionesAutomaticasController'
   	    }).
+  	  when('/GeneracionCierreCartera/:soporteId', {
+  	      templateUrl: function(params) {
+  	    	return  WEB_SERVER+'GeneracionCierreCartera/GeneracionCierreCartera/';
+  	      },
+  	      controller: 'GeneracionCierreCarteraController'
+  	    }). 
    	    otherwise({
    	    	templateUrl: function(params) {
     	          return  WEB_SERVER+'FrmMenu/defaultView'; 

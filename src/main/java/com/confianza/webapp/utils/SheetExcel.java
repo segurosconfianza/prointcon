@@ -21,10 +21,12 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 public class SheetExcel {
 	
 	private List<Object[]> listAll;
+	private List<Object[]> listAllExtra;
 	private String[] headers;
 	private String[] typeData;
 	private String nameSheet;
 	private short colorBackground;
+	private short colorBackgroundExtra;
 	private HSSFCellStyle CellStyleHeader;
 	private HSSFCellStyle CellStyle;
 	private HSSFCellStyle CellStyleDate;
@@ -39,11 +41,20 @@ public class SheetExcel {
 		this.nameSheet = nameSheet;
 	}
 	
+	public SheetExcel(List<Object[]> listAll, String[] headers,String[] typeData, short colorBackground, String nameSheet, List<Object[]> listAllExtra, short colorBackgroundExtra) {
+		this.listAll = listAll;
+		this.headers = headers;
+		this.typeData = typeData;
+		this.colorBackground = colorBackground;
+		this.nameSheet = nameSheet;
+		this.listAllExtra = listAllExtra;
+		this.colorBackgroundExtra = colorBackgroundExtra;
+	}
+	
 	public void initStyles(HSSFWorkbook workbook) {
 		
 		setCellStyleHeader(workbook);
 		setCellStyle(workbook);
-		setCellStyleDate(workbook);
 		setCellStyleDate(workbook);
 		setCellStyleInt(workbook);
 		setCellStyleDouble(workbook);
@@ -80,11 +91,21 @@ public class SheetExcel {
 		this.nameSheet = nameSheet;
 	}
 
-	private void setCellStyle(HSSFWorkbook workbook) {
+	public void setCellStyle(HSSFWorkbook workbook) {
 		//Estilo de las celdas normales
 		CellStyle = getBasicCellStyle(workbook);
 	}
 	
+	public void setCellStyleExtra(HSSFWorkbook workbook) {
+		//Estilo de las celdas normales
+		CellStyle = getBasicCellStyle(workbook);
+		CellStyle.setFillForegroundColor(this.colorBackgroundExtra);	
+		this.colorBackground=this.colorBackgroundExtra;
+		setCellStyleDate(workbook);
+		setCellStyleInt(workbook);
+		setCellStyleDouble(workbook);
+	}
+		
 	private void setCellStyleDate(HSSFWorkbook workbook) {
 		
 		CreationHelper createHelper = workbook.getCreationHelper();
@@ -183,6 +204,20 @@ public class SheetExcel {
 	public void setColorBackground(short colorBackground) {
 		this.colorBackground = colorBackground;
 	}
-	
-	
+
+	public List<Object[]> getListAllExtra() {
+		return listAllExtra;
+	}
+
+	public void setListAllExtra(List<Object[]> listAllExtra) {
+		this.listAllExtra = listAllExtra;
+	}
+
+	public short getColorBackgroundExtra() {
+		return colorBackgroundExtra;
+	}
+
+	public void setColorBackgroundExtra(short colorBackgroundExtra) {
+		this.colorBackgroundExtra = colorBackgroundExtra;
+	}
 }

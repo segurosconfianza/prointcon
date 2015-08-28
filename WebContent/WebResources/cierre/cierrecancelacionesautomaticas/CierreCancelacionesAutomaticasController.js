@@ -189,9 +189,6 @@ FrmMainApp.controller('CierreCancelacionesAutomaticasController', ['$scope', 'Ci
 		
 		$scope.$broadcast('getGrid');
 					
-		$scope.BotonLoader=false;
-		$scope.Boton = true;
-						
 	}
 	
 	$scope.$on('getGridEvento', function(event, gridOptions) {   

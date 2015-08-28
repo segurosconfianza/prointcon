@@ -162,6 +162,8 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 						
 			sql = completeSQL(order, filters, sql);
 			
+			System.out.println(sql);
+			
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(FmtFormregi.class);
 			
