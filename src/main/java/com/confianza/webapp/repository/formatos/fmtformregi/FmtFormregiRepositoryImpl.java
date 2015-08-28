@@ -165,6 +165,8 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(FmtFormregi.class);
 			
+			System.out.println(sql);
+			
 			query=setParameters(filters, query);
 			
 			if(limit!=0){
@@ -285,25 +287,26 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	}
 
 	private String evaluateField(String order, String sql, String where, String campoorde) {
+		
 		if((FmtFormregi.getColumnNames()).matches("(.*)"+campoorde+"(.*)")) 
 			sql+=" "+order;
 		else if("tablvast".matches("(.*)"+campoorde+"(.*)")){
-			sql+=order;
+			sql+=" "+order;
 			//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
 			sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, tablvast, ");
 		}
 		else if("usuarazo".matches("(.*)"+campoorde+"(.*)")){
-			sql+=order;
+			sql+=" "+order;
 			//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
 			sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuarazo, ");
 		}			
 		else if("usuaunit".matches("(.*)"+campoorde+"(.*)")){
-			sql+=order;
+			sql+=" "+order;
 			//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
 			sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuaunit, ");
 		}
 		else if("usuasucu".matches("(.*)"+campoorde+"(.*)")){
-			sql+=order;
+			sql+=" "+order;
 			//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
 			sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuasucu, ");
 		}

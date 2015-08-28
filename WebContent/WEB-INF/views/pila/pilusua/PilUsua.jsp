@@ -9,7 +9,7 @@
 			<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,PIL_USUA_ALL,PIL_USUA_DELETE"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModalNew" data-ng-click="deleteRecordForm()" > Inactivar <span class="glyphicon glyphicon-trash"> </span></button></sec:authorize>
 			<button type="button" class="btn btn-default btn-sm"><a href="#"> Ayuda <span class="glyphicon glyphicon-info-sign"> </span></a></button>	
 		</div>
-		<h3>{{ventanaTitulo}}</h3>-{{buttonDelete}}
+		<h3>{{ventanaTitulo}}</h3>
     	<custom-grid cols="columnDefs" selected-items="selectedItems" custom-options="gridOptions" evento="gridEvento" data-ng-if="directiveGrid"></custom-grid>
     	<!-- ventana modal -->
     	<!-- Modal New -->
