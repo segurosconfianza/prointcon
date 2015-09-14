@@ -150,7 +150,7 @@ public class GeneracionCierreCarteraServiceImpl implements GeneracionCierreCarte
 		FrmConsulta queryDetalle=null;
 		
 		for(FrmConsulta query:queryChilds){		
-			if(query.getConsnomb().equals("DETALLE DE SALDOS")){
+			if(query.getConsnomb().equals("DET_SALDOS_PART_ESP")){
 				cieEstaproc=modifyEstaProc(cieEstaproc, 0, "\nInicio de la ejecucion de la consulta: "+query.getConscons()+"-"+query.getConsnomb(), null);
 				List<FrmParametro> parametersQueryChild=this.frmParametroService.listParamsCosuType(query.getConscons());
 				

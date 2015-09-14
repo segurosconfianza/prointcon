@@ -255,75 +255,86 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		return gson.toJson(result);	
 	}
 
-	private boolean generateProvision(String[] fechaRuta, List<Object[]> listAll, String[] headers, String[] typeData, List<Object[]> cancel, float primaGastosCancel, float ivaCancel, HttpServletRequest request){
-		int indexPrimaAceptada = getIndexof(headers, "PRIMAACEP");
-		int indexPrimaDirecta  = getIndexof(headers, "PRIMADIR");
-		int indexCedidoCompania = getIndexof(headers, "CEDIDOCIA");		
-		int indexGastos = getIndexof(headers, "GASTOS");
-		int indexIva = getIndexof(headers, "IVA");
-		int indexMadurez = getIndexof(headers, "MADUREZ");
+	private boolean generateProvision(String[] fechaRuta, List<Object[]> listAll, String[] headers, String[] typeData, List<Object[]> cancel, HttpServletRequest request){
 		
-		return processProvision(fechaRuta, headers, typeData, listAll, cancel, indexPrimaAceptada, indexPrimaDirecta, indexCedidoCompania, indexGastos, indexMadurez, indexIva, primaGastosCancel, ivaCancel, request);
+		Map<String, Object> indexs=new HashMap<String, Object>();
+		indexs.put("indexPrimaAceptada", getIndexof(headers, "PRIMAACEP"));
+		indexs.put("indexPrimaDirecta", getIndexof(headers, "PRIMADIR"));
+		indexs.put("indexCedidoCompania", getIndexof(headers, "CEDIDOCIA"));
+		indexs.put("indexGastos", getIndexof(headers, "GASTOS"));
+		indexs.put("indexIva",  getIndexof(headers, "IVA"));
+		indexs.put("indexMadurez", getIndexof(headers, "MADUREZ"));
+		indexs.put("indexPrimaAceptada", getIndexof(headers, "PRIMAACEP"));
+		
+		Map<String, Object> data=this.processCancelProvision(cancel, indexs);
+		List<Object[]> listCancel=(List<Object[]>) data.get("listAll");
+		double total= (double) data.get("total");
+		System.out.println("cancel total: "+total);
+		double totalIva= (double) data.get("totalIva");
+		System.out.println("cancel totalIva: "+totalIva);
+		return processProvision(fechaRuta, headers, typeData, listAll, listCancel, indexs, total, totalIva, request);
 	}
 
-	private boolean processProvision(String[] fechaRuta, String[] headers, String[] typeData,List<Object[]> listAll, List<Object[]> cancel, int indexPrimaAceptada, int indexPrimaDirecta, int indexCedidoCompania, int indexGastos, int indexMadurez, int indexIva, float primaGastosCancel, float ivaCancel, HttpServletRequest request) {
-		float provisionSince0To75 = 0, provisionSince76To90 = 0, provisionSince91To180 = 0, provisionSince181To270 = 0, provisionSince271To360 = 0, provisionMayor360 = 0;		
-		float ivaSince76To90 = 0, ivaSince91To180 = 0, ivaSince181To270 = 0, ivaSince271To360 = 0, ivaMayor360 = 0;
+	private boolean processProvision(String[] fechaRuta, String[] headers, String[] typeData,List<Object[]> listAll, List<Object[]> cancel, Map<String, Object> indexs, double primaGastosCancel, double ivaCancel, HttpServletRequest request) {
+		double provisionSince0To75 = 0, provisionSince76To90 = 0, provisionSince91To180 = 0, provisionSince181To270 = 0, provisionSince271To360 = 0, provisionMayor360 = 0;		
+		double ivaSince76To90 = 0, ivaSince91To180 = 0, ivaSince181To270 = 0, ivaSince271To360 = 0, ivaMayor360 = 0;
 		
-		float porcentaje=0, factor=0;
+		double porcentaje=0, factor=0;
 		
 		//sin cancel 
 		List<Object[]> provisiones=new ArrayList<Object[]>();
 		Object[] newRow;
-		Long total;
-		Long madurez;
+		double total;
+		double madurez;
+		int cont=1;
 		for(Object[] row:listAll)
 		{
 			newRow = new Object[row.length+6];
 			System.arraycopy(row, 0, newRow, 0, row.length);
-			total  = castToLong(row[indexPrimaAceptada].toString()) + castToLong(row[indexPrimaDirecta].toString()) + castToLong(row[indexCedidoCompania].toString()) + castToLong(row[indexGastos].toString());
+			total  = castToDouble(row[(int) indexs.get("indexPrimaAceptada")].toString()) + castToDouble(row[(int) indexs.get("indexPrimaDirecta")].toString()) + castToDouble(row[(int) indexs.get("indexCedidoCompania")].toString()) + castToDouble(row[(int) indexs.get("indexGastos")].toString());
 			newRow[row.length]=total;
 			newRow[row.length+1]=total*0.20;
 			porcentaje=total-(total*0.20f);
-			newRow[row.length+2]=total-porcentaje;
-			
-			madurez=castToLong(row[indexMadurez].toString());
-			if(madurez >=0 && madurez <= 75){
+			newRow[row.length+2]=total-porcentaje;			
+			madurez=castToDouble(row[(int) indexs.get("indexMadurez")].toString());
+			if(madurez >=0 && madurez < 76){
 				provisionSince0To75+=total;
+				ivaSince76To90+=castToDouble(row[(int) indexs.get("indexIva")].toString());
+				
 				newRow[row.length+3]="0";
 				newRow[row.length+4]="0";
-				newRow[row.length+5]="0";
+				newRow[row.length+5]="0";				
 			}
-			else if(madurez >=76 && madurez <= 90){
+			else if(madurez >=76 && madurez < 91){
 				provisionSince76To90+=total;
-				ivaSince76To90+=castToLong(row[indexIva].toString());
+				ivaSince76To90+=castToDouble(row[(int) indexs.get("indexIva")].toString());
 				
 				newRow[row.length+3]="83/360";
 				factor=((total-porcentaje)*83)/360;
 				newRow[row.length+4]=factor;
 				newRow[row.length+5]=(total*0.20)+factor;
 			}
-			else if(madurez >=91 && madurez <= 180){
+			else if(madurez >=91 && madurez < 181){
 				provisionSince91To180+=total;
-				ivaSince91To180+=castToLong(row[indexIva].toString());
+				ivaSince91To180+=castToDouble(row[(int) indexs.get("indexIva")].toString());
 				
 				newRow[row.length+3]="3/8";
 				factor=((total-porcentaje)*3)/8;
 				newRow[row.length+4]=factor;
 				newRow[row.length+5]=(total*0.20)+factor;
 			}
-			else if(madurez >=181 && madurez <= 270){
+			else if(madurez >=181 && madurez < 271){
 				provisionSince181To270+=total;
-				ivaSince181To270+=castToLong(row[indexIva].toString());
+				ivaSince181To270+=castToDouble(row[(int) indexs.get("indexIva")].toString());
 				
 				newRow[row.length+3]="5/8";
 				factor=((total-porcentaje)*5)/8;
 				newRow[row.length+4]=factor;
 				newRow[row.length+5]=(total*0.20)+factor;
 			}
-			else if(madurez >=271 && madurez <= 360){
+			else if(madurez >=271 && madurez < 361){
 				provisionSince271To360+=total;
-				ivaSince271To360+=castToLong(row[indexIva].toString());
+				ivaSince271To360+=castToDouble(row[(int) indexs.get("indexIva")].toString());
 				
 				newRow[row.length+3]="7/8";
 				factor=((total-porcentaje)*7)/8;
@@ -332,57 +343,65 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 			}
 			else if(madurez >360){
 				provisionMayor360+=total;
-				ivaMayor360+=castToLong(row[indexIva].toString());
+				ivaMayor360+=castToDouble(row[(int) indexs.get("indexIva")].toString());
 				
 				newRow[row.length+3]="0";
 				newRow[row.length+4]="0";
 				newRow[row.length+5]="0";
-			}
+			}			
 			provisiones.add(newRow);
 		}
+		
 		return calculateProvisiones(fechaRuta, headers, typeData, provisiones, cancel, primaGastosCancel, ivaCancel, provisionSince0To75, provisionSince76To90, provisionSince91To180, provisionSince181To270, provisionSince271To360, provisionMayor360, ivaSince76To90, ivaSince91To180, ivaSince181To270, ivaSince271To360, ivaMayor360, request);
 	}
 
-	private boolean calculateProvisiones(String[] fechaRuta,String[] headers, String[] typeData, List<Object[]> provisiones, List<Object[]> cancel, float primaGastosCancel, float ivaCancel, float provisionSince0To75, float provisionSince76To90, float provisionSince91To180, float provisionSince181To270, float provisionSince271To360, float provisionMayor360, float ivaSince76To90, float ivaSince91To180, float ivaSince181To270, float ivaSince271To360, float ivaMayor360, HttpServletRequest request) {
+	private boolean calculateProvisiones(String[] fechaRuta,String[] headers, String[] typeData, List<Object[]> provisiones, List<Object[]> cancel, double primaGastosCancel, double ivaCancel, double provisionSince0To75, double provisionSince76To90, double provisionSince91To180, double provisionSince181To270, double provisionSince271To360, double provisionMayor360, double ivaSince76To90, double ivaSince91To180, double ivaSince181To270, double ivaSince271To360, double ivaMayor360, HttpServletRequest request) {
 		
-		float provision20PorcentSince76To90   = provisionSince76To90*0.2f;
-		float provision20PorcentSince91To180  = provisionSince91To180*0.2f;		
-		float provision20PorcentSince181To270 = provisionSince181To270*0.2f;
-		float provision20PorcentSince271To360 = provisionSince271To360*0.2f;
+		double columnaFConfisco=new Double(frmTablasService.listByTablcodi("columnaFProvisiones").getTablvast());
+		double columnaGConfisco=new Double(frmTablasService.listByTablcodi("columnaGProvisiones").getTablvast());
 		
-		float provisionMinus20PorcentSince76To90   = provisionSince76To90-provision20PorcentSince76To90;
-		float provisionMinus20PorcentSince91To180  = provisionSince91To180-provision20PorcentSince91To180;		
-		float provisionMinus20PorcentSince181To270 = provisionSince181To270-provision20PorcentSince181To270;
-		float provisionMinus20PorcentSince271To360 = provisionSince271To360-provision20PorcentSince271To360;
+		provisionMayor360+=columnaFConfisco;
+		System.out.println(primaGastosCancel+"-"+columnaGConfisco);
+		primaGastosCancel+=columnaGConfisco;
 		
-		float factorSince76To90   = (provisionMinus20PorcentSince76To90 *83)/360;
-		float factorSince91To180  = (provisionMinus20PorcentSince91To180 *3)/8;		
-		float factorSince181To270 = (provisionMinus20PorcentSince181To270*5)/8;
-		float factorSince271To360 = (provisionMinus20PorcentSince271To360*7)/8;
+		double provision20PorcentSince76To90   = provisionSince76To90*0.2;
+		double provision20PorcentSince91To180  = provisionSince91To180*0.2;		
+		double provision20PorcentSince181To270 = provisionSince181To270*0.2;
+		double provision20PorcentSince271To360 = provisionSince271To360*0.2;
 		
-		float totalProvisiones=provisionSince271To360+provisionSince181To270+provisionSince91To180+provisionSince76To90;
-		float totalProvisiones20Porcent=totalProvisiones*0.2f;
-		float totalProvisionMinus20Porcent=totalProvisiones-totalProvisiones20Porcent;
-		float totalFactores=factorSince76To90+factorSince91To180+factorSince181To270+factorSince271To360;
-		float totalIva=ivaSince76To90+ivaSince91To180+ivaSince181To270+ivaSince271To360;
+		double provisionMinus20PorcentSince76To90   = provisionSince76To90-provision20PorcentSince76To90;
+		double provisionMinus20PorcentSince91To180  = provisionSince91To180-provision20PorcentSince91To180;		
+		double provisionMinus20PorcentSince181To270 = provisionSince181To270-provision20PorcentSince181To270;
+		double provisionMinus20PorcentSince271To360 = provisionSince271To360-provision20PorcentSince271To360;
 		
-		float totalProvisionesFinal=totalProvisiones+provisionMayor360;
-		float totalProvisionMinus20PorcentFinal=totalProvisionMinus20Porcent+provisionMayor360+primaGastosCancel;
-		float totalFactoresFinal=totalFactores+provisionMayor360+primaGastosCancel;
-		float totalProvisionGastosCancel=provisionMayor360+primaGastosCancel;
+		double factorSince76To90   = (provisionMinus20PorcentSince76To90 *83)/360;
+		double factorSince91To180  = (provisionMinus20PorcentSince91To180 *3)/8;		
+		double factorSince181To270 = (provisionMinus20PorcentSince181To270*5)/8;
+		double factorSince271To360 = (provisionMinus20PorcentSince271To360*7)/8;
+		
+		double totalProvisiones=provisionSince271To360+provisionSince181To270+provisionSince91To180+provisionSince76To90;
+		double totalProvisiones20Porcent=totalProvisiones*0.2;
+		double totalProvisionMinus20Porcent=totalProvisiones-totalProvisiones20Porcent;
+		double totalFactores=factorSince76To90+factorSince91To180+factorSince181To270+factorSince271To360;
+		double totalIva=ivaSince76To90+ivaSince91To180+ivaSince181To270+ivaSince271To360;
+				
+		double totalProvisionesFinal=totalProvisiones+provisionMayor360;
+		double totalProvisionMinus20PorcentFinal=totalProvisionMinus20Porcent+provisionMayor360+primaGastosCancel;
+		double totalFactoresFinal=totalFactores+provisionMayor360+primaGastosCancel;
+		double totalProvisionGastosCancel=provisionMayor360+primaGastosCancel;
 		return exportProvisiones(fechaRuta, headers, typeData, provisiones, cancel, primaGastosCancel, ivaCancel, provisionSince0To75, provisionSince76To90, provisionSince91To180, provisionSince181To270, provisionSince271To360, provisionMayor360, ivaSince76To90, ivaSince91To180, ivaSince181To270, ivaSince271To360, ivaMayor360, provision20PorcentSince76To90, provision20PorcentSince91To180, provision20PorcentSince181To270, provision20PorcentSince271To360, provisionMinus20PorcentSince76To90, provisionMinus20PorcentSince91To180, provisionMinus20PorcentSince181To270, provisionMinus20PorcentSince271To360, factorSince76To90, factorSince91To180, factorSince181To270, factorSince271To360, totalProvisiones, totalProvisiones20Porcent, totalProvisionMinus20Porcent, totalFactores, totalIva, totalProvisionesFinal, totalProvisionMinus20PorcentFinal, totalFactoresFinal, totalProvisionGastosCancel, request);
 	}
 
-	private boolean exportProvisiones(String[] fechaRuta,String[] headers, String[] typeData,List<Object[]> provisiones, List<Object[]> cancel, float primaGastosCancel, float ivaCancel, float provisionSince0To75, float provisionSince76To90, float provisionSince91To180, float provisionSince181To270, float provisionSince271To360, float provisionMayor360, float ivaSince76To90, float ivaSince91To180, float ivaSince181To270, float ivaSince271To360, float ivaMayor360, float provision20PorcentSince76To90, float provision20PorcentSince91To180, float provision20PorcentSince181To270, float provision20PorcentSince271To360, float provisionMinus20PorcentSince76To90, float provisionMinus20PorcentSince91To180, float provisionMinus20PorcentSince181To270, float provisionMinus20PorcentSince271To360, float factorSince76To90, float factorSince91To180, float factorSince181To270, float factorSince271To360, float totalProvisiones, float totalProvisiones20Porcent, float totalProvisionMinus20Porcent, float totalFactores, float totalIva, float totalProvisionesFinal, float totalProvisionMinus20PorcentFinal, float totalFactoresFinal, float totalProvisionGastosCancel, HttpServletRequest request) {
+	private boolean exportProvisiones(String[] fechaRuta,String[] headers, String[] typeData,List<Object[]> provisiones, List<Object[]> cancel, double primaGastosCancel, double ivaCancel, double provisionSince0To75, double provisionSince76To90, double provisionSince91To180, double provisionSince181To270, double provisionSince271To360, double provisionMayor360, double ivaSince76To90, double ivaSince91To180, double ivaSince181To270, double ivaSince271To360, double ivaMayor360, double provision20PorcentSince76To90, double provision20PorcentSince91To180, double provision20PorcentSince181To270, double provision20PorcentSince271To360, double provisionMinus20PorcentSince76To90, double provisionMinus20PorcentSince91To180, double provisionMinus20PorcentSince181To270, double provisionMinus20PorcentSince271To360, double factorSince76To90, double factorSince91To180, double factorSince181To270, double factorSince271To360, double totalProvisiones, double totalProvisiones20Porcent, double totalProvisionMinus20Porcent, double totalFactores, double totalIva, double totalProvisionesFinal, double totalProvisionMinus20PorcentFinal, double totalFactoresFinal, double totalProvisionGastosCancel, HttpServletRequest request) {
 		List<Object[]> listProvision=new ArrayList<Object[]>();
-		Object[] row1= {"1005","0","0","0","0",				   provisionSince271To360,"0"			   ,provision20PorcentSince271To360,provisionMinus20PorcentSince271To360,"7/8",factorSince271To360		 ,provision20PorcentSince271To360+factorSince271To360,ivaSince271To360 	  		   };		
-		Object[] row2= {"1010","0","0","0","0",				   provisionSince181To270,"0"			   ,provision20PorcentSince181To270,provisionMinus20PorcentSince181To270,"5/8",factorSince181To270		 ,provision20PorcentSince181To270+factorSince181To270,ivaSince181To270	  		   };
-		Object[] row3= {"1015","0","0","0","0",				   provisionSince91To180 ,"0"			   ,provision20PorcentSince91To180 ,provisionMinus20PorcentSince91To180 ,"3/8",factorSince91To180 		 ,provision20PorcentSince91To180 +factorSince91To180 ,ivaSince91To180 	  		   };
-		Object[] row4= {"1020","0","0","0",provisionSince0To75,provisionSince76To90  ,"0"			   ,provision20PorcentSince76To90  ,provisionMinus20PorcentSince76To90  ,"3/8",factorSince76To90  		 ,provision20PorcentSince76To90  +factorSince76To90  ,ivaSince76To90  	  		   };
-		Object[] row5= {"1999","0","0","0",provisionSince0To75,totalProvisiones      ,"0"			   ,totalProvisiones20Porcent      ,totalProvisionMinus20Porcent        ,""   ,totalFactores      		 ,totalProvisiones20Porcent+totalFactores          	 ,totalIva        	  		   };
-		Object[] row6= {"6005","0","0","0","0",				   provisionMayor360     ,primaGastosCancel,"0"      					   ,totalProvisionGastosCancel 			,""   ,totalProvisionGastosCancel,totalProvisionGastosCancel  			  			 ,ivaMayor360+ivaCancel 	   };
-		Object[] row7= {"6999","0","0","0","0",				   provisionMayor360     ,primaGastosCancel,"0"      					   ,totalProvisionGastosCancel 			,""   ,totalProvisionGastosCancel,totalProvisionGastosCancel  			  			 ,ivaMayor360+ivaCancel		   };
-		Object[] row8= {"7005","0","0","0",provisionSince0To75,totalProvisionesFinal ,primaGastosCancel,totalProvisiones20Porcent      ,totalProvisionMinus20PorcentFinal	,""	  ,totalFactoresFinal		 ,totalProvisiones20Porcent+totalFactores+totalProvisionGastosCancel,totalIva+ivaMayor360+ivaCancel};		
+		Object[] row1= {"1005","0","0","0","0",				   provisionSince271To360,"0"			   ,provision20PorcentSince271To360,provisionMinus20PorcentSince271To360,"7/8"	 ,factorSince271To360		 ,provision20PorcentSince271To360+factorSince271To360,ivaSince271To360 	  		   };		
+		Object[] row2= {"1010","0","0","0","0",				   provisionSince181To270,"0"			   ,provision20PorcentSince181To270,provisionMinus20PorcentSince181To270,"5/8"	 ,factorSince181To270		 ,provision20PorcentSince181To270+factorSince181To270,ivaSince181To270	  		   };
+		Object[] row3= {"1015","0","0","0","0",				   provisionSince91To180 ,"0"			   ,provision20PorcentSince91To180 ,provisionMinus20PorcentSince91To180 ,"3/8"	 ,factorSince91To180 		 ,provision20PorcentSince91To180 +factorSince91To180 ,ivaSince91To180 	  		   };
+		Object[] row4= {"1020","0","0","0",provisionSince0To75,provisionSince76To90  ,"0"			   ,provision20PorcentSince76To90  ,provisionMinus20PorcentSince76To90  ,"83/360",factorSince76To90  		 ,provision20PorcentSince76To90  +factorSince76To90  ,ivaSince76To90  	  		   };
+		Object[] row5= {"1999","0","0","0",provisionSince0To75,totalProvisiones      ,"0"			   ,totalProvisiones20Porcent      ,totalProvisionMinus20Porcent        ,""   	 ,totalFactores      		 ,totalProvisiones20Porcent+totalFactores          	 ,totalIva        	  		   };
+		Object[] row6= {"6005","0","0","0","0",				   provisionMayor360     ,primaGastosCancel,"0"      					   ,totalProvisionGastosCancel 			,""   	 ,totalProvisionGastosCancel,totalProvisionGastosCancel  			  			 ,ivaMayor360+ivaCancel 	   };
+		Object[] row7= {"6999","0","0","0","0",				   provisionMayor360     ,primaGastosCancel,"0"      					   ,totalProvisionGastosCancel 			,""   	 ,totalProvisionGastosCancel,totalProvisionGastosCancel  			  			 ,ivaMayor360+ivaCancel		   };
+		Object[] row8= {"7005","0","0","0",provisionSince0To75,totalProvisionesFinal ,primaGastosCancel,totalProvisiones20Porcent      ,totalProvisionMinus20PorcentFinal	,""	  	 ,totalFactoresFinal		 ,totalProvisiones20Porcent+totalFactores+totalProvisionGastosCancel,totalIva+ivaMayor360+ivaCancel};		
 		listProvision.add(row1);
 		listProvision.add(row2);
 		listProvision.add(row3);
@@ -406,8 +425,8 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		return fileExcel.generateExcelManySheets(rutaArchivo, "Provisiones "+fechaRuta[1]+"-"+fechaRuta[2]+".xls", sheetsExcel, request);
 	}
 	
-	private Long castToLong(String camp){
-		return Long.parseLong(camp);
+	private Double castToDouble(String camp){
+		return Double.parseDouble(camp);
 	}
 	
 	private int getIndexof(String[] headers, String header){
@@ -442,25 +461,6 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		
 		return generateFileExcel(listAll, headers, typeData, forCancel, forNoCancel, fecha, query, cieEstaproc, parameters, request);
 	}
-
-	private List<Object[]> processProvisionCancel(List<Object[]> cancel, int indexPrimaAceptada, int indexPrimaDirecta, int indexCedidoCompania, int indexGastos, int indexMadurez, int indexIva, float primaGastosCancel, float ivaCancel, HttpServletRequest request) {
-		float total=0, subtotal=0, totalIva=0;		
-		
-		//cancel 
-		List<Object[]> provisiones=new ArrayList<Object[]>();
-		Object[] newRow;
-		for(Object[] row:cancel)
-		{
-			newRow = new Object[row.length+1];
-			System.arraycopy(row, 0, newRow, 0, row.length);
-			subtotal  = castToLong(row[indexPrimaAceptada].toString()) + castToLong(row[indexPrimaDirecta].toString()) + castToLong(row[indexCedidoCompania].toString()) + castToLong(row[indexGastos].toString());
-			total+=subtotal; 
-			totalIva+=castToLong(row[indexIva].toString());
-			newRow[row.length]=total;
-			provisiones.add(newRow);
-		}
-		return provisiones;
-	}
 	
 	private Map<String, Object> generateFileExcel(List<Object[]> listAll, String[] headers, String[] typeData, List<Object[]> forCancel, List<Object[]> forNoCancel, String fecha, FrmConsulta query, CieEstaproc cieEstaproc, Map<String, Object> parameters, HttpServletRequest request) {
 		
@@ -468,28 +468,34 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		
 		List<SheetExcel> sheetsExcel=createSheets(listAll, headers, typeData, forCancel, forNoCancel, parameters);
 		String fechaRuta[]=fecha.split("/");
-		String rutaArchivo=frmTablasService.listByTablcodi("ruta"+query.getConscons()).getTablvast()+fechaRuta[1]+"-"+fechaRuta[2];
 		
-		cieEstaproc=modifyEstaProc(cieEstaproc, 60, "\nInicio de la creacion del archivo del excel", null);
+		List<FrmTablas> listRutas=frmTablasService.listByCodi("ruta"+query.getConscons());
+		boolean respuesta=false;
+		String rutaArchivo="";
+		for(FrmTablas tabla:listRutas){
+			rutaArchivo=tabla.getTablvast()+fechaRuta[1]+"-"+fechaRuta[2];
+			
+			cieEstaproc=modifyEstaProc(cieEstaproc, 60, "\nInicio de la creacion del archivo del excel", null);
+			
+			respuesta=fileExcel.generateExcelManySheets(rutaArchivo, query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls", sheetsExcel, request);
+			
+			if(respuesta)
+				cieEstaproc=modifyEstaProc(cieEstaproc, 75, "\nFinalizacion de creacion del archivo del excel\n"+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>", null);
+			else{
+				result.put("Eror","Se genero un error al crear el archivo: "+query.getConsnomb()+fechaRuta[1]+"-"+fechaRuta[2]+".xls");
+				cieEstaproc=modifyEstaProc(cieEstaproc, 90, "\nSe genero un error al crear el archivo: "+query.getConsnomb()+fechaRuta[1]+"-"+fechaRuta[2]+".xls", null);
+			}
+		}	
+											
+		cieEstaproc=modifyEstaProc(cieEstaproc, 75, "\nInicio de creacion del archivo del excel de provisiones\n"+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>", null);
+		String[] headersProvision = createHeadersProvision(headers);
+		String[] typeDataProvision = createTypeDataProvision(typeData);
+		if(generateProvision(fechaRuta, forNoCancel, headersProvision, typeDataProvision, forCancel, request))
+			result.put("Success","Archivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>Archivo generado de provisiones");
+		else
+			result.put("Success","Archivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>No se genero el archivo de provisiones");
 		
-		if(fileExcel.generateExcelManySheets(rutaArchivo, query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls", sheetsExcel, request)){
-			
-			cieEstaproc=modifyEstaProc(cieEstaproc, 75, "\nFinalizacion de creacion del archivo del excel\n"+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>", null);
-			
-			cieEstaproc=modifyEstaProc(cieEstaproc, 75, "\nInicio de creacion del archivo del excel de provisiones\n"+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>", null);
-			String[] headersProvision = createHeadersProvision(headers);
-			String[] typeDataProvision = createTypeDataProvision(typeData);
-			if(generateProvision(fechaRuta, forNoCancel, headersProvision, typeDataProvision, forCancel, 0, 0, request))
-				result.put("Success","Archivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>Archivo generado de provisiones");
-			else
-				result.put("Success","Archivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>No se genero el archivo de provisiones");
-			
-			cieEstaproc=modifyEstaProc(cieEstaproc, 75, "\nFinalizacion de creacion del archivo del excel de provisiones\n"+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>", null);
-		}
-		else{
-			result.put("Eror","Se genero un error al crear el archivo: "+query.getConsnomb()+fechaRuta[1]+"-"+fechaRuta[2]+".xls");
-			cieEstaproc=modifyEstaProc(cieEstaproc, 90, "\nSe genero un error al crear el archivo: "+query.getConsnomb()+fechaRuta[1]+"-"+fechaRuta[2]+".xls", null);
-		}
+		cieEstaproc=modifyEstaProc(cieEstaproc, 75, "\nFinalizacion de creacion del archivo del excel de provisiones\n"+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>", null);
 		
 		cieEstaprocService.closeFinal(cieEstaproc);
 		return result;
@@ -568,4 +574,28 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		return myList;
 	}
 
+	private Map<String, Object> processCancelProvision(List<Object[]> listAllCancel, Map<String, Object> indexs) {
+		
+		//cancel 
+		List<Object[]> result =new ArrayList<Object[]>();
+		Object[] newRow;
+		double subtotal,total=0,totalIva=0;
+		for(Object[] row:listAllCancel)
+		{
+			newRow = new Object[row.length+1];
+			System.arraycopy(row, 0, newRow, 0, row.length);
+			subtotal = castToDouble(row[(int) indexs.get("indexPrimaAceptada")].toString()) + castToDouble(row[(int) indexs.get("indexPrimaDirecta")].toString()) + castToDouble(row[(int) indexs.get("indexCedidoCompania")].toString()) + castToDouble(row[(int) indexs.get("indexGastos")].toString());
+			total+= subtotal;
+			totalIva+= castToDouble(row[(int) indexs.get("indexIva")].toString());
+			newRow[row.length]=subtotal;
+			result.add(newRow);
+		}
+		
+		Map<String, Object> data=new HashMap<String, Object>();
+		data.put("listAll", result);
+		data.put("total", total);
+		data.put("totalIva", totalIva);
+		
+		return data;
+	}
 }

@@ -144,7 +144,7 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	@Override
 	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
 	public List<Object[]> loadListData(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros){
-		
+		System.out.println(frmConsulta);
 		if(frmConsulta.getConscaco().equals("dataSource")){
 			return frmConsultaRepository.loadData(frmConsulta, parameters);
 		}
