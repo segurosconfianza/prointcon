@@ -121,6 +121,13 @@ public class CFrmConsulta {
 		return this.frmConsultaService.loadData(conscons);
 	}
 	
+	@RequestMapping(value = "/loadDataName.json", params = {"conscons"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseBody
+	public String loadDataName(@RequestParam("conscons") String conscons) throws Throwable{
+			
+		return this.frmConsultaService.loadDataName(conscons);
+	}
+	
 	@RequestMapping(value = "/validateRol.json", params = {"roles"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String validateRol(@RequestParam("roles") String roles){
@@ -139,18 +146,5 @@ public class CFrmConsulta {
 			
 		return this.frmConsultaService.loadConsChield(conscons);
 	}	
-	
-	@RequestMapping("/CierreCarteraCuadre/")
-	public String soporteCierreCarteraCuadre() {
-		return "soporte/cierrecartera/CierreCarteraCuadre";
-	}
-	
-	@RequestMapping(value = "/ExecuteProcess.json", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
-	@ResponseBody
-	public String ExecuteProcess(@RequestParam("conscons") String conscons, @RequestParam("params") String params, HttpServletRequest request ) throws Throwable{
-			
-		String result=this.frmConsultaService.ExecuteProcess(conscons, params, request);  
 		
-		return result;
-	}
 }

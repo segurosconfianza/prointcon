@@ -13,7 +13,7 @@ FrmMainApp.service('CierreCarteraCuadreService', function($http, $rootScope, $ro
     	this.ExecuteProcess = function(formData) {    	
     		return $http({
     	        method: 'POST', 
-    	        url: WEB_SERVER+'FrmConsulta/ExecuteProcess.json',
+    	        url: WEB_SERVER+'CierreCartera/ExecuteProcessCierreCartera.json',
     	        data: formData,
     	        params: {conscons: $routeParams.soporteId},
     	        transformRequest: angular.identity,

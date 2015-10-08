@@ -2,7 +2,7 @@
 
 <sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR, CIERRECARTERACUADRE_ALL, CIERRECARTERACUADRE_READ">
 	
-      <div ng-controller="CierreCarteraCuadreController" ng-init="init()"><!-- Division grid maestro -->      	
+      <div ng-controller="CierreCancelacionesAutomaticasController" ng-init="init()"><!-- Division grid maestro -->      	
         
         <!-- Nested list template -->
 	    <script type="text/ng-template" id="form_renderer.jsp">  
@@ -38,7 +38,7 @@
 			  
 			   <div align="center">	
         		<button type="reset" class="btn btn-default btn-lg active" >Limpiar Datos</button>		        	
-        		<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,CIERRECARTERACUADRE_ALL,CIERRECARTERACUADRE_ALL"><button type="button" class="btn btn-success btn-lg active" ng-click="ExecuteProcess()" ng-show="Boton">Ejecutar Proceso<span class="glyphicon glyphicon-floppy-disk"></span></button></sec:authorize>
+        		<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,CIERRECANCELACIONESAUTO_ALL,CIERRECANCELACIONESAUTO_ALL"><button type="button" class="btn btn-success btn-lg active" ng-click="ExecuteProcess()" ng-show="Boton">Ejecutar Proceso<span class="glyphicon glyphicon-floppy-disk"></span></button></sec:authorize>
 		      </div>		      
 			</form>				
 		</div>			
@@ -50,6 +50,16 @@
 		<div class="alert alert-success" role="alert" ng-if="trans" align="center"><h4><label ng-bind-html="transaccion |to_trusted"></label></h4></div>
 		<div class="alert alert-danger" role="alert" ng-if="Error" align="center"><h4><b>Error:</b> <label ng-bind-html="DescripcionError |to_trusted"></label></h4></div>									
 		
+		<custom-alert name-modal="myModalError" label-error="Ninguno"></custom-alert>
+		
+		<div align="left" data-ng-if="directiveGrid">
+			<form name="formData" class="form-horizontal" role="form">
+			  <div align="center">	
+        		<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,CIERRECANCELACIONESAUTO_ALL,CIERRECANCELACIONESAUTO_ALL"><button type="button" class="btn btn-success btn-lg active" ng-click="ExecuteProcessCancel()" ng-show="Boton">Procesar Cancelaciones<span class="glyphicon glyphicon-floppy-disk"></span></button></sec:authorize>
+		      </div>		      
+			</form>				
+		</div>
+		<custom-grid cols="columnDefs" selected-items="selectedItems" custom-options="gridOptions" evento="gridEvento" icons="iconForeesta" evento-get-grid="getGridEvento" data-ng-if="directiveGrid"></custom-grid>
       </div>          	      
     
 </sec:authorize>      

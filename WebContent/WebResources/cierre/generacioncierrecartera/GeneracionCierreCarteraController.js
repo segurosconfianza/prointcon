@@ -1,6 +1,6 @@
 var FrmMainApp=angular.module('FrmMainApp');
 
-FrmMainApp.controller('CierreCarteraCuadreController', ['$scope', 'CierreCarteraCuadreService', '$filter', function($scope, Service, $filter) {
+FrmMainApp.controller('GeneracionCierreCarteraController', ['$scope', 'GeneracionCierreCarteraService', '$filter', function($scope, Service, $filter) {
 	
 	$scope.Params = {};
 	$scope.Result = false;
@@ -13,7 +13,7 @@ FrmMainApp.controller('CierreCarteraCuadreController', ['$scope', 'CierreCartera
 	$scope.init = function() {
 		Service.loadData().then(function(dataResponse) {  
 			if(dataResponse.data.error!=undefined)
-	    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+				$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	    	else{
 	    		$scope.title=dataResponse.data.titulo;
 	    		$scope.description=dataResponse.data.descri;
@@ -23,7 +23,7 @@ FrmMainApp.controller('CierreCarteraCuadreController', ['$scope', 'CierreCartera
 		Service.getParams().then(function(dataResponse) {  
 	    	
 	    	if(dataResponse.data.error!=undefined)
-	    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    		$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	    	else{
 	    		$scope.columns=dataResponse.data.data;
 	    		//recorro los campos para cargar los data de los combos
@@ -33,7 +33,7 @@ FrmMainApp.controller('CierreCarteraCuadreController', ['$scope', 'CierreCartera
 	    				//se pasa el codigo del combo
 	    				Service.getCombo($scope.columns[i].paracomb).then(function(dataResponse) {    					    					
 	    					if(dataResponse.data.error!=undefined)
-	    			    		alert(dataResponse.data.tituloError+': '+dataResponse.data.error);
+	    						$scope.sendAlert(dataResponse.data.tituloError+': '+dataResponse.data.error);
 	    			    	else{    			   
 	    			    		//se carga la data en los options
 	    			    		$scope.options[dataResponse.data.combo] = dataResponse.data.data;      			    		
@@ -109,34 +109,31 @@ FrmMainApp.controller('CierreCarteraCuadreController', ['$scope', 'CierreCartera
 						
 			Service.ExecuteProcess(formData).then(function(dataResponse) {
 				 	      
-        		if(dataResponse.data.SUCCESS==true || dataResponse.data.SUCCESS=="true"){
+        		if(dataResponse.data.Success!=undefined){
         			$scope.trans=true;
-        			alert('Proceso Terminado Satisfactoriamente');
+        			$scope.sendAlert('Proceso Terminado Satisfactoriamente');
         			
-        			$scope.transaccion='<b>Transacci&oacute;n:</b>'+dataResponse.data.TRANSACCION;
-        			if (dataResponse.data.EROR!=undefined)
-        				$scope.transaccion=$scope.transaccion + '<br>' + dataResponse.data.EROR;
+        			$scope.transaccion=dataResponse.data.Success;
+        			
         		}
         		else{
         			$scope.Error = true;
-        			alert('Proceso no termino Satisfactoriamente');
-        			if(dataResponse.data.EROR=="")
-        				$scope.DescripcionError = "Este proceso no genero ningun cambio";
-        			else
-        				$scope.DescripcionError = dataResponse.data.EROR;
-        		
-        			if(dataResponse.data.error!=undefined)
-        				$scope.DescripcionError = dataResponse.data.tituloError+': '+dataResponse.data.error; 
+        			$scope.sendAlert('Proceso no termino Satisfactoriamente');        			
+        			$scope.DescripcionError = dataResponse.data.Eror;        		        			
 				}
 	        	
 				$scope.BotonLoader=false;
 				$scope.Boton = true;	
 	        }); 						
 		}else{ 
-			alert("Datos vacios o incorrectos: Favor diligencie todos los campos");
+			$scope.sendAlert("Datos vacios o incorrectos: Favor diligencie todos los campos");
 			$scope.BotonLoader=false;
 			$scope.Boton = true;	
 		}				
-	}		
+	}
+	
+	$scope.sendAlert = function(error){
+		$scope.$broadcast('loadDataError', error);
+	}
  }            
 ])

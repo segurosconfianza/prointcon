@@ -3,7 +3,7 @@ FrmMainApp.directive('customGrid', function($compile) {
 	  return {
 	    restrict: 'E',
 	    template: '<div class="gridStyle" ng-grid="gridOptions" style="width: 100%"></div>',
-	    scope : { cols : '=', selectedItems : '=', customOptions : '=', evento : '@', eventoGrid : '@', icons : '='}, 
+	    scope : { cols : '=', selectedItems : '=', customOptions : '=', evento : '@', eventoGrid : '@', icons : '=', eventoGetGrid : '@'}, 
 	    replace : false,
 	    transclude : false,
 	    controller : controller
@@ -118,7 +118,7 @@ FrmMainApp.directive('customGrid', function($compile) {
 	    }	 
 	   
     	//metodo externo de filtrado(en toda la base de datos)
-    	$scope.$on('loadDataGrid', function(event, data, count, pageSize, currentPage) {     		
+    	$scope.$on('loadDataGrid', function(event, data, count, pageSize, currentPage) {
     		setTimeout(function () {
     			$scope.setPagingData(data, currentPage, pageSize);
 	    		$scope.totalServerItems = count;
@@ -142,6 +142,10 @@ FrmMainApp.directive('customGrid', function($compile) {
         };
         
         //llamado a la precarga de los datos
-        $scope.$emit($scope.evento, $scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, "order by "+$scope.gridOptions.sortInfo.fields+" "+$scope.gridOptions.sortInfo.directions, $scope.searchQuery);       
+        $scope.$emit($scope.evento, $scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, "order by "+$scope.gridOptions.sortInfo.fields+" "+$scope.gridOptions.sortInfo.directions, $scope.searchQuery);
+        
+        $scope.$on('getGrid', function() {
+        	$scope.$emit($scope.eventoGetGrid, $scope.gridOptions);
+ 	    });
 	  };	  	  
 });

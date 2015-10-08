@@ -57,7 +57,11 @@ public interface FrmConsultaService{
 
 	public List<Object[]> loadListData(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros);
 
-	public String ExecuteProcess(String conscons, String params, HttpServletRequest request);
+	public FrmConsulta listId(String id);
+
+	public String loadDataName(String conscons);
+
+	public List<FrmConsulta> listQueryChilds(String conscons);
 
 
 }
