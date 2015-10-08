@@ -88,7 +88,7 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		Map<String, Object> parameters=gson.fromJson(params, type);   						
 		
 		//carga la consulta dinamica
-		FrmConsulta frmConsulta=this.listName(conscons);
+		FrmConsulta frmConsulta=this.listId(conscons);
 		List<FrmParametro> parametros=this.frmParametroService.listParamsCosuType(new Long(conscons));
 		
 		//carga los datos de la consulta

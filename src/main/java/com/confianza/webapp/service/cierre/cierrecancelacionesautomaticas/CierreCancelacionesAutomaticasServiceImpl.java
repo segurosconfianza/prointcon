@@ -162,29 +162,33 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 				result.put("count", listAll.size());
 				
 				String fechaRuta[]=parameters.get("FECHAFIN").toString().split("/");
-				String rutaArchivo=frmTablasService.listByTablcodi("ruta"+query.getConscons()).getTablvast()+fechaRuta[1]+"-"+fechaRuta[2];
+				List<FrmTablas> listRutas=frmTablasService.listByCodi("ruta"+query.getConscons());
+				String rutaArchivo;
 				
-				if(query.getConsnomb().equals("DETALLE_DE_SALDOS_PARA_CIERRE_CANCELACIONES_Y_TOTA")){
-					List<SheetExcel> sheetsExcel = createSheetsforAnexo(parameters, query, listAll);
-					
-					if(fileExcel.generateExcelManySheets(rutaArchivo, query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls", sheetsExcel, request)){
-						success+="Archivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>";
-						cieEstaproc=modifyEstaProc(cieEstaproc, porcentaje, "\nFinalizo la ejecucion de la consulta: "+query.getConsnomb()+"\nArchivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\"), null);
+				for(FrmTablas tabla:listRutas){
+					rutaArchivo=tabla.getTablvast()+fechaRuta[1]+"-"+fechaRuta[2];
+					if(query.getConsnomb().equals("DETALLE_DE_SALDOS_PARA_CIERRE_CANCELACIONES_Y_TOTA")){						
+						List<SheetExcel> sheetsExcel = createSheetsforAnexo(parameters, query, listAll);
+						
+						if(fileExcel.generateExcelManySheets(rutaArchivo, query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls", sheetsExcel, request)){
+							success+="Archivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>";
+							cieEstaproc=modifyEstaProc(cieEstaproc, porcentaje, "\nFinalizo la ejecucion de la consulta: "+query.getConsnomb()+"\nArchivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\"), null);
+						}
+						else{
+							error+="Se genero un error al crear el archivo: "+query.getConsnomb()+fechaRuta[1]+"-"+fechaRuta[2]+".xls";
+							cieEstaproc=modifyEstaProc(cieEstaproc, porcentaje, null, "Se genero un error al crear el archivo: "+query.getConsnomb()+fechaRuta[1]+"-"+fechaRuta[2]+".xls");
+						}
 					}
-					else{
-						error+="Se genero un error al crear el archivo: "+query.getConsnomb()+fechaRuta[1]+"-"+fechaRuta[2]+".xls";
-						cieEstaproc=modifyEstaProc(cieEstaproc, porcentaje, null, "Se genero un error al crear el archivo: "+query.getConsnomb()+fechaRuta[1]+"-"+fechaRuta[2]+".xls");
-					}
+					else
+						if(fileExcel.generateExcel(rutaArchivo, query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls", listAll, query.getConscolu().split(","), query.getConstico().split(","), request)){
+							success+="Archivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>";
+							cieEstaproc=modifyEstaProc(cieEstaproc, porcentaje, "\nFinalizo la ejecucion de la consulta: "+query.getConsnomb()+"\nArchivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\"), null);
+						}
+						else{
+							error+="Se genero un error al crear el archivo: "+query.getConsnomb()+fechaRuta[1]+"-"+fechaRuta[2]+".xls";
+							cieEstaproc=modifyEstaProc(cieEstaproc, porcentaje, null, "Se genero un error al crear el archivo: "+query.getConsnomb()+fechaRuta[1]+"-"+fechaRuta[2]+".xls");
+						}
 				}
-				else
-					if(fileExcel.generateExcel(rutaArchivo, query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls", listAll, query.getConscolu().split(","), query.getConstico().split(","), request)){
-						success+="Archivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>";
-						cieEstaproc=modifyEstaProc(cieEstaproc, porcentaje, "\nFinalizo la ejecucion de la consulta: "+query.getConsnomb()+"\nArchivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\"), null);
-					}
-					else{
-						error+="Se genero un error al crear el archivo: "+query.getConsnomb()+fechaRuta[1]+"-"+fechaRuta[2]+".xls";
-						cieEstaproc=modifyEstaProc(cieEstaproc, porcentaje, null, "Se genero un error al crear el archivo: "+query.getConsnomb()+fechaRuta[1]+"-"+fechaRuta[2]+".xls");
-					}
 			}
 			cieEstaprocService.closeFinal(cieEstaproc);
 			
@@ -235,7 +239,7 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		List<Map<String, Object>> myList = getListMap(selectedItems);									
 		Map<String, Object> parameters=getParametersMap(params);
 		
-		FrmConsulta query = frmConsultaService.listName("CRUZAR_CANCELACIONES");
+		FrmConsulta query = frmConsultaService.listName("SALDOS CANCEL SIN CANCEL TOTAL");
 		List<FrmParametro> parametersQueryChild=this.frmParametroService.listParamsCosuType(query.getConscons());
 		
 		CieEstaproc cieEstaproc = cieEstaprocService.insert(query.getConsnomb(), "Inicio de la consulta: "+query.getConsnomb(), userDetails.getUser(), "I");		
@@ -490,6 +494,9 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		cieEstaproc=modifyEstaProc(cieEstaproc, 75, "\nInicio de creacion del archivo del excel de provisiones\n"+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>", null);
 		String[] headersProvision = createHeadersProvision(headers);
 		String[] typeDataProvision = createTypeDataProvision(typeData);
+		List<Object[]> cancelImplicitas = generateCancelacionesImplicitas(parameters);
+		forCancel.addAll(cancelImplicitas);
+		
 		if(generateProvision(fechaRuta, forNoCancel, headersProvision, typeDataProvision, forCancel, request))
 			result.put("Success","Archivo Generado: "+query.getConsnomb()+" "+fechaRuta[1]+"-"+fechaRuta[2]+".xls Ruta: "+rutaArchivo.replace("\\\\", "\\")+"<br>Archivo generado de provisiones");
 		else
