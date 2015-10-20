@@ -13,6 +13,7 @@
 	<context:property-placeholder system-properties-mode="OVERRIDE" location="WEB-INF/Confianza.properties"/>
 
 	<security:http pattern="/confianza/Intermediario/**" security="none"/>
+	<security:http pattern="/confianza/Transfiriendo/**" security="none"/>
 		
 	<security:http entry-point-ref="casEntryPoint" use-expressions="true" auto-config="true">				
 		<security:form-login login-page="${CASSERVER}login.jsp" authentication-failure-handler-ref="failureHandler" />
