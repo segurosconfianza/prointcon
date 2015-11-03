@@ -55,13 +55,7 @@ public class ConsultaPolizaServiceImpl implements ConsultaPolizaService{
 		Poliza poliza=new Poliza(PRODUCTO);
 
 		if(CERTIFICADO!=null){			
-			for(Object[] objCertificado:data){				
-				if(objCertificado[3].toString().equals(CERTIFICADO)){
-					List<Object[]> dataOne=new ArrayList<Object[]>();
-					dataOne.add(objCertificado);
-					poliza=createPoliza(query, dataOne, mapParameters, poliza, SUCURSAL, PRODUCTO, POLIZA, CERTIFICADO);	
-				}
-			}
+			poliza = lookForCertif(SUCURSAL, PRODUCTO, POLIZA, CERTIFICADO, query, mapParameters, data, poliza);
 		} 
 		else{
 			poliza=createPoliza(query, data, mapParameters, poliza, SUCURSAL, PRODUCTO, POLIZA, CERTIFICADO);				
@@ -73,6 +67,17 @@ public class ConsultaPolizaServiceImpl implements ConsultaPolizaService{
 	    
 		return xstream.toXML(poliza);
 		
+	}
+
+	private Poliza lookForCertif(String SUCURSAL, String PRODUCTO, String POLIZA, String CERTIFICADO, FrmConsulta query, Map<String, Object> mapParameters, List<Object[]> data, Poliza poliza) {
+		for(Object[] objCertificado:data){				
+			if(objCertificado[3].toString().equals(CERTIFICADO)){
+				List<Object[]> dataOne=new ArrayList<Object[]>();
+				dataOne.add(objCertificado);
+				poliza=createPoliza(query, dataOne, mapParameters, poliza, SUCURSAL, PRODUCTO, POLIZA, CERTIFICADO);	
+			}
+		}
+		return poliza;
 	}
 
 	private Map<String, Object> createParametersQuery( String sql, String SUCURSAL, String PRODUCTO, String POLIZA, String CERTIFICADO) {
@@ -115,39 +120,52 @@ public class ConsultaPolizaServiceImpl implements ConsultaPolizaService{
 
 	private Certificado mapForTypeConsult(FrmConsulta query, Object[] objCertificado, Certificado certificado, String PRODUCTO, List<FrmParametro> parametersQuery,Map<String, Object> mapParameters) {
 		
-		if(query.getConstico().equals("1")){
-			String[] identificadores=query.getConscolu().split(",");
-			
-			for(int i=0; i<objCertificado.length;i++){
-				try{
-					certificado.addCampo(identificadores[i], objCertificado[i].toString());
-				}catch(NullPointerException e){
-					certificado.addCampo(identificadores[i], null);
-				}
-			}
+		if(query.getConstico().equals("1"))
+			certificado=matchSqlWithColu(query, objCertificado, certificado);		
+		else if(query.getConstico().equals("2"))//especifica para AMPAROS
+			certificado=matchSqlWithHeaders(objCertificado, certificado, PRODUCTO, query.getConscolu());
+		else if(query.getConstico().equals("3"))
+			certificado=matchFieldWithValue(objCertificado, certificado);
+		
+		return certificado;
+	}
+
+	private Certificado matchFieldWithValue(Object[] objCertificado, Certificado certificado) {
+		try{
+			certificado.addCampo(objCertificado[1].toString(), objCertificado[0].toString());
+		}catch(NullPointerException e){
+			certificado.addCampo(objCertificado[1].toString(), null);
 		}
-		else if(query.getConstico().equals("2")){//especifica para AMPAROS
-			query = frmConsultaService.listName("HEADERS AMPAROS "+PRODUCTO);
-			List<Object[]> identificadores=frmConsultaService.loadListData(query, null, null);
-									
-			for(Object[] obj:identificadores)
-				if(obj[0].equals(objCertificado[8]))
-					for(int i=0; i<objCertificado.length;i++){
-						try{
-							certificado.addCampo(obj[i].toString(), objCertificado[i].toString());
-						}catch(NullPointerException e){
-							certificado.addCampo(obj[i].toString(), null);
-						}
-			}
-			
+		return certificado;
+	}
+
+	private Certificado matchSqlWithHeaders(Object[] objCertificado, Certificado certificado, String PRODUCTO, String numberOfQuery) {
+		FrmConsulta query = frmConsultaService.listId(numberOfQuery);
+		List<Object[]> identificadores=frmConsultaService.loadListData(query, null, null);
+								
+		for(Object[] obj:identificadores)
+			if(obj[8].equals(objCertificado[8]))
+				for(int i=0; i<objCertificado.length-1;i++){
+					try{
+						certificado.addCampo(obj[i].toString(), objCertificado[i].toString());
+					}catch(NullPointerException e){
+						certificado.addCampo(obj[i].toString(), null);
+					}
 		}
-		else if(query.getConstico().equals("3")){	
+		return certificado;
+	}
+
+	private Certificado matchSqlWithColu(FrmConsulta query, Object[] objCertificado, Certificado certificado) {
+		String[] identificadores=query.getConscolu().split(",");
+		
+		for(int i=0; i<objCertificado.length;i++){
 			try{
-				certificado.addCampo(objCertificado[1].toString(), objCertificado[0].toString());
+				certificado.addCampo(identificadores[i], objCertificado[i].toString());
 			}catch(NullPointerException e){
-				certificado.addCampo(objCertificado[1].toString(), null);
+				certificado.addCampo(identificadores[i], null);
 			}
 		}
+		
 		return certificado;
 	}	
 
