@@ -51,7 +51,6 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	private SendEmail sendEmail;
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_READ"})
 	public String list(Long id){
 		
 		return gson.toJson(frmConsultaRepository.list(id));
@@ -81,7 +80,6 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	private FrmTablasService frmTablasService;
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
 	public String loadRecord(String conscons, String params){
 		
         Type type = new TypeToken<Map<String, Object>>(){}.getType();
@@ -104,7 +102,6 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
 	public String listCombo(String conscons){
 		//carga la consulta dinamica
 		FrmConsulta frmConsulta=this.listName(conscons);
@@ -142,7 +139,6 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
 	public List<Object[]> loadListData(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros){
 		System.out.println(frmConsulta);
 		if(frmConsulta.getConscaco().equals("dataSource")){
@@ -156,27 +152,23 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_READ"})
 	public int getCount(){
 				
 		return frmConsultaRepository.getCount();
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_UPDATE"})
 	public String update(FrmConsulta frmconsulta){
 		
 		return gson.toJson(frmConsultaRepository.update(frmconsulta));
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_DELETE"})
 	public void delete(FrmConsulta frmconsulta){
 		frmConsultaRepository.delete(frmconsulta);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_CONSULTA_ALL", "FRM_CONSULTA_CREATE"})
 	public String insert(FrmConsulta frmconsulta){
 		
 			//frmconsulta.setesta("A");
@@ -186,7 +178,6 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_UPDATE"})
 	public String updateRecord(String conscons, String params, String paramsData, ArrayList<MultipartFile> file){
 		
 		Type type = new TypeToken<Map<String, Object>>(){}.getType();
