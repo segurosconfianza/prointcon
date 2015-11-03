@@ -365,7 +365,6 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		double columnaGConfisco=new Double(frmTablasService.listByTablcodi("columnaGProvisiones").getTablvast());
 		
 		provisionMayor360+=columnaFConfisco;
-		System.out.println(primaGastosCancel+"-"+columnaGConfisco);
 		primaGastosCancel+=columnaGConfisco;
 		
 		double provision20PorcentSince76To90   = provisionSince76To90*0.2;
@@ -425,8 +424,14 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		sheetExcel=new SheetExcel(listProvision, " , , , , , , , , , , , , ".split(","), "string,integer,integer,integer,double,double,double,double,double,string,double,double,double".split(","), HSSFColor.WHITE.index, "TotalProvisiones");
 		sheetsExcel.add(sheetExcel);
 		
-		String rutaArchivo=frmTablasService.listByTablcodi("rutaProvisiones").getTablvast()+fechaRuta[1]+"-"+fechaRuta[2];
-		return fileExcel.generateExcelManySheets(rutaArchivo, "Provisiones "+fechaRuta[1]+"-"+fechaRuta[2]+".xls", sheetsExcel, request);
+		List<FrmTablas> listRutas=frmTablasService.listByCodi("rutaProvisiones");
+		boolean respuesta=false;
+		String rutaArchivo="";
+		for(FrmTablas tabla:listRutas){
+			rutaArchivo=tabla.getTablvast()+fechaRuta[1]+"-"+fechaRuta[2];
+			respuesta=fileExcel.generateExcelManySheets(rutaArchivo, "Provisiones "+fechaRuta[1]+"-"+fechaRuta[2]+".xls", sheetsExcel, request);
+		}
+		return respuesta;
 	}
 	
 	private Double castToDouble(String camp){
@@ -443,6 +448,7 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 	private Map<String, Object> generateListForSheets(List<Map<String, Object>> myList, List<Object[]> listAll, String[] headers, String[] typeData, String fecha, FrmConsulta query, CieEstaproc cieEstaproc, Map<String, Object> parameters, HttpServletRequest request) {
 		List<Object[]> forCancel=new ArrayList<Object[]>();
 		List<Object[]> forNoCancel=new ArrayList<Object[]>();
+		List<Object[]> total=new ArrayList<Object[]>();
 		Map<String, Object> result;
 		
 		cieEstaproc=modifyEstaProc(cieEstaproc, 30, "\nIncio del cruce de cancelaciones", null);
@@ -452,18 +458,21 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 				result = rowIsInList(myList, queryRow);				
 			
 				if(result!=null){
+					queryRow[19]='C';//la consulta en la columna 19 esta en '' para colocarle la C de cancel sino en blanco
 					forCancel.add(queryRow);
-					myList.remove(result);
+					myList.remove(result);					
 				}
 				else
 					forNoCancel.add(queryRow);
 			}
 			else
 				forNoCancel.add(queryRow);
+			
+			total.add(queryRow);
 		}
 		cieEstaproc=modifyEstaProc(cieEstaproc, 45, "\nFinalizacion del cruce de cancelaciones", null);
 		
-		return generateFileExcel(listAll, headers, typeData, forCancel, forNoCancel, fecha, query, cieEstaproc, parameters, request);
+		return generateFileExcel(total, headers, typeData, forCancel, forNoCancel, fecha, query, cieEstaproc, parameters, request);
 	}
 	
 	private Map<String, Object> generateFileExcel(List<Object[]> listAll, String[] headers, String[] typeData, List<Object[]> forCancel, List<Object[]> forNoCancel, String fecha, FrmConsulta query, CieEstaproc cieEstaproc, Map<String, Object> parameters, HttpServletRequest request) {

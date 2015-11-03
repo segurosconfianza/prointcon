@@ -1,4 +1,4 @@
-package com.confianza.webapp.controller.cierre.generacioncierrecartera;
+package com.confianza.webapp.controller.cierre.generacioncierrecartera; 
 
 import javax.servlet.http.HttpServletRequest;
 
