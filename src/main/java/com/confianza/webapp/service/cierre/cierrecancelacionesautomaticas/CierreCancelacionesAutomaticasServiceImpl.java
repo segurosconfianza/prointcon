@@ -25,7 +25,7 @@ import com.confianza.webapp.repository.cierre.cieestaproc.CieEstaproc;
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsulta;
 import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
 import com.confianza.webapp.repository.framework.frmtablas.FrmTablas;
-import com.confianza.webapp.service.cierre.cieestaproc.CieEstaprocService;
+import com.confianza.webapp.service.cierre.cieestaproc.FacEstaprocService;
 import com.confianza.webapp.service.excel.fileExcel.FileExcel;
 import com.confianza.webapp.service.framework.frmconsulta.FrmConsultaService;
 import com.confianza.webapp.service.framework.frmparametro.FrmParametroService;
@@ -59,7 +59,7 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 	private FrmParametroService frmParametroService;
 	
 	@Autowired
-	private CieEstaprocService cieEstaprocService;
+	private FacEstaprocService cieEstaprocService;
 	
 	@Override
 	public String executeProcessCierreCartera(String conscons, String params, HttpServletRequest request){
@@ -152,7 +152,15 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		Map<String, Object> result=new HashMap<String, Object>();
 		
 		try{
-			for(FrmConsulta query:queryChilds){		
+			for(FrmConsulta query:queryChilds){	
+				
+				if(query.getConsnomb().equals("DETALLE_DE_SALDOS_PARA_CIERRE_CANCELACIONES_Y_TOTA")){
+					FrmConsulta queryPropertys = frmConsultaService.listName("DETALLE_DE_SALDOS_PARA_CIERRE_CANCELACIONES_Y_TOTA PROPERTY");
+					query.setConslsql(query.getConslsql()+" UNION "+queryPropertys.getConslsql());
+					
+					System.out.println(query.getConslsql());
+				}
+					
 				cieEstaproc=modifyEstaProc(cieEstaproc, 0, "\nInicio de la ejecucion de la consulta: "+query.getConsnomb(), null);
 				List<FrmParametro> parametersQueryChild=this.frmParametroService.listParamsCosuType(query.getConscons());
 				
@@ -240,6 +248,8 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		Map<String, Object> parameters=getParametersMap(params);
 		
 		FrmConsulta query = frmConsultaService.listName("SALDOS CANCEL SIN CANCEL TOTAL");
+		FrmConsulta queryPropertys = frmConsultaService.listName("SALDOS CANCEL SIN CANCEL TOTAL PROPERTY");
+		query.setConslsql(query.getConslsql()+" UNION "+queryPropertys.getConslsql());
 		List<FrmParametro> parametersQueryChild=this.frmParametroService.listParamsCosuType(query.getConscons());
 		
 		CieEstaproc cieEstaproc = cieEstaprocService.insert(query.getConsnomb(), "Inicio de la consulta: "+query.getConsnomb(), userDetails.getUser(), "I");		
@@ -298,8 +308,8 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 			total  = castToDouble(row[(int) indexs.get("indexPrimaAceptada")].toString()) + castToDouble(row[(int) indexs.get("indexPrimaDirecta")].toString()) + castToDouble(row[(int) indexs.get("indexCedidoCompania")].toString()) + castToDouble(row[(int) indexs.get("indexGastos")].toString());
 			newRow[row.length]=total;
 			newRow[row.length+1]=total*0.20;
-			porcentaje=total-(total*0.20f);
-			newRow[row.length+2]=total-porcentaje;			
+			porcentaje=total-(total*0.20);
+			newRow[row.length+2]=total-(total*0.20);			
 			madurez=castToDouble(row[(int) indexs.get("indexMadurez")].toString());
 			if(madurez >=0 && madurez < 76){
 				provisionSince0To75+=total;
@@ -363,6 +373,7 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		
 		double columnaFConfisco=new Double(frmTablasService.listByTablcodi("columnaFProvisiones").getTablvast());
 		double columnaGConfisco=new Double(frmTablasService.listByTablcodi("columnaGProvisiones").getTablvast());
+		double columnaMProvisionesIva=new Double(frmTablasService.listByTablcodi("columnaMProvisionesIva").getTablvast());
 		
 		provisionMayor360+=columnaFConfisco;
 		primaGastosCancel+=columnaGConfisco;
@@ -392,19 +403,21 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		double totalProvisionMinus20PorcentFinal=totalProvisionMinus20Porcent+provisionMayor360+primaGastosCancel;
 		double totalFactoresFinal=totalFactores+provisionMayor360+primaGastosCancel;
 		double totalProvisionGastosCancel=provisionMayor360+primaGastosCancel;
-		return exportProvisiones(fechaRuta, headers, typeData, provisiones, cancel, primaGastosCancel, ivaCancel, provisionSince0To75, provisionSince76To90, provisionSince91To180, provisionSince181To270, provisionSince271To360, provisionMayor360, ivaSince76To90, ivaSince91To180, ivaSince181To270, ivaSince271To360, ivaMayor360, provision20PorcentSince76To90, provision20PorcentSince91To180, provision20PorcentSince181To270, provision20PorcentSince271To360, provisionMinus20PorcentSince76To90, provisionMinus20PorcentSince91To180, provisionMinus20PorcentSince181To270, provisionMinus20PorcentSince271To360, factorSince76To90, factorSince91To180, factorSince181To270, factorSince271To360, totalProvisiones, totalProvisiones20Porcent, totalProvisionMinus20Porcent, totalFactores, totalIva, totalProvisionesFinal, totalProvisionMinus20PorcentFinal, totalFactoresFinal, totalProvisionGastosCancel, request);
+		
+		double totalProvesiones=(totalIva+ivaMayor360+ivaCancel)+columnaMProvisionesIva;
+		return exportProvisiones(fechaRuta, headers, typeData, provisiones, cancel, primaGastosCancel, ivaCancel, provisionSince0To75, provisionSince76To90, provisionSince91To180, provisionSince181To270, provisionSince271To360, provisionMayor360, ivaSince76To90, ivaSince91To180, ivaSince181To270, ivaSince271To360, ivaMayor360, provision20PorcentSince76To90, provision20PorcentSince91To180, provision20PorcentSince181To270, provision20PorcentSince271To360, provisionMinus20PorcentSince76To90, provisionMinus20PorcentSince91To180, provisionMinus20PorcentSince181To270, provisionMinus20PorcentSince271To360, factorSince76To90, factorSince91To180, factorSince181To270, factorSince271To360, totalProvisiones, totalProvisiones20Porcent, totalProvisionMinus20Porcent, totalFactores, totalIva, totalProvisionesFinal, totalProvisionMinus20PorcentFinal, totalFactoresFinal, totalProvisionGastosCancel, totalProvesiones, columnaMProvisionesIva, request);
 	}
 
-	private boolean exportProvisiones(String[] fechaRuta,String[] headers, String[] typeData,List<Object[]> provisiones, List<Object[]> cancel, double primaGastosCancel, double ivaCancel, double provisionSince0To75, double provisionSince76To90, double provisionSince91To180, double provisionSince181To270, double provisionSince271To360, double provisionMayor360, double ivaSince76To90, double ivaSince91To180, double ivaSince181To270, double ivaSince271To360, double ivaMayor360, double provision20PorcentSince76To90, double provision20PorcentSince91To180, double provision20PorcentSince181To270, double provision20PorcentSince271To360, double provisionMinus20PorcentSince76To90, double provisionMinus20PorcentSince91To180, double provisionMinus20PorcentSince181To270, double provisionMinus20PorcentSince271To360, double factorSince76To90, double factorSince91To180, double factorSince181To270, double factorSince271To360, double totalProvisiones, double totalProvisiones20Porcent, double totalProvisionMinus20Porcent, double totalFactores, double totalIva, double totalProvisionesFinal, double totalProvisionMinus20PorcentFinal, double totalFactoresFinal, double totalProvisionGastosCancel, HttpServletRequest request) {
+	private boolean exportProvisiones(String[] fechaRuta,String[] headers, String[] typeData,List<Object[]> provisiones, List<Object[]> cancel, double primaGastosCancel, double ivaCancel, double provisionSince0To75, double provisionSince76To90, double provisionSince91To180, double provisionSince181To270, double provisionSince271To360, double provisionMayor360, double ivaSince76To90, double ivaSince91To180, double ivaSince181To270, double ivaSince271To360, double ivaMayor360, double provision20PorcentSince76To90, double provision20PorcentSince91To180, double provision20PorcentSince181To270, double provision20PorcentSince271To360, double provisionMinus20PorcentSince76To90, double provisionMinus20PorcentSince91To180, double provisionMinus20PorcentSince181To270, double provisionMinus20PorcentSince271To360, double factorSince76To90, double factorSince91To180, double factorSince181To270, double factorSince271To360, double totalProvisiones, double totalProvisiones20Porcent, double totalProvisionMinus20Porcent, double totalFactores, double totalIva, double totalProvisionesFinal, double totalProvisionMinus20PorcentFinal, double totalFactoresFinal, double totalProvisionGastosCancel, double totalProvesiones, double columnaMProvisionesIva,HttpServletRequest request) {
 		List<Object[]> listProvision=new ArrayList<Object[]>();
 		Object[] row1= {"1005","0","0","0","0",				   provisionSince271To360,"0"			   ,provision20PorcentSince271To360,provisionMinus20PorcentSince271To360,"7/8"	 ,factorSince271To360		 ,provision20PorcentSince271To360+factorSince271To360,ivaSince271To360 	  		   };		
 		Object[] row2= {"1010","0","0","0","0",				   provisionSince181To270,"0"			   ,provision20PorcentSince181To270,provisionMinus20PorcentSince181To270,"5/8"	 ,factorSince181To270		 ,provision20PorcentSince181To270+factorSince181To270,ivaSince181To270	  		   };
 		Object[] row3= {"1015","0","0","0","0",				   provisionSince91To180 ,"0"			   ,provision20PorcentSince91To180 ,provisionMinus20PorcentSince91To180 ,"3/8"	 ,factorSince91To180 		 ,provision20PorcentSince91To180 +factorSince91To180 ,ivaSince91To180 	  		   };
 		Object[] row4= {"1020","0","0","0",provisionSince0To75,provisionSince76To90  ,"0"			   ,provision20PorcentSince76To90  ,provisionMinus20PorcentSince76To90  ,"83/360",factorSince76To90  		 ,provision20PorcentSince76To90  +factorSince76To90  ,ivaSince76To90  	  		   };
 		Object[] row5= {"1999","0","0","0",provisionSince0To75,totalProvisiones      ,"0"			   ,totalProvisiones20Porcent      ,totalProvisionMinus20Porcent        ,""   	 ,totalFactores      		 ,totalProvisiones20Porcent+totalFactores          	 ,totalIva        	  		   };
-		Object[] row6= {"6005","0","0","0","0",				   provisionMayor360     ,primaGastosCancel,"0"      					   ,totalProvisionGastosCancel 			,""   	 ,totalProvisionGastosCancel,totalProvisionGastosCancel  			  			 ,ivaMayor360+ivaCancel 	   };
-		Object[] row7= {"6999","0","0","0","0",				   provisionMayor360     ,primaGastosCancel,"0"      					   ,totalProvisionGastosCancel 			,""   	 ,totalProvisionGastosCancel,totalProvisionGastosCancel  			  			 ,ivaMayor360+ivaCancel		   };
-		Object[] row8= {"7005","0","0","0",provisionSince0To75,totalProvisionesFinal ,primaGastosCancel,totalProvisiones20Porcent      ,totalProvisionMinus20PorcentFinal	,""	  	 ,totalFactoresFinal		 ,totalProvisiones20Porcent+totalFactores+totalProvisionGastosCancel,totalIva+ivaMayor360+ivaCancel};		
+		Object[] row6= {"6005","0","0","0","0",				   provisionMayor360     ,primaGastosCancel,"0"      					   ,totalProvisionGastosCancel 			,""   	 ,totalProvisionGastosCancel,totalProvisionGastosCancel  			  			 ,ivaMayor360+ivaCancel+columnaMProvisionesIva };
+		Object[] row7= {"6999","0","0","0","0",				   provisionMayor360     ,primaGastosCancel,"0"      					   ,totalProvisionGastosCancel 			,""   	 ,totalProvisionGastosCancel,totalProvisionGastosCancel  			  			 ,ivaMayor360+ivaCancel+columnaMProvisionesIva };
+		Object[] row8= {"7005","0","0","0",provisionSince0To75,totalProvisionesFinal ,primaGastosCancel,totalProvisiones20Porcent      ,totalProvisionMinus20PorcentFinal	,""	  	 ,totalFactoresFinal		 ,totalProvisiones20Porcent+totalFactores+totalProvisionGastosCancel,totalProvesiones};		
 		listProvision.add(row1);
 		listProvision.add(row2);
 		listProvision.add(row3);

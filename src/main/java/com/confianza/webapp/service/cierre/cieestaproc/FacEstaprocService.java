@@ -14,7 +14,7 @@ import java.util.List;
 import com.confianza.webapp.repository.cierre.cieestaproc.CieEstaproc;
 import com.confianza.webapp.utils.Filter;
 
-public interface CieEstaprocService{
+public interface FacEstaprocService{
 	
 	public String list(Long id);
 	

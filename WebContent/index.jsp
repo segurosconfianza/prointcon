@@ -125,6 +125,9 @@
 	    <script  src="WebResources/cierre/generacioncierrecartera/GeneracionCierreCarteraController.js"></script>
 	    <script  src="WebResources/cierre/generacioncierrecartera/GeneracionCierreCarteraService.js"></script>
 	    
+	    <script  src="WebResources/cierre/cierreregeneral/CierreGeneralController.js"></script>
+	    <script  src="WebResources/cierre/cierreregeneral/CierreGeneralService.js"></script>
+	    
 		<script type="text/javascript" Language="JavaScript">
 			document.createElement('ng-view');
 				   

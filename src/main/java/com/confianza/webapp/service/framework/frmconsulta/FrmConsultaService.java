@@ -63,5 +63,7 @@ public interface FrmConsultaService{
 
 	public List<FrmConsulta> listQueryChilds(String conscons);
 
+	public List<FrmConsulta> listProcedureChildren(String id);
+
 
 }

@@ -76,6 +76,11 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		return frmConsultaRepository.listProcedureChild(id);
 	}
 	
+	@Override	
+	public List<FrmConsulta> listProcedureChildren(String id){
+		return frmConsultaRepository.listProcedureChildren(id);
+	}
+	
 	@Autowired
 	private FrmTablasService frmTablasService;
 	

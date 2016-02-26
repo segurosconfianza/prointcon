@@ -27,7 +27,7 @@ import com.confianza.webapp.utils.Filter;
 import com.google.gson.reflect.TypeToken;
 
 @Service
-public class CieEstaprocServiceImpl implements CieEstaprocService{
+public class CieEstaprocServiceImpl implements FacEstaprocService{
 	
 	@Autowired
 	private CieEstaprocRepository cieestaprocRepository;
