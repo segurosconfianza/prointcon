@@ -51,10 +51,10 @@ public class ConsultaPolizaServiceImpl implements ConsultaPolizaService{
 		List<FrmParametro> parametersQuery=this.frmParametroService.listParamsCosuType(query.getConscons());
 		
 		Map<String, Object> mapParameters=createParametersQuery(query.getConslsql(), SUCURSAL, PRODUCTO, POLIZA, CERTIFICADO);
-		List<Object[]> data=frmConsultaService.loadListData(query, mapParameters, parametersQuery);		
+		List<Object[]> data=frmConsultaService.loadListData(query, mapParameters, parametersQuery);
 		Poliza poliza=new Poliza(PRODUCTO);
 
-		if(CERTIFICADO!=null){			
+		if(CERTIFICADO!=null){	
 			poliza = lookForCertif(SUCURSAL, PRODUCTO, POLIZA, CERTIFICADO, query, mapParameters, data, poliza);
 		} 
 		else{
@@ -103,14 +103,15 @@ public class ConsultaPolizaServiceImpl implements ConsultaPolizaService{
 	private Poliza createCertificados(FrmConsulta query, List<Object[]> data, Poliza poliza, String SUCURSAL, String PRODUCTO, String POLIZA, String CERTIFICADO) {
 		
 		for(Object[] objCertificado:data){
-			Certificado certificado=new Certificado();
-			certificado=mapForTypeConsult(query, objCertificado, certificado, PRODUCTO, null, null); 
+			Certificado certificado=new Certificado();		
+			CERTIFICADO=objCertificado[3].toString();
+			certificado=mapForTypeConsult(query, objCertificado, certificado, PRODUCTO, null, null);
 			List<FrmConsulta> hijosConsulta = frmConsultaService.listQueryChilds(query.getConscons().toString());
 			for(FrmConsulta consulta:hijosConsulta){
 				List<FrmParametro> parametersQuery=this.frmParametroService.listParamsCosuType(query.getConscons());
 				Map<String, Object> mapParameters=createParametersQuery(consulta.getConslsql(), SUCURSAL, PRODUCTO, POLIZA, CERTIFICADO);
 				List<Object[]> dataQ=frmConsultaService.loadListData(consulta, mapParameters, parametersQuery);
-				for(Object[] objData:dataQ)
+				for(Object[] objData:dataQ) 
 					certificado=mapForTypeConsult(consulta, objData, certificado, PRODUCTO, parametersQuery, mapParameters);
 			}
 			poliza.addCertificado(certificado);
@@ -140,10 +141,11 @@ public class ConsultaPolizaServiceImpl implements ConsultaPolizaService{
 	}
 
 	private Certificado matchSqlWithHeaders(Object[] objCertificado, Certificado certificado, String PRODUCTO, String numberOfQuery) {
+		
 		FrmConsulta query = frmConsultaService.listId(numberOfQuery);
 		List<Object[]> identificadores=frmConsultaService.loadListData(query, null, null);
 								
-		for(Object[] obj:identificadores)
+		for(Object[] obj:identificadores){
 			if(obj[8].equals(objCertificado[8]))
 				for(int i=0; i<objCertificado.length-1;i++){
 					try{
@@ -151,6 +153,7 @@ public class ConsultaPolizaServiceImpl implements ConsultaPolizaService{
 					}catch(NullPointerException e){
 						certificado.addCampo(obj[i].toString(), null);
 					}
+				}
 		}
 		return certificado;
 	}
