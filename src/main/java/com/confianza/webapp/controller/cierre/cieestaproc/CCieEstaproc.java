@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 
-import com.confianza.webapp.service.cierre.cieestaproc.CieEstaprocService;
+import com.confianza.webapp.service.cierre.cieestaproc.FacEstaprocService;
 import com.confianza.webapp.repository.cierre.cieestaproc.CieEstaproc;
 
 @Controller
@@ -22,7 +22,7 @@ import com.confianza.webapp.repository.cierre.cieestaproc.CieEstaproc;
 public class CCieEstaproc {
 
 	@Autowired
-	private CieEstaprocService cieestaprocService;
+	private FacEstaprocService cieestaprocService;
 	
 	public CCieEstaproc() {
 		super();

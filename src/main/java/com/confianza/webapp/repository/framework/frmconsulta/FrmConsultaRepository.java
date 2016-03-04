@@ -49,5 +49,7 @@ public interface FrmConsultaRepository {
 	public FrmConsulta listChild(String id);
 
 	public List<Object[]> loadDataOsiris(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros);
+
+	public List<FrmConsulta> listProcedureChildren(String id);
 	
 }

@@ -57,8 +57,10 @@ public class FileExcelImpl implements FileExcel {
         
     }
 	
-	private HSSFWorkbook createExcel(String[] headers, String[] typeData, List<Object[]> listAll){		
+	private HSSFWorkbook createExcel(String[] headers, String[] typeData, List<Object[]> listAll){
+		
 		HSSFWorkbook workbook = new HSSFWorkbook();
+		try{
 		initCellStyleHeader(workbook);
 		
 		//crear la hoja de excel
@@ -74,7 +76,9 @@ public class FileExcelImpl implements FileExcel {
 			for(Object objCell:objRow)
 				createRow(typeData, objCell);	
 		}
-		
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		return workbook;
 	}
 	
@@ -208,6 +212,7 @@ public class FileExcelImpl implements FileExcel {
 			createFile(obj, serverFile, workbook);
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -221,7 +226,6 @@ public class FileExcelImpl implements FileExcel {
 	
 	private void createRow(String[] typeData, Object objCell) {
 		cell = row.createCell(numCell);
-		
 		if(typeData[numCell].equals("integer"))
 			generateCellNumberInteger(objCell);
 		else if(typeData[numCell].equals("double"))
@@ -235,39 +239,75 @@ public class FileExcelImpl implements FileExcel {
 
 	private void generateCellString(Object objCell) {
 		cell.setCellStyle(CellStyle);
-		try{
-			cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-			cell.setCellValue(objCell.toString());
-		}catch(Exception  e){ 
-			cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
+		if(objCell!=null)
+			try{
+				cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(objCell.toString());
+			}catch(Exception  e){ 
+				cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
+				cell.setCellValue("");
+			}
+		else{
 			cell.setCellValue("");
+			cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
 		}
 	}
 
 	private void generateCellDate(Object objCell) {
-		try {
-			SimpleDateFormat myFormat=new SimpleDateFormat("dd/MM/yyyy");
-			Calendar calendar=Calendar.getInstance();
-			calendar.setTime(myFormat.parse(objCell.toString()));
-			cell.setCellStyle(CellStyleDate);
-			cell.setCellValue(calendar.getTime());
-		} catch (ParseException e) {
+		if(objCell!=null)
+			try {
+				SimpleDateFormat myFormat=new SimpleDateFormat("dd/MM/yyyy");
+				Calendar calendar=Calendar.getInstance();
+				calendar.setTime(myFormat.parse(objCell.toString()));
+				cell.setCellStyle(CellStyleDate);
+				cell.setCellValue(calendar.getTime());
+			} catch (ParseException e) {
+				cell.setCellValue("");
+				cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
+				e.printStackTrace();
+			}
+		else{
+			cell.setCellStyle(CellStyle);
 			cell.setCellValue("");
 			cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
-			e.printStackTrace();
 		}
 	}
 
 	private void generateCellNumberDouble(Object objCell) {
-		cell.setCellStyle(CellStyleNumberDouble);
-		cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-		cell.setCellValue(Double.parseDouble(objCell.toString()));
+		if(objCell!=null)
+			try {
+				cell.setCellStyle(CellStyleNumberDouble);
+				cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC); 
+				cell.setCellValue(Double.parseDouble(objCell.toString()));   
+			} catch (NullPointerException e) {
+				cell.setCellStyle(CellStyle);
+				cell.setCellValue("");
+				cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
+				e.printStackTrace();
+			}
+		else{
+			cell.setCellStyle(CellStyle);
+			cell.setCellValue("");
+			cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
+		}
 	}
 
 	private void generateCellNumberInteger(Object objCell) {
-		cell.setCellStyle(CellStyleNumberInt);
-		cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-		cell.setCellValue(Long.parseLong(objCell.toString()));
+		if(objCell!=null)
+			try {
+				cell.setCellStyle(CellStyleNumberInt);
+				cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+				cell.setCellValue(Long.parseLong(objCell.toString()));
+			} catch (Exception e) {
+				cell.setCellValue("");
+				cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
+				e.printStackTrace();
+			}
+		else{
+			cell.setCellStyle(CellStyle);
+			cell.setCellValue("");
+			cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
+		}
 	}
 
 	private void createCellHeader(String column) {

@@ -175,6 +175,30 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	}
 	
 	/**
+	 * Metodo de consulta para los registros de la tabla FrmConsulta por el nombre de la consulta
+	 * @value id = id de la llave primaria a consultar el registro
+	 * @return FrmConsulta = objeto de la case FrmConsulta que contiene los datos encontrados dado el id
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional(readOnly=true)
+	public List<FrmConsulta> listProcedureChildren(String id){
+		try{
+			String sql = "select "+FrmConsulta.getColumnNames()
+					   + "from Frm_Consulta "
+					   + "where conspadr = :id and constipo=2";
+						
+			Query query = getSession().createSQLQuery(sql)	
+						 .addEntity(FrmConsulta.class)	
+					     .setParameter("id", id);
+			return query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
 	 * Metodo de consulta para ejecutar la consulta guardad en el sql
 	 * @value id = id de la llave primaria a consultar el registro
 	 * @return FrmConsulta = objeto de la case FrmConsulta que contiene los datos encontrados dado el id

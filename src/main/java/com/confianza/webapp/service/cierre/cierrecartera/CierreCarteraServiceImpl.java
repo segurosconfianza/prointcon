@@ -24,7 +24,7 @@ import com.confianza.webapp.repository.cierre.cieestaproc.CieEstaproc;
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsulta;
 import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
 import com.confianza.webapp.repository.framework.frmtablas.FrmTablas;
-import com.confianza.webapp.service.cierre.cieestaproc.CieEstaprocService;
+import com.confianza.webapp.service.cierre.cieestaproc.FacEstaprocService;
 import com.confianza.webapp.service.excel.fileExcel.FileExcel;
 import com.confianza.webapp.service.framework.frmconsulta.FrmConsultaService;
 import com.confianza.webapp.service.framework.frmparametro.FrmParametroService;
@@ -56,7 +56,7 @@ public class CierreCarteraServiceImpl implements CierreCarteraService{
 	private FrmParametroService frmParametroService;
 	
 	@Autowired
-	private CieEstaprocService cieEstaprocService;
+	private FacEstaprocService cieEstaprocService;
 	
 	@Override
 	public String executeProcessCierreCartera(String conscons, String params, HttpServletRequest request){

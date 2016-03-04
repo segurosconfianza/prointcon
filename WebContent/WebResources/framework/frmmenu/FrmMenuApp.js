@@ -69,6 +69,12 @@ FrmMainApp.config(['$routeProvider',
   	      },
   	      controller: 'GeneracionCierreCarteraController'
   	    }). 
+  	  when('/CierreGeneral/:soporteId', {
+  	      templateUrl: function(params) {
+  	    	return  WEB_SERVER+'CierreGeneral/CierreGeneral/';
+  	      },
+  	      controller: 'CierreGeneralController'
+  	    }). 
    	    otherwise({
    	    	templateUrl: function(params) {
     	          return  WEB_SERVER+'FrmMenu/defaultView'; 
