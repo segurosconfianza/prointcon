@@ -45,7 +45,7 @@
 			   
 			   <div align="center">	
         		<button type="reset" class="btn btn-default btn-lg active" >Limpiar Datos</button>		        	
-        		<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,GOBIERNODATOS_ALL,SGOBIERNODATOS_READ"><button type="button" class="btn btn-primary btn-lg active" ng-click="executeProcess(picFile)" ng-show="Boton">Ejecutar Proceso <span class="glyphicon glyphicon-search"></span></button></sec:authorize>
+        		<sec:authorize ifAnyGranted="ADMINISTRATOR_ADMINISTRATOR,GOBIERNODATOS_ALL,GOBIERNODATOS_READ"><button type="button" class="btn btn-primary btn-lg active" ng-click="executeProcess(picFile)" ng-show="Boton">Ejecutar Proceso <span class="glyphicon glyphicon-search"></span></button></sec:authorize>
 		      </div>		      
 			</form>				
 		</div>        	      
