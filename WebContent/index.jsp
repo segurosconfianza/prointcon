@@ -128,6 +128,9 @@
 	    <script  src="WebResources/cierre/cierreregeneral/CierreGeneralController.js"></script>
 	    <script  src="WebResources/cierre/cierreregeneral/CierreGeneralService.js"></script>
 	    
+	    <script  src="WebResources/gobiernoDatos/carga/GobiernoDatosController.js"></script>
+	    <script  src="WebResources/gobiernoDatos/carga/GobiernoDatosService.js"></script>		
+	    
 		<script type="text/javascript" Language="JavaScript">
 			document.createElement('ng-view');
 				   

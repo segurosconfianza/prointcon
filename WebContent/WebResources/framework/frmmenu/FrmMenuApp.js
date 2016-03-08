@@ -75,6 +75,12 @@ FrmMainApp.config(['$routeProvider',
   	      },
   	      controller: 'CierreGeneralController'
   	    }). 
+  	  when('/InformaColombia/:soporteId', {
+  	      templateUrl: function(params) {
+  	          return  WEB_SERVER+'GodCarga/';
+  	      },
+  	      controller: 'GobiernoDatosController'
+  	    }).   	    
    	    otherwise({
    	    	templateUrl: function(params) {
     	          return  WEB_SERVER+'FrmMenu/defaultView'; 
