@@ -23,8 +23,8 @@
 									   	  '<div class="ngSortPriority">{{col.sortPriority}}</div>'+
 									   	  '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div>'+
 										    '</div>'+
-										    '<input type="text" ng-click="stopClickProp($event)" placeholder="DD/MM/YYYY since..." ng-model="col.filterDateSince" ng-style="{ \'width\' : col.width - 14 + \'px\' }" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;"/>'+
-										    '<input type="text" ng-click="stopClickProp($event)" placeholder="DD/MM/YYYY until..." ng-model="col.filterDateUntil" ng-style="{ \'width\' : col.width - 14 + \'px\' }" style="position: absolute; top: 60px; bottom: 40px; left: 0; bottom:0;"/>'+
+										    '<input type="text" ng-click="stopClickProp($event)" placeholder="DD/MM/YYYY since..." ng-model="col.filterDateSince" ng-style="{ \'width\' : col.width - 14 + \'px\', \'height\' : 28 + \'px\' }" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;"/>'+
+										    '<input type="text" ng-click="stopClickProp($event)" placeholder="DD/MM/YYYY until..." ng-model="col.filterDateUntil" ng-style="{ \'width\' : col.width - 14 + \'px\', \'height\' : 28 + \'px\' }" style="position: absolute; top: 60px; bottom: 50px; left: 0; bottom:0;"/>'+
 										    '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>'+
 										    '<span class="glyphicon glyphicon-search" ng-click="executeQuery()" ng-style="{ \'width\' : 14 + \'px\', \'left\' : col.width - 14 + \'px\' }" style="position: absolute; top: 30px; bottom: 30px; cursor: pointer;"> </span>';
 				 var filterText='<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
@@ -75,11 +75,14 @@
 		<!--inclusion de app, servicios, controles ...-->		
 	    <script  src="WebResources/framework/frmmenu/FrmMenuApp.js"></script>
 	    <script  src="WebResources/framework/frmmenu/FrmMenuService.js"></script>
-	    <script  src="WebResources/framework/frmmenu/FrmMenuController.js"></script>
-	    <script  src="WebResources/framework/frmmenu/FrmMenuDirective.js"></script>
+	    <script  src="WebResources/framework/frmmenu/FrmMenuController.js"></script>	    
 	    <script  src="WebResources/framework/frmmenu/FrmMenuFilter.js"></script>
 	    <script  src="WebResources/framework/frmmenu/masks.js"></script>
 	        					
+		<script  src="WebResources/framework/Directives/FrmDirectiveGrid.js"></script>
+	    <script  src="WebResources/framework/Directives/FrmDirectiveError.js"></script>
+	    <script  src="WebResources/framework/Directives/FrmDirectiveLoad.js"></script>
+	    	        					
 	    <script  src="WebResources/framework/frmperfil/FrmPerfilService.js"></script>
 	    <script  src="WebResources/framework/frmperfil/FrmPerfilController.js"></script>
 	    <script  src="WebResources/framework/frmperfmodu/FrmPerfmoduController.js"></script>
@@ -98,11 +101,35 @@
 	    <script  src="WebResources/pila/pilusua/PilUsuaService.js"></script>
 	    <script  src="WebResources/pila/pilusua/PilUsuaController.js"></script>
 	    
+	    <script  src="WebResources/pila/pilusuaanalis/PilUsuaanalisService.js"></script>
+	    <script  src="WebResources/pila/pilusuaanalis/PilUsuaanalisController.js"></script>
+	    <script  src="WebResources/pila/pilusuasucu/PilUsuasucuController.js"></script>
+	    
+		<script  src="WebResources/pila/pilsucuranalisis/PilSucuranalisisController.js"></script>
+		<script  src="WebResources/pila/pilsucuranalisis/PilSucuranalisisService.js"></script>
+	    <script  src="WebResources/pila/pilusuasucuranalisis/PilUsuasucuranalisisController.js"></script>
+	    
 	    <script  src="WebResources/pila/planilla/PlanillaService.js"></script>
 	    <script  src="WebResources/pila/planilla/PlanillaController.js"></script>
 		<script  src="WebResources/pila/Adjunto/FmtAdjuntoController.js"></script>
 	    <script  src="WebResources/pila/Auditoria/FmtAuditoriaController.js"></script>
 	    <script  src="WebResources/pila/Estado/FmtEstadoController.js"></script>
+	    <script  src="WebResources/pila/pilmotiform/PilMotiformController.js"></script>
+	    
+	    <script  src="WebResources/cierre/cierrecarteracuadre/CierreCarteraCuadreController.js"></script>
+	    <script  src="WebResources/cierre/cierrecarteracuadre/CierreCarteraCuadreService.js"></script>
+	    
+	    <script  src="WebResources/cierre/cierrecancelacionesautomaticas/CierreCancelacionesAutomaticasController.js"></script>
+	    <script  src="WebResources/cierre/cierrecancelacionesautomaticas/CierreCancelacionesAutomaticasService.js"></script>
+	    
+	    <script  src="WebResources/cierre/generacioncierrecartera/GeneracionCierreCarteraController.js"></script>
+	    <script  src="WebResources/cierre/generacioncierrecartera/GeneracionCierreCarteraService.js"></script>
+	    
+	    <script  src="WebResources/cierre/cierreregeneral/CierreGeneralController.js"></script>
+	    <script  src="WebResources/cierre/cierreregeneral/CierreGeneralService.js"></script>
+	    
+	    <script  src="WebResources/gobiernoDatos/carga/GobiernoDatosController.js"></script>
+	    <script  src="WebResources/gobiernoDatos/carga/GobiernoDatosService.js"></script>		
 	    
 		<script type="text/javascript" Language="JavaScript">
 			document.createElement('ng-view');
@@ -165,7 +192,7 @@
 		
 		<div id="contenido" >
 			<aside>
-				<div ng-show="angularView" ng-view></div>					
+				<div ng-show="angularView" ng-view>Cargando...</div>					
 				
 				<iframe ng-show="iframeView" ng-src="{{iframeUrl}}" frameborder="0" marginheight="0" width="99%" height="150%">
 			        Something wrong...
@@ -214,7 +241,7 @@
 								<span lang="es-co">
 									<a href="http://srvvmshp:9005/BAL/Forms/AllItems.aspx?RootFolder=%2fBAL%2fLey%20de%20contrataci%c3%b3n%20estatal&FolderCTID=0x01200026D53D3410ABA54D82C8ED5BF1118F3D <http://srvvmshp:9005/BAL/Forms/AllItems.aspx?RootFolder=/BAL/Ley de contrataci%c3%b3n estatal&FolderCTID=0x01200026D53D3410ABA54D82C8ED5BF1118F3D" target="_blank">ASPECTOS LEGALES</a>
 								</span><br />
-								<a href="http://srvvmshp:9005/Documentos%20compartidos/Aviso_de_protección_de_datos[1].pdf" target="_blank">Aviso de Protección de Datos </a><br />
+								<a href="http://srvvmshp:9005/Documentos%20compartidos/Aviso_de_protección_de_datos[1].pdf" target="_blank">Aviso de Protecci&oacute;n de Datos </a><br />
 							</td>
 							<td  style="width: 89px; height: 50px;"></td>
 							<td  style="width: 173px; height: 50px;">&nbsp;</td>

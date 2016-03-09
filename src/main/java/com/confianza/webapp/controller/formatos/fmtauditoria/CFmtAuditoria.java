@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 
+
 import com.confianza.webapp.service.formatos.fmtauditoria.FmtAuditoriaService;
 import com.confianza.webapp.repository.formatos.fmtauditoria.FmtAuditoria;
 
@@ -33,21 +34,21 @@ public class CFmtAuditoria {
 		return "formatos/fmtauditoria/FmtAuditoria";
 	}
 	
-	@RequestMapping(value = "/{audicons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{audicons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("audicons") Long audicons){
 		
 		return this.fmtAuditoriaService.list(audicons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.fmtAuditoriaService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FmtAuditoria fmtauditoria, HttpServletRequest request){
@@ -55,7 +56,7 @@ public class CFmtAuditoria {
 		return this.fmtAuditoriaService.update(fmtauditoria);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FmtAuditoria fmtauditoria, HttpServletRequest request){
@@ -64,11 +65,18 @@ public class CFmtAuditoria {
 		return this.fmtAuditoriaService.update(fmtauditoria);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FmtAuditoria fmtauditoria, HttpServletRequest request){
 		
 		return this.fmtAuditoriaService.insert(fmtauditoria);		
+	}
+	
+	@RequestMapping(value = "/listAllFormregi.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseBody
+	public String listAllFrmFormregi(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam(value ="order", required=false) String order, @RequestParam(value ="filter", required=false) String filters, @RequestParam("forecons") Long forecons){
+		
+		return this.fmtAuditoriaService.listAllFrmFormregi(pageSize, page, order, filters, forecons);
 	}
 }

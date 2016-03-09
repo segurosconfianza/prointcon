@@ -14,9 +14,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.google.gson.Gson;
+import com.confianza.webapp.repository.formatos.fmtauditoria.FmtAuditoria;
 import com.confianza.webapp.repository.pila.pilauditoria.PilAuditoria;
 import com.confianza.webapp.repository.pila.pilauditoria.PilAuditoriaRepository;
 
@@ -44,7 +47,7 @@ public class PilAuditoriaServiceImpl implements PilAuditoriaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_AUDITORIA_ALL", "PIL_AUDITORIA_READ"})
 	public String list(Long id){
 		PilAuditoria listAll=pilAuditoriaRepository.list(id);
 		
@@ -56,7 +59,7 @@ public class PilAuditoriaServiceImpl implements PilAuditoriaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_AUDITORIA_ALL", "PIL_AUDITORIA_READ"})
 	public String listAll(int pageSize, int page){
 	
 		int limit=pageSize;
@@ -78,21 +81,34 @@ public class PilAuditoriaServiceImpl implements PilAuditoriaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__UPDATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_AUDITORIA_ALL", "PIL_AUDITORIA_UPDATE"})
 	public String update(PilAuditoria pilauditoria){
 		return gson.toJson(pilAuditoriaRepository.update(pilauditoria));
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__DELETE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_AUDITORIA_ALL", "PIL_AUDITORIA_DELETE"})
 	public void delete(PilAuditoria pilauditoria){
 		pilAuditoriaRepository.delete(pilauditoria);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILAUDITORIA__ALL", "APP_PILAUDITORIA__CREATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_AUDITORIA_ALL", "PIL_AUDITORIA_CREATE"})
 	public String insert(PilAuditoria pilauditoria){
 		return gson.toJson(pilAuditoriaRepository.insert(pilauditoria));
+	}
+	
+	@Override
+	public void generateAudit(String audicamp, Long audicopk, String tabla, String audivaan, String audivanu, Long trancons) {
+		PilAuditoria pilauditoria=new PilAuditoria();
+		pilauditoria.setAudicamp(audicamp);
+		pilauditoria.setAudicopk(audicopk);
+		pilauditoria.setAuditabl(tabla);
+		pilauditoria.setAudivaan(audivaan);
+		pilauditoria.setAudivanu(audivanu);		
+		pilauditoria.setAuditran(trancons);
+		
+		pilAuditoriaRepository.insert(pilauditoria);
 	}
 	
 }

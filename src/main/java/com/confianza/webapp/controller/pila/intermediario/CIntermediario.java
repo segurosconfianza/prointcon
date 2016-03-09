@@ -30,6 +30,8 @@ import com.confianza.webapp.service.framework.frmconsulta.FrmConsultaService;
 import com.confianza.webapp.service.framework.frmi18n.FrmI18nService;
 import com.confianza.webapp.service.framework.frmmenu.FrmMenuService;
 import com.confianza.webapp.service.framework.frmtablas.FrmTablasService;
+import com.confianza.webapp.service.pila.pilmotiform.PilMotiformService;
+import com.confianza.webapp.service.pila.pilmotivo.PilMotivoService;
 import com.confianza.webapp.service.pila.pilusua.PilUsuaService;
 import com.confianza.webapp.utils.Filter;
 import com.confianza.webapp.utils.JSONUtil;
@@ -71,11 +73,17 @@ public class CIntermediario {
 	@Autowired
 	private FrmConsultaService frmConsultaService;
 	
+	@Autowired
+	private PilMotivoService pilMotivoService;
+	
+	@Autowired
+	private PilMotiformService pilmotiformService;
+	
 	public CIntermediario() {
 		super();
 	}
 			
-	@RequestMapping(value = "/validateUsua.json", params = {"user","password"}, method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/validateUsua.json", params = {"user","password"}, method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String validateUsua(@RequestParam("user") String user, @RequestParam("password") String password){
@@ -133,21 +141,21 @@ public class CIntermediario {
 		return this.frmI18nService.listModulo(modulo);
 	}
 	
-	@RequestMapping(value = "/FmtAuditoria/listAll.json", params = {"page","pageSize", "forecons"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/FmtAuditoria/listAll.json", params = {"page","pageSize", "forecons"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
-	public String listAllFmtAuditoria(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("forecons") long forecons){
+	public String listAllFmtAuditoria(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page,@RequestParam("order") String order,@RequestParam("stringFilters") String stringFilters, @RequestParam("forecons") long forecons){
 	
-		return this.fmtauditoriaService.listAll(pageSize, page, forecons);
+		return this.fmtauditoriaService.listAllFrmFormregi(pageSize, page, order, stringFilters, forecons);
 	}
 	
-	@RequestMapping(value = "/FmtEstado/listAll.json", params = {"page","pageSize", "forecons"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/FmtEstado/listAll.json", params = {"page","pageSize","order","filter"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
-	public String listAllFmtEstado(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("forecons") long forecons){
+	public String listAllFmtEstado(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam("filter") String filters){
 	
-		return this.fmtEstadoService.listAll(pageSize, page, forecons);
+		return this.fmtEstadoService.listAll(pageSize, page, order, filters);
 	}
 	
-	@RequestMapping(value = "/FmtAdjunto/listAdjunto.json", params = {"forecons"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/FmtAdjunto/listAdjunto.json", params = {"forecons"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public void listAdjuntoFmtAdjunto(@RequestParam("forecons") long forecons, HttpServletRequest request, HttpServletResponse response) {
@@ -167,6 +175,21 @@ public class CIntermediario {
 	public String listComboDynamic(@RequestParam("conscons") String conscons) throws Exception{
 		
 		return this.frmConsultaService.listComboDynamic(conscons);
+	}
+	
+	@RequestMapping(value = "/PilMotivo/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseBody
+	public String listAllPilMotivo(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
+	
+		return this.pilMotivoService.listAll(pageSize, page);
+	}
+	
+	@RequestMapping(value = "/PilMotiform/listAll.json", params = {"page","pageSize","order","filter"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseBody
+	public String listAllPilMotiform(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam("filter") String filters){
+	
+		return this.pilmotiformService.listAllIntermediario(pageSize, page, order, filters); 
+		
 	}
 		
 }

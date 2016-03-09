@@ -24,9 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsulta;
 import com.confianza.webapp.repository.framework.frmconsulta.FrmConsultaRepository;
 import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
+import com.confianza.webapp.service.email.sendEmail.SendEmail;
 import com.confianza.webapp.service.framework.frmparametro.FrmParametroService;
+import com.confianza.webapp.service.framework.frmtablas.FrmTablasService;
 import com.confianza.webapp.service.soporte.sopmotivo.SopMotivoService;
-import com.confianza.webapp.utils.CharsetString;
 import com.confianza.webapp.utils.JSONUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -46,27 +47,18 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	@Autowired
 	private SopMotivoService sopMotivoService;
 	
-	private CharsetString charsetString=new CharsetString();
-	
-	/**
-	 * @return the frmconsultaRepository
-	 */
-	public FrmConsultaRepository getFrmConsultaRepository() {
-		return frmConsultaRepository;
-	}
-
-	/**
-	 * @param frmconsultaRepository the frmconsultaRepository to set
-	 */
-	public void setFrmConsultaRepository(FrmConsultaRepository frmconsultaRepository) {
-		this.frmConsultaRepository = frmconsultaRepository;
-	}
+	@Autowired
+	private SendEmail sendEmail;
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMCONSULTA_ALL", "APP_FRMCONSULTA_READ"})
 	public String list(Long id){
 		
 		return gson.toJson(frmConsultaRepository.list(id));
+	}
+	
+	@Override	
+	public FrmConsulta listId(String id){
+		return frmConsultaRepository.list(new Long(id));
 	}
 	
 	@Override	
@@ -84,15 +76,22 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 		return frmConsultaRepository.listProcedureChild(id);
 	}
 	
+	@Override	
+	public List<FrmConsulta> listProcedureChildren(String id){
+		return frmConsultaRepository.listProcedureChildren(id);
+	}
+	
+	@Autowired
+	private FrmTablasService frmTablasService;
+	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
 	public String loadRecord(String conscons, String params){
 		
         Type type = new TypeToken<Map<String, Object>>(){}.getType();
 		Map<String, Object> parameters=gson.fromJson(params, type);   						
 		
 		//carga la consulta dinamica
-		FrmConsulta frmConsulta=this.listName(conscons);
+		FrmConsulta frmConsulta=this.listId(conscons);
 		List<FrmParametro> parametros=this.frmParametroService.listParamsCosuType(new Long(conscons));
 		
 		//carga los datos de la consulta
@@ -108,7 +107,6 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
 	public String listCombo(String conscons){
 		//carga la consulta dinamica
 		FrmConsulta frmConsulta=this.listName(conscons);
@@ -128,7 +126,7 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	public String listComboDynamic(String conscons){
 		
 		//carga la consulta dinamica
-		FrmConsulta frmConsulta=this.listName(conscons);
+		FrmConsulta frmConsulta=frmConsultaRepository.list(new Long(conscons));
 		
 		//carga los datos de la consulta
 		List<Object[]> rAll=this.loadListData(frmConsulta, null, null);		
@@ -146,9 +144,8 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
 	public List<Object[]> loadListData(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros){
-		
+		System.out.println(frmConsulta);
 		if(frmConsulta.getConscaco().equals("dataSource")){
 			return frmConsultaRepository.loadData(frmConsulta, parameters);
 		}
@@ -160,43 +157,23 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMCONSULTA_ALL", "APP_FRMCONSULTA_READ"})
-	public String listAll(int pageSize, int page){
-	
-			int limit=pageSize*page;
-			int init=limit-pageSize;
-			
-			List<FrmConsulta> listAll=frmConsultaRepository.listAll(init, limit);
-			
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("data", listAll);
-			result.put("count", this.getCount());
-			
-			return gson.toJson(result);		
-	}	
-	
-	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMCONSULTA_ALL", "APP_FRMCONSULTA_READ"})
 	public int getCount(){
 				
 		return frmConsultaRepository.getCount();
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMCONSULTA_ALL", "APP_FRMCONSULTA_UPDATE"})
 	public String update(FrmConsulta frmconsulta){
 		
 		return gson.toJson(frmConsultaRepository.update(frmconsulta));
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMCONSULTA_ALL", "APP_FRMCONSULTA_DELETE"})
 	public void delete(FrmConsulta frmconsulta){
 		frmConsultaRepository.delete(frmconsulta);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMCONSULTA_ALL", "APP_FRMCONSULTA_CREATE"})
 	public String insert(FrmConsulta frmconsulta){
 		
 			//frmconsulta.setesta("A");
@@ -206,7 +183,6 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_UPDATE"})
 	public String updateRecord(String conscons, String params, String paramsData, ArrayList<MultipartFile> file){
 		
 		Type type = new TypeToken<Map<String, Object>>(){}.getType();
@@ -237,7 +213,6 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_UPDATE"})
 	public Map<String, Object> loadProcedure(FrmConsulta frmConsulta, List<FrmParametro> parametros, Map<String, Object> parameters, Map<String, Object> parametersData){
 		
 		if(frmConsulta.getConscaco().equals("dataSource")){
@@ -251,8 +226,18 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
 	public String loadData(String conscons){
+		//carga la consulta dinamica
+		FrmConsulta frmConsulta=this.listId(conscons);
+							
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("titulo", frmConsulta.getConsnomb());
+		result.put("descri", frmConsulta.getConsdesc());
+		return gson.toJson(result);
+	}
+	
+	@Override
+	public String loadDataName(String conscons){ 
 			        
 		//carga la consulta dinamica
 		FrmConsulta frmConsulta=this.listName(conscons);
@@ -264,11 +249,16 @@ public class FrmConsultaServiceImpl implements FrmConsultaService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "SOPORTE_ALL", "SOPORTE_READ"})
 	public String loadConsChield(String conscons){
 		
 		//carga la consulta dinamica
 		FrmConsulta frmConsulta=this.listChild(conscons);
 		return gson.toJson(frmConsulta.getConscons());	
+	}		
+
+	@Override	
+	public List<FrmConsulta> listQueryChilds(String conscons) {
+		return frmConsultaRepository.listAll(Integer.parseInt(conscons));
 	}
+
 }

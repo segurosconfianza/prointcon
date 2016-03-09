@@ -33,8 +33,8 @@ public interface FmtValocampService{
 
 	public List<FmtValocamp> listAll(int init, int limit, Long vacafore, List<Long> codigosFormRegi);
 
-	public boolean updateValuesIntermediario(Long vefocons, Long vacafore, Map<String, Object> parametersData, String user);
+	public FmtValocamp updateFmtValocamp(Map<String, Object> parametersData, FmtCampo campo, FmtValocamp fmtValocamp, String user, Long trancons);
 
-	public FmtValocamp updateFmtValocamp(Map<String, Object> parametersData, FmtCampo campo, FmtValocamp fmtValocamp, String user);
+	public boolean updateValuesIntermediario(Long vefocons, Long vacafore, Map<String, Object> parametersData, String user, Long trancons);
 	
 }

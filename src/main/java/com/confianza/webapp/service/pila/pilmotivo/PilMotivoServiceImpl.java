@@ -44,7 +44,7 @@ public class PilMotivoServiceImpl implements PilMotivoService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIVO__ALL", "APP_PILMOTIVO__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_MOTIVO_ALL", "PIL_MOTIVO_READ"})
 	public String list(Long id){
 		PilMotivo listAll=pilMotivoRepository.list(id);
 		
@@ -55,8 +55,7 @@ public class PilMotivoServiceImpl implements PilMotivoService{
 		return gson.toJson(result);	
 	}
 	
-	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIVO__ALL", "APP_PILMOTIVO__READ"})
+	@Override	 
 	public String listAll(int pageSize, int page){
 	
 		int limit=pageSize;
@@ -78,19 +77,19 @@ public class PilMotivoServiceImpl implements PilMotivoService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIVO__ALL", "APP_PILMOTIVO__UPDATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_MOTIVO_ALL", "PIL_MOTIVO_UPDATE"})
 	public String update(PilMotivo pilmotivo){
 		return gson.toJson(pilMotivoRepository.update(pilmotivo));
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIVO__ALL", "APP_PILMOTIVO__DELETE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_MOTIVO_ALL", "PIL_MOTIVO_DELETE"})
 	public void delete(PilMotivo pilmotivo){
 		pilMotivoRepository.delete(pilmotivo);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_PILMOTIVO__ALL", "APP_PILMOTIVO__CREATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "PIL_MOTIVO_ALL", "PIL_MOTIVO_CREATE"})
 	public String insert(PilMotivo pilmotivo){
 		return gson.toJson(pilMotivoRepository.insert(pilmotivo));
 	}

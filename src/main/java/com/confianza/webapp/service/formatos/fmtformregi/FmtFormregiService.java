@@ -42,4 +42,10 @@ public interface FmtFormregiService{
 	public String loadFormRegiAdmin(Long vefocons, int pageSize, int page, String order, String stringFilters);
 
 	public int getCountAdmin(List<Filter> filters);
+
+	public String aprobarRecord(Long forecons);
+
+	public String devolverRecord(Long forecons);
+
+	public String cancelarRecord(Long forecons);
 }

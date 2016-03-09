@@ -212,6 +212,31 @@ public class PilUsuaRepositoryImpl implements PilUsuaRepository{
 			e.printStackTrace();
 			return null;
 		}
-	}	
+	}
+	
+	/**
+	 * Metodo de consulta para los registros de la tabla PilUsua
+	 * @return PilUsua = coleccion de objetos de la case PilUsua que contiene los datos encontrados
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional
+	public List<PilUsua> listAllFormregi(List<Long> codigosFormRegi){
+		try{
+			String sql = "select "+PilUsua.getColumnNames()
+					   + "from PIL_USUA "
+					   + "join FMT_FORMREGI ON (FOREUSER=USUAUSUA AND FORECONS IN (:lista)) "
+					   + "where  USUATIPO=1 ";				
+			
+			Query query = getSession().createSQLQuery(sql)
+						 .addEntity(PilUsua.class)
+						 .setParameterList("lista", codigosFormRegi);														
+					     
+			return query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 }

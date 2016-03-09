@@ -33,21 +33,21 @@ public class CPilAuditoria {
 		return "pila/pilauditoria/PilAuditoria";
 	}
 	
-	@RequestMapping(value = "/{audicons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{audicons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("audicons") Long audicons){
 		
 		return this.pilAuditoriaService.list(audicons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.pilAuditoriaService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody PilAuditoria pilauditoria, HttpServletRequest request){
@@ -55,7 +55,7 @@ public class CPilAuditoria {
 		return this.pilAuditoriaService.update(pilauditoria);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody PilAuditoria pilauditoria, HttpServletRequest request){
@@ -64,7 +64,7 @@ public class CPilAuditoria {
 		return this.pilAuditoriaService.update(pilauditoria);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody PilAuditoria pilauditoria, HttpServletRequest request){

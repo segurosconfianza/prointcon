@@ -1,4 +1,4 @@
-package com.confianza.webapp.controller.formatos.fmtadjunto;
+package com.confianza.webapp.controller.formatos.fmtadjunto; 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,21 +40,21 @@ public class CFmtAdjunto {
 		return "formatos/fmtadjunto/FmtAdjunto";
 	}
 	
-	@RequestMapping(value = "/{adjucons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{adjucons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("adjucons") Long adjucons){
 		
 		return this.fmtAdjuntoService.list(adjucons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.fmtAdjuntoService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FmtAdjunto fmtadjunto, HttpServletRequest request){
@@ -62,7 +62,7 @@ public class CFmtAdjunto {
 		return this.fmtAdjuntoService.update(fmtadjunto);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FmtAdjunto fmtadjunto, HttpServletRequest request){
@@ -71,7 +71,7 @@ public class CFmtAdjunto {
 		return this.fmtAdjuntoService.update(fmtadjunto);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FmtAdjunto fmtadjunto, HttpServletRequest request){
@@ -88,7 +88,7 @@ public class CFmtAdjunto {
 		
 	}
 	
-	@RequestMapping(value = "/listAdjunto.json", params = {"forecons"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAdjunto.json", params = {"forecons"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public void listAdjuntoFmtAdjunto(@RequestParam("forecons") long forecons, HttpServletRequest request, HttpServletResponse response) {

@@ -46,7 +46,7 @@ public class FrmParametroServiceImpl implements FrmParametroService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PARAMETRO_ALL", "FRM_PARAMETRO_READ"})
 	public String list(Long id){
 		return gson.toJson(frmParametroRepository.list(id));
 	}
@@ -62,7 +62,7 @@ public class FrmParametroServiceImpl implements FrmParametroService{
 	}	
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__READ"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PARAMETRO_ALL", "FRM_PARAMETRO_READ"})
 	public String listAll(int pageSize, int page){
 	
 		int limit=pageSize*page;
@@ -84,19 +84,19 @@ public class FrmParametroServiceImpl implements FrmParametroService{
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__UPDATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PARAMETRO_ALL", "FRM_PARAMETRO_UPDATE"})
 	public String update(FrmParametro frmparametro){
 		return gson.toJson(frmParametroRepository.update(frmparametro));
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__DELETE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PARAMETRO_ALL", "FRM_PARAMETRO_DELETE"})
 	public void delete(FrmParametro frmparametro){
 		frmParametroRepository.delete(frmparametro);
 	}
 	
 	@Override
-	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "APP_FRMPARAMETRO__ALL", "APP_FRMPARAMETRO__CREATE"})
+	@RolesAllowed({"ADMINISTRATOR_ADMINISTRATOR", "FRM_PARAMETRO_ALL", "FRM_PARAMETRO_CREATE"})
 	public String insert(FrmParametro frmparametro){
 		return gson.toJson(frmParametroRepository.insert(frmparametro));
 	}

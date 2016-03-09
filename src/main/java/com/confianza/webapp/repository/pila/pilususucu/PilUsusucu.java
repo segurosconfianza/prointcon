@@ -87,7 +87,7 @@ public class PilUsusucu {
 	}		
 	
 	static public String getColumnNames(){
-		return " USSUCONS, USSUUSUA, USSUSUCU, USSUESTA ";
+		return " ussucons, ussuusua, ussusucu, ussuesta "; 
 	}
 	
 	public String toString(){

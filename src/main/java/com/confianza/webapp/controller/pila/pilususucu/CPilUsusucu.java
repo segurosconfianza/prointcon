@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 
+
 import com.confianza.webapp.service.pila.pilususucu.PilUsusucuService;
 import com.confianza.webapp.repository.pila.pilususucu.PilUsusucu;
 
@@ -33,21 +34,28 @@ public class CPilUsusucu {
 		return "pila/pilususucu/PilUsusucu";
 	}
 	
-	@RequestMapping(value = "/{ussucons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{ussucons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("ussucons") Long ussucons){
 		
 		return this.pilUsusucuService.list(ussucons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize","order","filter"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
-	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
+	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam("filter") String filters){
 	
-		return this.pilUsusucuService.listAll(pageSize, page);
+		return this.pilUsusucuService.listAll(pageSize, page, order, filters);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/listAllAnalistas.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseBody
+	public String listAllAnalistas(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page, @RequestParam("order") String order, @RequestParam(value ="filter", required=false) String filters){
+	
+		return this.pilUsusucuService.listAllAnalistas(pageSize, page, order, filters);
+	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody PilUsusucu pilususucu, HttpServletRequest request){
@@ -55,7 +63,7 @@ public class CPilUsusucu {
 		return this.pilUsusucuService.update(pilususucu);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody PilUsusucu pilususucu, HttpServletRequest request){
@@ -64,7 +72,7 @@ public class CPilUsusucu {
 		return this.pilUsusucuService.update(pilususucu);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody PilUsusucu pilususucu, HttpServletRequest request){
@@ -72,7 +80,7 @@ public class CPilUsusucu {
 		return this.pilUsusucuService.insert(pilususucu);		
 	}
 	
-	@RequestMapping(value = "/listSucursales.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listSucursales.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listSucur(){
 	

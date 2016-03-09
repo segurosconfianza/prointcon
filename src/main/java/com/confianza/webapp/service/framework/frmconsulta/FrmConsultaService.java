@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -23,9 +24,7 @@ import com.confianza.webapp.repository.framework.frmparametro.FrmParametro;
 public interface FrmConsultaService{
 	
 	public String list(Long id);
-	
-	public String listAll(int pageSize, int page);	
-	
+		
 	public String insert(FrmConsulta frmconsulta);
 	
 	public String update(FrmConsulta frmconsulta);
@@ -57,6 +56,14 @@ public interface FrmConsultaService{
 	public void uploadFiles(String motidesc, ArrayList<MultipartFile> file,	String result);
 
 	public List<Object[]> loadListData(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros);
+
+	public FrmConsulta listId(String id);
+
+	public String loadDataName(String conscons);
+
+	public List<FrmConsulta> listQueryChilds(String conscons);
+
+	public List<FrmConsulta> listProcedureChildren(String id);
 
 
 }

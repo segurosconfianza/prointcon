@@ -89,7 +89,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	public FrmConsulta list(Long id){
 		try{
 			String sql = "select "+FrmConsulta.getColumnNames()
-					   + "from FrmConsulta "
+					   + "from Frm_Consulta "  
 					   + "where conscons = :id ";
 						
 			Query query = getSession().createSQLQuery(sql)
@@ -114,7 +114,7 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 		try{
 			String sql = "select "+FrmConsulta.getColumnNames()
 					   + "from Frm_Consulta "
-					   + "where conscons = :id ";
+					   + "where consnomb = :id ";
 						
 			Query query = getSession().createSQLQuery(sql)	
 						 .addEntity(FrmConsulta.class)	
@@ -168,6 +168,30 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 						 .addEntity(FrmConsulta.class)	
 					     .setParameter("id", id);
 			return (FrmConsulta) query.uniqueResult();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * Metodo de consulta para los registros de la tabla FrmConsulta por el nombre de la consulta
+	 * @value id = id de la llave primaria a consultar el registro
+	 * @return FrmConsulta = objeto de la case FrmConsulta que contiene los datos encontrados dado el id
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional(readOnly=true)
+	public List<FrmConsulta> listProcedureChildren(String id){
+		try{
+			String sql = "select "+FrmConsulta.getColumnNames()
+					   + "from Frm_Consulta "
+					   + "where conspadr = :id and constipo=2";
+						
+			Query query = getSession().createSQLQuery(sql)	
+						 .addEntity(FrmConsulta.class)	
+					     .setParameter("id", id);
+			return query.list();
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;
@@ -252,18 +276,14 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 	 */
 	@Override
 	@Transactional(readOnly=true)
-	public List<FrmConsulta> listAll(int init, int limit){
+	public List<FrmConsulta> listAll(int id){
 		try{
 			String sql = "select "+FrmConsulta.getColumnNames()
-					   + "from FrmConsulta ";
+					   + "from Frm_Consulta where conspadr = :padre and constipo=1 ";
 						
 			Query query = getSession().createSQLQuery(sql)
-						 .addEntity(FrmConsulta.class);
-						 
-			if(init==0 && limit!=0){
-				query.setFirstResult(init);			
-				query.setMaxResults(limit);
-			}
+						 .addEntity(FrmConsulta.class)
+						 .setParameter("padre", id);						 			
 					     
 			return query.list();
 		}catch(Exception e){
@@ -421,7 +441,8 @@ public class FrmConsultaRepositoryImpl implements FrmConsultaRepository{
 					CallableStatement cst = connection.prepareCall(procedure);
 												
 					cst=putParametersInput(p, fp, cst, "E");
-					cst=putParametersInput(pd, fp, cst, "S");
+					if(pd!=null)
+						cst=putParametersInput(pd, fp, cst, "S");
 					
 					cst=putParameterOutput(fp, cst);
 					

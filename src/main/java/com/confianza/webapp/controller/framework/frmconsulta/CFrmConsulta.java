@@ -58,14 +58,7 @@ public class CFrmConsulta {
 		
 		return this.frmConsultaService.list(conscons);
 	}
-	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
-	@ResponseBody
-	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
-	
-		return this.frmConsultaService.listAll(pageSize, page);
-	}
-	
+		
 	@RequestMapping(value = "/loadRecord.json", params = {"conscons","params"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String loadRecord(@RequestParam("conscons") String conscons, @RequestParam("params") String params) throws Throwable{
@@ -126,6 +119,13 @@ public class CFrmConsulta {
 	public String loadData(@RequestParam("conscons") String conscons) throws Throwable{
 			
 		return this.frmConsultaService.loadData(conscons);
+	}
+	
+	@RequestMapping(value = "/loadDataName.json", params = {"conscons"}, method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
+	@ResponseBody
+	public String loadDataName(@RequestParam("conscons") String conscons) throws Throwable{
+			
+		return this.frmConsultaService.loadDataName(conscons);
 	}
 	
 	@RequestMapping(value = "/validateRol.json", params = {"roles"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})

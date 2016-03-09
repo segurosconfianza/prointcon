@@ -33,21 +33,21 @@ public class CFmtValocamp {
 		return "formatos/fmtvalocamp/FmtValocamp";
 	}
 	
-	@RequestMapping(value = "/{vacacons}.json", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/{vacacons}.json", method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String list(@PathVariable("vacacons") Long vacacons){
 		
 		return this.fmtValocampService.list(vacacons);
 	}
 	
-	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/listAll.json", params = {"page","pageSize"},  method = RequestMethod.GET, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseBody
 	public String listAll(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page){
 	
 		return this.fmtValocampService.listAll(pageSize, page);
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String update(@RequestBody FmtValocamp fmtvalocamp, HttpServletRequest request){
@@ -55,7 +55,7 @@ public class CFmtValocamp {
 		return this.fmtValocampService.update(fmtvalocamp);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.OK )
 	@ResponseBody
 	public String delete(@RequestBody FmtValocamp fmtvalocamp, HttpServletRequest request){
@@ -64,7 +64,7 @@ public class CFmtValocamp {
 		return this.fmtValocampService.update(fmtvalocamp);
 	}
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces={"application/json; charset=ISO-8859-1"})
 	@ResponseStatus( HttpStatus.CREATED )
 	@ResponseBody
 	public String insert(@RequestBody FmtValocamp fmtvalocamp, HttpServletRequest request){

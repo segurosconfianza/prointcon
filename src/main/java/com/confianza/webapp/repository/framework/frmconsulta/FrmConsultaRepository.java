@@ -20,7 +20,7 @@ public interface FrmConsultaRepository {
 	
 	public FrmConsulta list(Long id);
 	
-	public List<FrmConsulta> listAll(int init, int limit);	
+	public List<FrmConsulta> listAll(int id);	
 	
 	public FrmConsulta update(FrmConsulta frmconsulta);
 	
@@ -49,5 +49,7 @@ public interface FrmConsultaRepository {
 	public FrmConsulta listChild(String id);
 
 	public List<Object[]> loadDataOsiris(FrmConsulta frmConsulta, Map<String, Object> parameters, List<FrmParametro> parametros);
+
+	public List<FrmConsulta> listProcedureChildren(String id);
 	
 }

@@ -177,7 +177,10 @@ public class PilUsua {
 	}
 	
 	public void setUsuapass(String usuapass){
-		this.usuapass = codeMd5(usuapass);
+		if(usuapass.isEmpty())
+			this.usuapass=usuapass;
+		else
+			this.usuapass = codeMd5(usuapass);
 	}
 
 	private String codeMd5(String usuapass) {

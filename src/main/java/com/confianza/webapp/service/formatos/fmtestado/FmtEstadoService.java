@@ -12,12 +12,12 @@ package com.confianza.webapp.service.formatos.fmtestado;
 import java.util.List;
 
 import com.confianza.webapp.repository.formatos.fmtestado.FmtEstado;
+import com.confianza.webapp.repository.formatos.fmtformregi.FmtFormregi;
+import com.confianza.webapp.utils.Filter;
 
 public interface FmtEstadoService{
 	
-	public String list(Long id);
-	
-	public String listAll(int pageSize, int page);	
+	public String list(Long id);	
 	
 	public String insert(FmtEstado fmtestado);
 	
@@ -25,8 +25,10 @@ public interface FmtEstadoService{
 	
 	public void delete(FmtEstado fmtestado);	
 	
-	public int getCount();
+	public int getCount(List<Filter> filters);
 
-	public String listAll(int pageSize, int page, long forecons);
+	public String listAll(int pageSize, int page, String order, String stringFilters);
+
+	public void insertLastEstado(FmtFormregi fmtformregi, String user);
 	
 }

@@ -1,4 +1,4 @@
-var FrmMainApp=angular.module('FrmMainApp', ['ui.tree', 'ngGrid', 'ngRoute', 'ui.bootstrap', 'ngRoute', 'ngFileUpload' ]);  
+var FrmMainApp=angular.module('FrmMainApp', ['ui.tree', 'ngGrid', 'ngRoute', 'ui.bootstrap', 'ngFileUpload', 'ui.utils.masks' ]);  
 
 FrmMainApp.config(['$routeProvider',
    	function($routeProvider) {
@@ -27,13 +27,64 @@ FrmMainApp.config(['$routeProvider',
   	      },
   	      controller: 'PilUsuaController'
   	    }).
-  	  when('/Planilla/:PlanillaId', {
+  	    when('/PilUsuaanalis', {
+  	      templateUrl: function(params) {
+  	          return  WEB_SERVER+'PilUsua/PilUsuaanalis';
+  	      },
+  	      controller: 'PilUsuaanalisisController'
+  	    }).
+  	    when('/PilSucuranalisis', {
+  	      templateUrl: function(params) {
+  	          return  WEB_SERVER+'PilUsua/PilSucuranalisis';
+  	      },
+  	      controller: 'PilUsuaanalisisController'
+  	    }).
+  	    when('/Planilla/:PlanillaId', {
   	      templateUrl: function(params) {
   	          return  WEB_SERVER+'FmtFormato/Planilla/';
   	      },
   	      controller: 'PlanillaController'
-  	    }).	  
+  	    }).	
+  	    when('/CierreCarteraCuadre/:soporteId', {
+  	      templateUrl: function(params) {
+  	          return  WEB_SERVER+'CierreCartera/CierreCarteraCuadre/';
+  	      },
+  	      controller: 'CierreCarteraCuadreController'
+  	    }).	
+  	  when('/AdminPlanilla/:PlanillaId', {
+  	      templateUrl: function(params) {
+  	          return  WEB_SERVER+'FmtFormato/AdminPlanilla/';
+  	      },
+  	      controller: 'PlanillaController'
+  	    }).	
+  	  when('/CierreCancelacionesAuto/:soporteId', {
+  	      templateUrl: function(params) {
+  	    	return  WEB_SERVER+'CierreCancelaciones/CierreCancelacionesAutomaticas/';
+  	      },
+  	      controller: 'CierreCancelacionesAutomaticasController'
+  	    }).
+  	  when('/GeneracionCierreCartera/:soporteId', {
+  	      templateUrl: function(params) {
+  	    	return  WEB_SERVER+'GeneracionCierreCartera/GeneracionCierreCartera/';
+  	      },
+  	      controller: 'GeneracionCierreCarteraController'
+  	    }). 
+  	  when('/CierreGeneral/:soporteId', {
+  	      templateUrl: function(params) {
+  	    	return  WEB_SERVER+'CierreGeneral/CierreGeneral/';
+  	      },
+  	      controller: 'CierreGeneralController'
+  	    }). 
+  	  when('/InformaColombia/:soporteId', {
+  	      templateUrl: function(params) {
+  	          return  WEB_SERVER+'GodCarga/';
+  	      },
+  	      controller: 'GobiernoDatosController'
+  	    }).   	    
    	    otherwise({
-   	      
+   	    	templateUrl: function(params) {
+    	          return  WEB_SERVER+'FrmMenu/defaultView'; 
+    	          
+    	      },
    	    });
 }]);

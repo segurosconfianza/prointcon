@@ -12,16 +12,17 @@ package com.confianza.webapp.repository.formatos.fmtformregi;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Iterator;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.metamodel.SessionFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,9 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	Gson gson;
 	
 	public Session getSession() {
+		
+		FmtFormregiInterceptor.setSessionFactory(sessionFactory);
+		sessionFactory.getCurrentSession().sessionWithOptions().interceptor(FmtFormregiInterceptor);
 		
 		return sessionFactory.getCurrentSession();
 	}
@@ -135,7 +139,8 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 	@Override
 	@Transactional
 	public FmtFormregi insert(FmtFormregi fmtformregi){
-		getSession().save(fmtformregi);	
+			
+		getSession().saveOrUpdate(fmtformregi);
 		return fmtformregi;
 	}
 	
@@ -156,7 +161,8 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 					   + "join PIL_USUA     ON (USUAUSUA=FOREUSER) ";
 						
 			sql = completeSQL(order, filters, sql);
-			System.out.println("sql: "+sql);
+			
+			System.out.println(sql);
 			
 			Query query = getSession().createSQLQuery(sql)
 						 .addEntity(FmtFormregi.class);
@@ -244,9 +250,18 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 					}
 				}
 				else if(filter.getTipodato().equals("Number")){
-					query.setDouble(filter.getCampo(), new Double(filter.getVal1()));
-					if(filter.getVal2()!=null)	{
-						query.setDouble(filter.getCampo()+"2", new Double(filter.getVal2()));
+					
+					if(filter.getCampo().equals("usuasucu") && !filter.getTipo().equals("IN")){
+						query.setDouble(filter.getCampo()+"o", new Double(filter.getVal1()));
+						if(filter.getVal2()!=null)	{
+							query.setDouble(filter.getCampo()+"o2", new Double(filter.getVal2()));
+						}
+					}
+					else{
+						query.setDouble(filter.getCampo(), new Double(filter.getVal1()));
+						if(filter.getVal2()!=null)	{
+							query.setDouble(filter.getCampo()+"2", new Double(filter.getVal2()));
+						}
 					}
 				}
 				else{
@@ -266,75 +281,93 @@ public class FmtFormregiRepositoryImpl implements FmtFormregiRepository{
 		if(order!=null){
 			String campoorde=order.replace("order by", "").replace("desc", "").replace("asc", "").replace(" ", "");
 			
-			if((FmtFormregi.getColumnNames()).matches("(.*)"+campoorde+"(.*)")) 
-				sql+=" "+order;
-			else if("tablvast".matches("(.*)"+campoorde+"(.*)")){
-				sql+=order;
-				//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
-				sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, tablvast, ");
-			}
-			else if("usuanomb".matches("(.*)"+campoorde+"(.*)")){
-				sql+=order;
-				//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
-				sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuanomb, ");
-			}			
-			else if("usuasucu".matches("(.*)"+campoorde+"(.*)")){
-				sql+=order;
-				//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
-				sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuasucu, ");
-			}
-			else{
-				if(where.isEmpty())
-					sql+=" WHERE campnomb='"+campoorde+"' ";
-				else
-					sql+=" AND campnomb='"+campoorde+"' ";				
-				sql+=" order by vacavalo ";
-				sql=sql.replace("distinct(forecons) forecons,", "distinct(forecons) forecons, vacavalo, ");
-			}
+			sql = evaluateField(order, sql, where, campoorde);
+		}
+		return sql;
+	}
+
+	private String evaluateField(String order, String sql, String where, String campoorde) {
+		if((FmtFormregi.getColumnNames()).matches("(.*)"+campoorde+"(.*)")) 
+			sql+=" "+order;
+		else if("tablvast".matches("(.*)"+campoorde+"(.*)")){
+			sql+=order;
+			//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
+			sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, tablvast, ");
+		}
+		else if("usuarazo".matches("(.*)"+campoorde+"(.*)")){
+			sql+=order;
+			//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
+			sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuarazo, ");
+		}			
+		else if("usuaunit".matches("(.*)"+campoorde+"(.*)")){
+			sql+=order;
+			//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
+			sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuaunit, ");
+		}
+		else if("usuasucu".matches("(.*)"+campoorde+"(.*)")){
+			sql+=order;
+			//para el order by se debe agregar el campo al select porque sino no hacer el ornamiento pero si no se ordena por ese campo al dejar el campo en el select me repite los registros
+			sql=sql.replace("distinct(forecons) forecons," , "distinct(forecons) forecons, usuasucu, ");
+		}
+		else{
+			if(where.isEmpty())
+				sql+=" WHERE campnomb='"+campoorde+"' ";
+			else
+				sql+=" AND campnomb='"+campoorde+"' ";				
+			sql+=" order by vacavalo ";
+			sql=sql.replace("distinct(forecons) forecons,", "distinct(forecons) forecons, vacavalo, ");
 		}
 		return sql;
 	}
 
 	private String generateWhere(List<Filter> filters, String where) {
 		for(Filter filter:filters){
-			if((FmtFormregi.getColumnNames()+", tablvast, usuanomb").matches("(.*)"+filter.getCampo()+"(.*)") || filter.getCampo().equals("usuasucu")){
-				if(where.isEmpty()){
+			if((FmtFormregi.getColumnNames()+", tablvast, usuasucu, usuarazo, usuaunit").matches("(.*)"+filter.getCampo()+"(.*)") ){
+				if(where.isEmpty())
 					where+=" WHERE ";
-					where+= generateCondition(filter);
-				}
-				else{
+				else
 					where+=" AND ";
-					where+= generateCondition(filter);
-				}
+				where+= generateCondition(filter);
 			}
 			else{
-				if(where.isEmpty()){
+				if(where.isEmpty())
 					where+=" WHERE ";
-					where+= "campnomb='"+filter.getCampo()+"' AND "+generateConditionValocamp(filter);
-				}
-				else{
+				else
 					where+=" AND ";
-					where+= "campnomb='"+filter.getCampo()+"' AND "+generateConditionValocamp(filter);
-				}
+								
+				where+= "campnomb='"+filter.getCampo()+"' AND "+generateConditionValocamp(filter);
 			}
 		}
 		return where;
 	}
 
 	private String generateCondition(Filter filter) {
-		if(filter.getTipo().equals("BETWEEN"))
-			return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
+		if(filter.getTipo().equals("BETWEEN")){
+			if(filter.getCampo().equals("usuasucu") && !filter.getTipo().equals("IN"))
+				return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo()+"o AND :"+filter.getCampo()+"2";
+			else
+				return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
+		}
 		if(filter.getTipo().equals("IN"))
 			return filter.getCampo()+" IN(:"+filter.getCampo()+")";
 		else
-			return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo();
+			if(filter.getCampo().equals("usuasucu") && !filter.getTipo().equals("IN"))
+				return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo()+"o";
+			else
+				return filter.getCampo()+" "+filter.getTipo()+" :"+filter.getCampo();
 	}
 	
 	private String generateConditionValocamp(Filter filter) {
 		if(filter.getTipo().equals("BETWEEN"))
-			return " vacavalo "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
+			if(filter.getTipodato().equals("Number"))
+				return " COALESCE(TO_NUMBER(REGEXP_SUBSTR(vacavalo, '^\\d+')), 0) "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
+			else
+				return " vacavalo "+filter.getTipo()+" :"+filter.getCampo()+" AND :"+filter.getCampo()+"2";
 		else
-			return " vacavalo "+filter.getTipo()+" :"+filter.getCampo();
+			if(filter.getTipodato().equals("Number"))
+				return " COALESCE(TO_NUMBER(REGEXP_SUBSTR(vacavalo, '^\\d+')), 0) "+filter.getTipo()+" :"+filter.getCampo();
+			else
+				return " vacavalo "+filter.getTipo()+" :"+filter.getCampo();
 	}
 	
 	/**

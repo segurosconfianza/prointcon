@@ -28,5 +28,7 @@ public interface FrmTransaccionService{
 	public String listAll(int pageSize, int page);
 
 	public int getCount();
+
+	public Long generateTransaction(String user);
 	
 }
