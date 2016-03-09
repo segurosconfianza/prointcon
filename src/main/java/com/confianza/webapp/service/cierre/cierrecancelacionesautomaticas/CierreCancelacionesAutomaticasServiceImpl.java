@@ -155,8 +155,8 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 			for(FrmConsulta query:queryChilds){	
 				
 				if(query.getConsnomb().equals("DETALLE_DE_SALDOS_PARA_CIERRE_CANCELACIONES_Y_TOTA")){
-					FrmConsulta queryPropertys = frmConsultaService.listName("DETALLE_DE_SALDOS_PARA_CIERRE_CANCELACIONES_Y_TOTA PROPERTY");
-					query.setConslsql(query.getConslsql()+" UNION "+queryPropertys.getConslsql());
+					/*FrmConsulta queryPropertys = frmConsultaService.listName("DETALLE_DE_SALDOS_PARA_CIERRE_CANCELACIONES_Y_TOTA PROPERTY");
+					query.setConslsql(query.getConslsql()+" UNION "+queryPropertys.getConslsql());*/
 					
 					System.out.println(query.getConslsql());
 				}
@@ -248,8 +248,8 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		Map<String, Object> parameters=getParametersMap(params);
 		
 		FrmConsulta query = frmConsultaService.listName("SALDOS CANCEL SIN CANCEL TOTAL");
-		FrmConsulta queryPropertys = frmConsultaService.listName("SALDOS CANCEL SIN CANCEL TOTAL PROPERTY");
-		query.setConslsql(query.getConslsql()+" UNION "+queryPropertys.getConslsql());
+		/*FrmConsulta queryPropertys = frmConsultaService.listName("SALDOS CANCEL SIN CANCEL TOTAL PROPERTY");
+		query.setConslsql(query.getConslsql()+" UNION "+queryPropertys.getConslsql());*/
 		List<FrmParametro> parametersQueryChild=this.frmParametroService.listParamsCosuType(query.getConscons());
 		
 		CieEstaproc cieEstaproc = cieEstaprocService.insert(query.getConsnomb(), "Inicio de la consulta: "+query.getConsnomb(), userDetails.getUser(), "I");		
