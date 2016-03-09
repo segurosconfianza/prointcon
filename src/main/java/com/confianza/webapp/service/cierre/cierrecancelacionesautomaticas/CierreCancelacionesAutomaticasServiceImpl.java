@@ -249,7 +249,7 @@ public class CierreCancelacionesAutomaticasServiceImpl implements CierreCancelac
 		
 		FrmConsulta query = frmConsultaService.listName("SALDOS CANCEL SIN CANCEL TOTAL");
 		/*FrmConsulta queryPropertys = frmConsultaService.listName("SALDOS CANCEL SIN CANCEL TOTAL PROPERTY");
-		query.setConslsql(query.getConslsql()+" UNION "+queryPropertys.getConslsql());*/
+		query.setConslsql(query.getConslsql()+" UNION "+queryPropertys.getConslsql());*/ 
 		List<FrmParametro> parametersQueryChild=this.frmParametroService.listParamsCosuType(query.getConscons());
 		
 		CieEstaproc cieEstaproc = cieEstaprocService.insert(query.getConsnomb(), "Inicio de la consulta: "+query.getConsnomb(), userDetails.getUser(), "I");		
